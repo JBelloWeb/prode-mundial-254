@@ -36,6 +36,13 @@ formulario.addEventListener('submit', async (e) =>{
             return;
         }
 
+        if(usuarioEncontrado.ya_participo === true) {
+            mensaje.textContent = "Acceso denegado: Ya enviaste tu pronóstico previamente.";
+            mensaje.className = "error"; //--------------------------> Vincular clase 🟢  
+            btnIngresar.disabled = false;
+            return;
+        }
+
         mensaje.textContent = "¡Ingreso exitoso! Redirigiendo...";
         mensaje.className = "exito"; //--------------------------> Vincular clase 🟢  
 
