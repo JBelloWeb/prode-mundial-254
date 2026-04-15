@@ -3,6 +3,7 @@ const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
 window.supaClient = supaClient;
 
+const reglas = document.getElementById('reglas');
 const formulario = document.getElementById('loginForm');
 const mensaje = document.getElementById('mensaje');
 const btnIngresar = document.getElementById('btnIngresar');
@@ -61,6 +62,10 @@ formulario.addEventListener('submit', async (e) =>{
         btnIngresar.disabled = false;
     }
 });
+
+const closeRules = () =>{
+    reglas.classList.add("d-none");
+}
 
 icon.addEventListener('click', () =>{
     if(clave.type === "password"){
