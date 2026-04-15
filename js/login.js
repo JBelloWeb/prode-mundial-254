@@ -3,17 +3,18 @@ const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
 window.supaClient = supaClient;
 
-const reglas = document.getElementById('reglas');
-const formulario = document.getElementById('loginForm');
-const mensaje = document.getElementById('mensaje');
-const btnIngresar = document.getElementById('btnIngresar');
-const clave = document.getElementById('clave');
-const icon = document.getElementById('claveIcon');
+const d = document;
+const reglas = d.getElementById('reglas');
+const formulario = d.getElementById('loginForm');
+const mensaje = d.getElementById('mensaje');
+const btnIngresar = d.getElementById('btnIngresar');
+const clave = d.getElementById('clave');
+const icon = d.getElementById('claveIcon');
 
 formulario.addEventListener('submit', async (e) =>{
     e.preventDefault();
 
-    const emailTry = document.getElementById('email').value.trim();
+    const emailTry = d.getElementById('email').value.trim();
     const claveTry = clave.value.trim();
 
     btnIngresar.disabled = true;
@@ -53,7 +54,7 @@ formulario.addEventListener('submit', async (e) =>{
             }));
 
         setTimeout(() => {
-            window.location.href = 'prode.html';
+            window.location.href = 'pages/prode.html';
         }, 1000);
     } catch (error){
         console.error("Error: ", error);
