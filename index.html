@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="icon" href="favicon.ico">
+    <script src="https://kit.fontawesome.com/2cd34b61aa.js" crossorigin="anonymous"></script>
     <title>Login Prode 254</title>
 </head>
 <body>
@@ -36,7 +37,10 @@
                 </div>
                 <div class="form-group">
                     <label for="clave">Clave</label>
-                    <input type="password" id="clave" required placeholder="*******">
+                    <div class="password-input">
+                        <input type="password" id="clave" required placeholder="*******">
+                        <i id="claveIcon" class="fa-solid fa-eye" style="color: rgb(116, 192, 252);"></i>
+                    </div>
                 </div>
 
                 <button type="submit" id="btnIngresar">Ingresar</button>

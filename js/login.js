@@ -6,12 +6,14 @@ window.supaClient = supaClient;
 const formulario = document.getElementById('loginForm');
 const mensaje = document.getElementById('mensaje');
 const btnIngresar = document.getElementById('btnIngresar');
+const clave = document.getElementById('clave');
+const icon = document.getElementById('claveIcon');
 
 formulario.addEventListener('submit', async (e) =>{
     e.preventDefault();
 
     const emailTry = document.getElementById('email').value.trim();
-    const claveTry = document.getElementById('clave').value.trim();
+    const claveTry = clave.value.trim();
 
     btnIngresar.disabled = true;
     mensaje.textContent = "Verficando credenciales...";
@@ -50,5 +52,17 @@ formulario.addEventListener('submit', async (e) =>{
         mensaje.textContent = "Hubo un error al conectar con la base de datos";
         mensaje.className = "error"; //--------------------------> Vincular clase 🟢  
         btnIngresar.disabled = false;
+    }
+});
+
+icon.addEventListener('click', () =>{
+    if(clave.type === "password"){
+        clave.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else{
+        clave.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
     }
 });
