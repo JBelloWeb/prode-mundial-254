@@ -10,17 +10,22 @@
 <body>
     <h1>Prode Mundial 2026</h1>
 
-    <section id="elegirPaises">
+    <section id="seccionSeleccion">
         <h2>Fase de Grupos</h2>
-        <div id="countrySelector">
-            
-        </div>
+        <p>Elije 3 países más para predecir sus partidos (Argentina es obligatorio)</p>
+        <div id="countrySelector"></div>
 
-        <div id="elecciones">
+        <div id="elecciones"></div>
 
-        </div>
+        <button id="btnGenerarFormulario">Continuar a Pronósticos</button>
+    </section>
 
-        <button></button>
+    <section id="seccionPronosticos">
+        <h2>Partidos a Predecir</h2>
+        <form id="formGrupos">
+            <div id="contenedorPartidos"></div>
+            <button type="submit" id="btnGuardar">Guardar Pronósticos</button>
+        </form>
     </section>
 
     <script src="../js/groups.js"></script>

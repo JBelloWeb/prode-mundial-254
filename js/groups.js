@@ -3,10 +3,21 @@ const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
 window.supaClient = supaClient;
 
+const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado'));
+if(!usuarioActivo){
+    alert("Debes iniciar sesión");
+    window.location.href = '../index.html';
+}
+
 const d = document;
 
+const seccionSeleccion = d.getElementById('seccionSeleccion');
+const seccionPronosticos = d.getElementById('seccionPronosticos');
 const countries = d.getElementById('countrySelector');
 const selections = d.getElementById('elecciones');
+const btnGenerar = d.getElementById('btnGenerarFormulario');
+const contenedorPartidos = d.getElementById('contenedorPartidos');
+const formGrupos = d.getElementById('formGrupos');
 
 const grupos = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 const paises = [
@@ -26,7 +37,7 @@ const paises = [
 const paisesASeguir = ["Argentina"];
 
 const actualizarSelecciones = () =>{
-    selections.firstChild.remove();
+    if(selections.firstChild) selections.firstChild.remove();
     let ul = d.createElement('ul');
     for(let p of paisesASeguir){
         let li = d.createElement('li');
@@ -81,3 +92,115 @@ const cargameLosPaises = () =>{
 }
 
 cargameLosPaises();
+
+const generarPartidosUnicos = () =>{
+    const partidosUnicos = new Map();
+
+    paisesASeguir.forEach(pais =>{
+        let indiceGrupo = paises.findIndex(grupo => grupo.includes(pais));
+
+        if (indiceGrupo !== -1) {
+            const letraGrupo = grupos[indiceGrupo];
+            const equiposDelGrupo = paises[indiceGrupo];
+
+            // Generamos los 3 partidos de este país
+            equiposDelGrupo.forEach(rival => {
+                if (rival !== pais) {
+                    // Ordenamos alfabéticamente para crear una clave única (Ej: "Argelia-Argentina")
+                    // Así evitamos que se duplique si el usuario elige dos del mismo grupo
+                    const parOrdenado = [pais, rival].sort();
+                    const clave = `${parOrdenado[0]}-vs-${parOrdenado[1]}`;
+
+                    if (!partidosUnicos.has(clave)) {
+                        partidosUnicos.set(clave, {
+                            grupo: letraGrupo,
+                            equipoA: parOrdenado[0],
+                            equipoB: parOrdenado[1]
+                        });
+                    }
+                }
+            });
+        }
+    });
+    return Array.from(partidosUnicos.values());
+};
+
+btnGenerar.addEventListener('click', () =>{
+    if(paisesASeguir.length < 4) {
+        alert("Por favor, selecciona 4 países en total antes de continuar");
+        return;
+    }
+
+    const partidos = generarPartidosUnicos();
+    contenedorPartidos.innerHTML = "";
+
+    partidos.forEach((partido, index) =>{
+        const div = d.createElement('div');
+        div.classList = "match-card";
+        div.innerHTML = `
+            <p><strong>Grupo ${partido.grupo}</strong></p>
+            <div class="team-row">
+                <span class="team-name">${partido.equipoA}</span>
+                <input type="number" class="score-input" data-equipo="${partido.equipoA}" data-index="${index}" min="0" max="99" required placeholdes="0">
+                <span class="team-name"> vs </span>
+                <input type="number" class="score-input" data-equipo="${partido.equipoB}" data-index="${index}" min="0" max="99" required placeholdes="0">
+                <span class="team-name">${partido.equipoB}</span>
+                </div>
+                <hr>
+            `;
+            contenedorPartidos.appendChild(div);
+    });
+
+    seccionSeleccion.style.display = 'none';
+    seccionPronosticos.style.display = 'block';
+});
+
+    formGrupos.addEventListener('submit', async (e) =>{
+        e.preventDefault();
+
+        const btnGuardar = d.getElementById('btnGuardar');
+        btnGuardar.disabled = true;
+        btnGuardar.textContent = "Guardando respuestas...";
+
+        try{
+            const { error: errorUsuario } = await supaClient
+                .from('usuarios')
+                .update({ paises_seguidos: paisesASeguir })
+                .eq('id', usuarioActivo.id);
+
+            if(errorUsuario) throw errorUsuario;
+
+            const prediccionesParaSubir = [];
+            const matchCards = contenedorPartidos.querySelectorAll('.match-card');
+
+            matchCards.forEach(card =>{
+                const inputs = card.querySelectorAll('.score-input');
+                prediccionesParaSubir.push({
+                    usuario_id: usuarioActivo.id,
+                    equipo_a_pred: inputs[0].dataset.equipo,
+                    goles_a_pred: parseInt(inputs[0].value),
+                    equipo_b_pred: inputs[1].dataset.equipo,
+                    goles_b_pred: parseInt(inputs[1].value),
+                });
+            });
+
+            console.log("Datos a enviar:", prediccionesParaSubir);
+
+            const { error: errorPredicciones } = await supaClient
+                .from ('predicciones')
+                .insert(prediccionesParaSubir);
+
+            if (errorPredicciones) throw errorPredicciones;
+
+            await supaClient.from('usuarios').update({ya_participo: true}).eq('id', usuarioActivo.id);
+
+            alert("Predicciones guardadas con éxito");
+            localStorage.removeItem('usuarioLogueado');
+            window.location.href = '../index.html';
+        } catch (error) {
+            console.error("Error: ", error);
+            alert("Hubo un problema al guardar");
+            btnGuardar.disabled = false;
+            btnGuardar.textContent = "Guardar Pronósticos";
+        }
+    });
