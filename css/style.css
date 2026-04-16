@@ -199,7 +199,7 @@ button{
     gap: 1rem;
 }
 
-.group{
+.group, .match-card{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -255,4 +255,17 @@ button{
         gap: 7px;
         margin: 0 auto;
     }
+}
+
+#contenedorPartidos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.match-card{
+    width: 90%;
+    min-width: fit-content;
 }

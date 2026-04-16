@@ -35,7 +35,6 @@ btnTabPerfil.addEventListener('click', () => {
     vistaPerfil.style.display = 'block';
     vistaRanking.style.display = 'none';
     btnTabPerfil.style.fontWeight = 'bold';
-    btnTabPerfil.style.backgroundColor = '#ddd';
     btnTabRanking.style.fontWeight = 'normal';
     btnTabRanking.style.backgroundColor = '';
 });
@@ -44,7 +43,6 @@ btnTabRanking.addEventListener('click', () => {
     vistaPerfil.style.display = 'none';
     vistaRanking.style.display = 'block';
     btnTabRanking.style.fontWeight = 'bold';
-    btnTabRanking.style.backgroundColor = '#ddd';
     btnTabPerfil.style.fontWeight = 'normal';
     btnTabPerfil.style.backgroundColor = '';
     
@@ -102,7 +100,7 @@ function dibujarTablaPronosticos(predicciones) {
     }
     let html = `
         <table border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
-            <thead style="background-color: #f4f4f4;">
+            <thead>
                 <tr><th style="padding: 10px;">Tu Pronóstico</th><th style="padding: 10px;">Resultado Real</th></tr>
             </thead>
             <tbody>
@@ -146,7 +144,7 @@ function dibujarTablaRanking(ranking) {
         const posicion = index + 1;
         let medalla = posicion === 1 ? "🥇 " : posicion === 2 ? "🥈 " : posicion === 3 ? "🥉 " : "";
         
-        const estiloFila = jugador.usuario_id === usuarioActivo.id ? 'background-color: #e6f7ff; font-weight: bold;' : '';
+        const estiloFila = jugador.usuario_id === usuarioActivo.id ? 'font-weight: bold;' : '';
         const nombreMostrar = jugador.usuario_id === usuarioActivo.id ? `${jugador.nombre} (Tú)` : jugador.nombre;
 
         html += `
