@@ -79,8 +79,8 @@ formulario.addEventListener('submit', async (e) =>{
     }
 });
 
-const closeRules = () =>{
-    reglas.classList.add("d-none");
+const viewRules = (abierto) =>{
+    abierto ? reglas.classList.add("d-none") : reglas.classList.remove("d-none");
 }
 
 icon.addEventListener('click', () =>{
