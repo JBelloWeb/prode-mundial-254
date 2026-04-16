@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Mi Panel - Prode 254</title>
+</head>
+<body>
+    <header>
+        <h1 id="bienvenidaDashboard">Cargando perfil...</h1>
+        <div id="puntajeContainer">
+            <h2>Puntos Totales: <span id="puntosTotales">0</span></h2>
+            <p>Plenos: <span id="puntosPlenos">0</span> | Parciales: <span id="puntosParciales">0</span></p>
+        </div>
+        <button id="btnCerrarSesion">Cerrar Sesión</button>
+    </header>
+
+    <nav style="margin-top: 20px; text-align: center;">
+        <button id="btnTabPerfil" style="font-weight: bold; background-color: #ddd;">Mi Perfil</button>
+        <button id="btnTabRanking">🏆 Ranking Global</button>
+    </nav>
+    <hr>
+
+    <main>
+        <div id="vistaPerfil">
+            <section id="misEquipos">
+                <h2>Equipos Seguidos</h2>
+                <ul id="listaEquipos"></ul>
+            </section>
+
+            <section id="misPronosticos">
+                <h2>Mis Predicciones</h2>
+                <div id="tablaPronosticos"></div>
+            </section>
+        </div>
+
+        <div id="vistaRanking" style="display: none;">
+            <section id="seccionRanking">
+                <h2>Tabla de Posiciones</h2>
+                <table border="1" style="width: 100%; max-width: 600px; border-collapse: collapse; text-align: center; margin: 0 auto;">
+                    <thead style="background-color: #f4f4f4;">
+                        <tr>
+                            <th style="padding: 10px;">Pos</th>
+                            <th style="padding: 10px; text-align: left;">Jugador</th>
+                            <th style="padding: 10px;">Puntos</th>
+                            <th style="padding: 10px;">Plenos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTablaRanking">
+                        <tr><td colspan="4">Cargando posiciones...</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>

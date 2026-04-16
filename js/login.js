@@ -38,10 +38,25 @@ formulario.addEventListener('submit', async (e) =>{
             return;
         }
 
+        // if(usuarioEncontrado.ya_participo === true) {
+        //     mensaje.textContent = "Acceso denegado: Ya enviaste tu pronóstico previamente.";
+        //     mensaje.className = "error"; //--------------------------> Vincular clase 🟢  
+        //     btnIngresar.disabled = false;
+        //     return;
+        // }
+
         if(usuarioEncontrado.ya_participo === true) {
-            mensaje.textContent = "Acceso denegado: Ya enviaste tu pronóstico previamente.";
-            mensaje.className = "error"; //--------------------------> Vincular clase 🟢  
-            btnIngresar.disabled = false;
+            localStorage.setItem('usuarioLogueado', JSON.stringify({
+                id: usuarioEncontrado.id,
+                nombre: usuarioEncontrado.nombre
+            }));
+
+            mensaje.textContent = "¡Bienvenido/a de vuelta! Redirigiendo a tu panel...";
+            mensaje.className = "exito"; //--------------------------> Vincular clase 🟢
+            
+            setTimeout(() =>{
+                window.location.href = '../pages/dashboard.html';
+            }, 1000);
             return;
         }
 
