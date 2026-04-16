@@ -152,7 +152,7 @@ btnGenerar.addEventListener('click', () =>{
             `;
             contenedorPartidos.appendChild(div);
     });
-
+    btnGuardar.disabled = false;
     seccionSeleccion.style.display = 'none';
     seccionPronosticos.style.display = 'block';
 });

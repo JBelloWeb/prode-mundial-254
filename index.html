@@ -10,20 +10,28 @@
     <title>Login Prode 254</title>
 </head>
 <body>
-    <h1>Bienvenido/a al Prode 254 del mundial</h1>
+    <header>
+        <h1>Bienvenido/a al Prode del mundial</h1>
+    </header>
+
 
     <section id="reglas">
-        <div class="box">
-            <h2>LEER CON ATENCIÓN</h2>
-            <p></p>
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-            <button onclick="closeRules()">De Acuerdo</button>
+        <div class="modal">
+            <div class="box">
+                    <h2>LEER CON ATENCIÓN</h2>
+                    <div class="modal-text">
+                        <p>El prode 254 estrá dividido en 2 etapas. La primera abarcará toda la fase de grupos del mundial, donde cada participante podrá hacer el seguimiento de los partidos de 4 países, inluyendo a Argentina. La segunda etapa abarcará de 16avos en adelante, haciendo una predicción absoluta de todos los partidos hasta el final del mundial.</p>
+                        <ul>
+                            <li>Dependiendo de tus aciertos, plenos o parciales, acumularás puntos</li>
+                            <li>Al finalizar cada etapa se designará ganador a aquel participante que allá acumulado más puntos</li>
+                            <li>Tienes una sola oportunidad para dar tus predicciones en cada etapa</li>
+                            <li>Podrás ver tus predicciones, resultados y puntaje en tiempo real</li>
+                            <li>Una vez hechas las predicciones, no podrás editarlas</li>
+                        </ul>
+                    </div>
+                
+                <button onclick="closeRules()">De Acuerdo</button>
+            </div>
         </div>
     </section>
 
@@ -34,13 +42,15 @@
             <form id="loginForm">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" required placeholder="sanantonio254@gmail.com">
+                    <div class="input-wrapper">
+                        <input type="email" id="email" required placeholder="sanantonio254@gmail.com">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="clave">Clave</label>
-                    <div class="password-input">
+                    <div class="input-wrapper">
                         <input type="password" id="clave" required placeholder="*******">
-                        <i id="claveIcon" class="fa-solid fa-eye" style="color: rgb(116, 192, 252);"></i>
+                        <i id="claveIcon" class="fa-solid fa-eye" style="color: var(--sananto-black);"></i>
                     </div>
                 </div>
 

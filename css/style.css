@@ -1,4 +1,13 @@
+:root{
+    --sananto-blue: #8CCBF4;
+    --sananto-red: #E12C2C;
+    --sananto-black: #131313;
+}
+
 html {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+background-color: #131313;
+color: #fefefe;
 box-sizing: border-box;
 scroll-behavior: smooth;
 }
@@ -8,7 +17,7 @@ padding: 0;
 box-sizing: inherit;
 }
 
-img, picture, video, svg, canvas {
+img, picture, video, svg, canvas,button {
 max-width: 100%;
 display: block;
 }
@@ -21,6 +30,11 @@ body {
 line-height: 1.5;
 }
 
+ul{
+list-style: none;
+
+}
+
 h1, h2, h3, h4, h5, h6 {
 line-height: 1.2;
 overflow-wrap: break-word;
@@ -28,4 +42,217 @@ overflow-wrap: break-word;
 
 .d-none{
     display: none;
+}
+
+main, section{
+        background-color: var(--sananto-black);
+
+}
+
+header{
+    padding: 1.5rem 1rem;
+    z-index: 5;
+    background-color: var(--sananto-red);
+}
+h1{
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+h2{
+    text-align: center;
+    color: var(--sananto-blue);
+}
+
+.modal{
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background-color: #131313a6;
+    
+    h2{
+        color: var(--sananto-black);
+        width: 100%;
+        padding: 15px 0;
+        background-color: var(--sananto-blue);
+    }
+
+    .box{
+        background-color: var(--sananto-black);
+        position: relative;
+        top: 15%;
+        bottom: 25%;
+        outline: var(--sananto-blue) 5px solid;
+        border-radius: 15px;
+        width: 85%;
+        min-height: fit-content;
+        margin: auto;
+        background-color: var(--sananto-black);
+        
+        
+        .modal-text{
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            p{
+                text-align: center;
+            }
+
+            ul{
+                list-style-type: decimal;
+                list-style: disc;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+            li{
+                background-color: var(--sananto-red);
+            }
+        }
+    }
+
+
+
+}
+button{
+    text-align: center;
+    margin: 15px auto;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: var(--sananto-blue);
+}
+
+.box{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.login{
+    h2{
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        width: 100% ;
+        color: var(--sananto-blue);
+    }
+}
+
+#loginForm{
+    display: flex;
+    flex-direction: column;
+
+    
+    button{
+        padding: 5px 7px;
+    }
+}
+
+.form-group{
+
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    margin-top: 15px;
+
+    label{
+        background-color: var(--sananto-red);
+        padding: 2px 10px;
+
+        border-radius: 5px 5px 0px 0px;
+    }
+
+    .input-wrapper{
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: var(--sananto-red);
+        border-radius: 0px 5px 5px 5px;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+
+        input{  
+            background-color: var(--sananto-black);
+            color: #fefefe;
+            border: none;
+            border-radius: 4px;
+            flex: 1;
+            padding: 5px;
+            font: inherit;
+        }
+
+        i{
+            margin-left: 5px;
+            color: var(--sananto-red);
+        }
+    }
+
+}
+
+#countrySelector ol{
+    margin: 50px 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.group{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+    min-height: fit-content;
+    outline: var(--sananto-blue) solid;
+    border-radius: 20px;
+    padding: 1rem;
+    gap: 20px;
+}
+.group-participant{
+    flex: 0 0 calc(50% - 5px);
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: var(--sananto-red);
+    border-radius: 10px;
+    width: fit-content;
+    padding: 5px;
+
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.countries-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    margin: 0 auto;
+}
+
+#elecciones{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1rem 2rem;
+    position: sticky;
+    background-color: var(--sananto-blue);
+    bottom: 5%;
+    left: 0;
+    right: 0;
+    height: 40px;
+
+    ul{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 7px;
+        margin: 0 auto;
+    }
 }
