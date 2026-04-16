@@ -16,6 +16,8 @@ const seccionPronosticos = d.getElementById('seccionPronosticos');
 const countries = d.getElementById('countrySelector');
 const selections = d.getElementById('elecciones');
 const btnGenerar = d.getElementById('btnGenerarFormulario');
+const btnGuardar = d.getElementById('btnGuardar');
+      btnGuardar.disabled = true;
 const contenedorPartidos = d.getElementById('contenedorPartidos');
 const formGrupos = d.getElementById('formGrupos');
 
@@ -157,8 +159,6 @@ btnGenerar.addEventListener('click', () =>{
 
     formGrupos.addEventListener('submit', async (e) =>{
         e.preventDefault();
-
-        const btnGuardar = d.getElementById('btnGuardar');
         btnGuardar.disabled = true;
         btnGuardar.textContent = "Guardando respuestas...";
 
