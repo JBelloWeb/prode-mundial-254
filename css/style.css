@@ -2,12 +2,31 @@
     --sananto-blue: #8CCBF4;
     --sananto-red: #E12C2C;
     --sananto-black: #131313;
+    --sananto-white: #F0F0F0;
+
+    --text-main: #1C1C1C;
+    --text-muted: #888888;
+    --border-thin: 2px solid #888888;
+
+    /*BACKGROUND VARIABLES*/
+    --s: 100px; /* control the size*/
+    --c1: #8CCBF4;
+    --c2: #5991b6;
+    --_g:#0000, #0004 5%,
+     var(--c2) 6%  14%,var(--c1) 16% 24%,var(--c2) 26% 34%,var(--c1) 36% 44%,
+     var(--c2) 46% 54%,var(--c1) 56% 64%,var(--c2) 66% 74%,var(--c1) 76% 84%,
+     var(--c2) 86% 94%,#0004 95%,#0000;
+    --pattern-bg:
+    radial-gradient(100% 50% at 100% 0   ,var(--_g)),
+    radial-gradient(100% 50% at 0    50% ,var(--_g)),
+    radial-gradient(100% 50% at 100% 100%,var(--_g));
+    --pattern-bg-size: var(--s) calc(2*var(--s));
 }
 
 html {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 background-color: #131313;
-color: #fefefe;
+color: var(--text-main);
 box-sizing: border-box;
 scroll-behavior: smooth;
 }
@@ -44,32 +63,54 @@ overflow-wrap: break-word;
     display: none;
 }
 
+body{
+    background: var(--pattern-bg);
+    background-size: var(--pattern-bg-size);
+    background-attachment: fixed;
+}
 main, section{
-        background-color: var(--sananto-black);
+    background-color: var(--sananto-white);
+}
+main{
+    border-radius: 50px 50px 0px 0px;
+    box-shadow: #131313a9 0px 0px 20px 7px;;
+}
 
+.footer-login{
+    height: 40vw;
+    background-color: var(--sananto-white);
 }
 
 header{
-    padding: 1.5rem 1rem;
-    z-index: 5;
-    background-color: var(--sananto-red);
+    padding: 4rem;
+
 }
 h1{
-    font-size: 1.5rem;
+    color: var(--sananto-white);
+    font-size: 1.8rem;
     text-align: center;
+    background-color: #131313;
+    padding: 1rem 2rem;
+    width: fit-content;
+    margin: auto;
 }
 
 h2{
     text-align: center;
-    color: var(--sananto-blue);
 }
 
 .modal{
-    position: absolute;
+    height: 100%;
+    width: 100%;
+    position: fixed;
     inset: 0;
     z-index: 4;
     background-color: #131313a6;
-    
+    padding: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+        
     h2{
         color: var(--sananto-black);
         width: 100%;
@@ -78,37 +119,34 @@ h2{
     }
 
     .box{
-        background-color: var(--sananto-black);
-        position: relative;
-        top: 15%;
-        bottom: 25%;
+        height: fit-content;
+        background-color: var(--sananto-white);
         outline: var(--sananto-blue) 5px solid;
         border-radius: 15px;
-        width: 85%;
-        min-height: fit-content;
-        margin: auto;
-        background-color: var(--sananto-black);
-        
+        background-color: var(--sananto-white);
         
         .modal-text{
-            padding: 1.5rem;
+            padding: 0.7rem;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
 
             p{
                 text-align: center;
+                font-size: 1rem;
             }
 
             ul{
+                font-size: 0.8rem;
                 list-style-type: decimal;
                 list-style: disc;
                 display: flex;
                 flex-direction: column;
                 gap: 5px;
+                padding: 0px 10px;
             }
             li{
-                background-color: var(--sananto-red);
+                background-color: var(--sananto-blue);
             }
         }
     }
@@ -116,12 +154,30 @@ h2{
 
 
 }
-button{
-    text-align: center;
-    margin: 15px auto;
+
+.button{
+    border-radius: 50px;
+    margin: 10px auto;
     padding: 5px;
-    border-radius: 10px;
+}
+
+#btnReglas{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    position: fixed;
+    color: var(--sananto-black);
+    bottom: 15px;
+    right: 15px;
+    border-radius: 100px;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    width: 40px;
+    padding: 25px;
     background-color: var(--sananto-blue);
+    border: 3px solid var(--sananto-black);
+    box-shadow: #13131357 0px 1px 2px 1px;
 }
 
 .box{
@@ -132,18 +188,20 @@ button{
 }
 
 .login{
+    border-radius: 25px;
+    height: 100%;
     h2{
+        font-size: 2rem;
         margin-top: 2rem;
         margin-bottom: 1rem;
         width: 100% ;
-        color: var(--sananto-blue);
     }
 }
 
 #loginForm{
     display: flex;
     flex-direction: column;
-
+    width: 90%;
     
     button{
         padding: 5px 7px;
@@ -151,34 +209,49 @@ button{
 }
 
 .form-group{
-
     display: flex;
     flex-direction: column;
     align-items: baseline;
-    margin-top: 15px;
+    margin: 15px 0px;
 
     label{
-        background-color: var(--sananto-red);
-        padding: 2px 10px;
+        font-weight: bold;
+        background-color: var(--sananto-blue);
+        padding: 5px 0px;
+        padding-left: 15px;
+        gap: 10px;
+        border-radius: 20px 10px 0px 0px;
+        transform: translateY(1px);
 
-        border-radius: 5px 5px 0px 0px;
+        &::after{
+            content: 'La que diste al registrarte';
+            position: relative;
+            background-color: var(--sananto-red);
+            color: var(--sananto-white);
+            margin-left: 20px;
+            padding: 6px;
+            padding-left: 10px;
+            padding-right: 15px;
+            border-radius: 0px 5px 0px 0px;
+            font-weight: 600;
+        }
     }
 
     .input-wrapper{
         position: relative;
         display: flex;
         align-items: center;
-        background: var(--sananto-red);
-        border-radius: 0px 5px 5px 5px;
+        background: var(--sananto-blue);
+        border-radius: 0px 20px 20px 20px;
         padding: 10px;
         width: 100%;
         box-sizing: border-box;
 
         input{  
-            background-color: var(--sananto-black);
-            color: #fefefe;
+            background-color: var(--sananto-white);
+            color: var(--text-main);
             border: none;
-            border-radius: 4px;
+            border-radius: 20px;
             flex: 1;
             padding: 5px;
             font: inherit;

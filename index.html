@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <h1>Bienvenido/a al Prode del mundial</h1>
+        <h1>PRODE 254</h1>
     </header>
 
 
@@ -30,7 +30,7 @@
                         </ul>
                     </div>
                 
-                <button onclick="viewRules(true)">De Acuerdo</button>
+                <button class="button" onclick="viewRules(true)">De Acuerdo</button>
             </div>
         </div>
     </section>
@@ -54,14 +54,16 @@
                     </div>
                 </div>
 
-                <button type="submit" id="btnIngresar">Ingresar</button>
+                <button class="button" type="submit" id="btnIngresar">Ingresar</button>
             </form>
 
             <div id="mensaje"></div>
         </div>
 
-        <button onclick="viewRules(false)">Reglas</button>
+        <button id="btnReglas" onclick="viewRules(false)"><i class="fa-solid fa-list"></i></button>
     </main>
+
+    <footer class="footer-login"></footer>
 
     <script src="js/login.js"></script>
 </body>
