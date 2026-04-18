@@ -133,6 +133,7 @@ btnGenerar.addEventListener('click', () =>{
         return;
     }
 
+    seccionPronosticos.classList.remove('d-none')
     const partidos = generarPartidosUnicos();
     contenedorPartidos.innerHTML = "";
 

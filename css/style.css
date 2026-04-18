@@ -71,19 +71,17 @@ body{
 main, section{
     background-color: var(--sananto-white);
 }
-main{
+main, .top-section{
     border-radius: 50px 50px 0px 0px;
     box-shadow: #131313a9 0px 0px 20px 7px;;
 }
-
-.footer-login{
+footer{
     height: 40vw;
     background-color: var(--sananto-white);
 }
 
 header{
     padding: 4rem;
-
 }
 h1{
     color: var(--sananto-white);
@@ -91,7 +89,7 @@ h1{
     text-align: center;
     background-color: #131313;
     padding: 1rem 2rem;
-    width: fit-content;
+    width: 100%;
     margin: auto;
 }
 
@@ -265,6 +263,28 @@ h2{
 
 }
 
+#seccionSeleccion{
+    padding: 1.2rem;
+
+    p{
+        margin-top: 15px;
+        font-style: italic;
+        font-weight: 500;
+        color: var(--sananto-red);
+        text-align: center;
+    }
+}
+
+#seccionPronosticos{
+    padding: 1rem 0;
+
+    margin-top: 20px;
+
+    h2{
+        padding: 1.2rem;
+    }
+}
+
 #countrySelector ol{
     margin: 50px 5%;
     display: flex;
@@ -310,12 +330,15 @@ h2{
 }
 
 #elecciones{
+    outline: 3px solid var(--sananto-blue);
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 2rem 2rem;
     position: sticky;
-    background-color: var(--sananto-blue);
+    background-color: var(--sananto-black);
+    color: var(--sananto-white);
+    font-weight: bold;
     bottom: 5%;
     left: 0;
     right: 0;
@@ -331,6 +354,7 @@ h2{
 }
 
 #contenedorPartidos{
+
     display: flex;
     flex-direction: column;
     align-items: center;
