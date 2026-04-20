@@ -9,6 +9,9 @@ if(!usuarioActivo){
     window.location.href = '../index.html';
 }
 
+const flagApi = "https://flagcdn.com/16x12/";
+const flagCodesApi = "https://flagcdn.com/es/codes.json";
+
 const d = document;
 
 const seccionSeleccion = d.getElementById('seccionSeleccion');
@@ -42,6 +45,8 @@ const actualizarSelecciones = () =>{
     if(selections.firstChild) selections.firstChild.remove();
     let ul = d.createElement('ul');
     for(let p of paisesASeguir){
+        let b = d.getElementById(p.toLowerCase());
+        if(b) b.classList.add('selected');
         let li = d.createElement('li');
         li.textContent = p;
         ul.appendChild(li);
@@ -54,8 +59,12 @@ actualizarSelecciones();
 const elegirPaises = (pais) =>{
     if(paisesASeguir.includes(pais)){
         let i = paisesASeguir.indexOf(pais);
+        let b = d.getElementById(pais.toLowerCase());
+        if(b) b.classList.remove('selected');
         paisesASeguir.splice(i, 1);
     } else if(paisesASeguir.length == 4){
+        let b = d.getElementById(paisesASeguir[1].toLowerCase());
+        if(b) b.classList.remove('selected');
         paisesASeguir.splice(1, 1);
         paisesASeguir.push(pais) 
     } else {
@@ -63,11 +72,51 @@ const elegirPaises = (pais) =>{
     }
     actualizarSelecciones();
 }
+const codigosBanderas = {};
+
+
+const getCodes = async () => {
+    try {
+        const response = await fetch(flagCodesApi);
+        const data = await response.json();
+
+        const excepciones = {
+            "Chequia": "cz",
+            "Arabia Saudita": "sa",
+            "Corea del Sur": "kr",
+            "RD Congo": "cd",
+            "Países Bajos": "nl",
+            "Estados Unidos": "us"
+        };
+
+        paises.forEach(grupo => {
+            grupo.forEach(pais => {
+                let match = Object.entries(data).find(([key, value]) => value.toLowerCase() === pais.toLowerCase());
+
+                if (match) {
+                    codigosBanderas[pais] = match[0];
+                } else if (excepciones[pais]) {
+                    codigosBanderas[pais] = excepciones[pais];
+                } else {
+                    console.warn(`No encontré el código para: ${pais}`);
+                    codigosBanderas[pais] = "un";
+                }
+            });
+        });
+        console.log("Códigos de banderas obtenidos:", codigosBanderas);
+        cargameLosPaises();
+
+    } catch (error) {
+        console.error("Error al obtener banderas:", error);
+        cargameLosPaises();
+    }
+}
+getCodes();
 
 const cargameLosPaises = () =>{
     let index = 0;
     let ol = d.createElement('ol');
-    for(let gruop of paises){
+    for(let group of paises){
         let gr = d.createElement('li');
         gr.classList = "group";
         let name = d.createElement('h3');
@@ -77,23 +126,23 @@ const cargameLosPaises = () =>{
         integrantes.classList = "countries-container"
         gr.appendChild(name);
         gr.appendChild(integrantes);
-        for(let p of gruop){
+        for(let p of group){
             let li = d.createElement('li');
-            p === "Argentina" ? li.classList = "group-participant arg" : li.classList = "group-participant";
+            p == "Argentina" ? li.classList = "group-participant selected" : li.classList = "group-participant";
+            li.id = p.toLowerCase();
             if(p !== "Argentina"){
                 li.addEventListener('click', () =>{
-                elegirPaises(p);
+                    elegirPaises(p);
                 })
             }
-            li.textContent = p;
+            let codigo = codigosBanderas[p];
+            li.innerHTML = `<img src="https://flagcdn.com/16x12/${codigo}.png" alt="${p}" style="margin-right: 8px;"> ${p}`;
             integrantes.appendChild(li);
         }
         ol.appendChild(gr);
         countries.appendChild(ol);
     }
 }
-
-cargameLosPaises();
 
 const generarPartidosUnicos = () =>{
     const partidosUnicos = new Map();
