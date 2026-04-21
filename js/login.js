@@ -10,6 +10,7 @@ const mensaje = d.getElementById('mensaje');
 const btnIngresar = d.getElementById('btnIngresar');
 const clave = d.getElementById('clave');
 const icon = d.getElementById('claveIcon');
+const marado = d.getElementById('maradonaOk');
 
 formulario.addEventListener('submit', async (e) =>{
     e.preventDefault();
@@ -59,7 +60,7 @@ formulario.addEventListener('submit', async (e) =>{
             }, 1000);
             return;
         }
-
+        marado.classList.remove('d-none');
         mensaje.textContent = "¡Ingreso exitoso! Redirigiendo...";
         mensaje.className = "exito"; //--------------------------> Vincular clase 🟢  
 
@@ -70,7 +71,7 @@ formulario.addEventListener('submit', async (e) =>{
 
         setTimeout(() => {
             window.location.href = 'pages/prode.html';
-        }, 1000);
+        }, 3000);
     } catch (error){
         console.error("Error: ", error);
         mensaje.textContent = "Hubo un error al conectar con la base de datos";

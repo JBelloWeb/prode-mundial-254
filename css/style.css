@@ -263,6 +263,19 @@ h2{
 
 }
 
+#maradonaOk{
+    margin: auto;
+    animation: appear 1s linear;
+}
+@keyframes appear{
+    from{
+        filter:opacity(0);
+    }
+    to{
+        filter:opacity(1);
+    }
+}
+
 #seccionSeleccion{
     padding: 1.2rem;
 
