@@ -46,6 +46,7 @@ formulario.addEventListener('submit', async (e) =>{
         }
 
         // ¡Ingreso Exitoso para TODOS!
+        marado.classList.remove('d-none');
         mensaje.textContent = "¡Bienvenido/a! Redirigiendo a tu panel...";
         mensaje.className = "exito"; 
 
@@ -55,7 +56,6 @@ formulario.addEventListener('submit', async (e) =>{
         }));
 
         setTimeout(() => {
-            // Asumiendo que el login está en la raíz y el dashboard en pages/
             window.location.href = 'pages/dashboard.html'; 
         }, 3000);
 
