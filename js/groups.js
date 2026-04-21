@@ -9,6 +9,21 @@ if(!usuarioActivo){
     window.location.href = '../index.html';
 }
 
+// Candado de seguridad: Verificar en la BD si ya mandó los grupos
+async function verificarAccesoGrupos() {
+    const { data, error } = await supaClient
+        .from('usuarios')
+        .select('fecha_envio_grupos')
+        .eq('id', usuarioActivo.id)
+        .single();
+
+    if (data && data.fecha_envio_grupos) {
+        alert("Ya completaste tus pronósticos de Fase de Grupos. No podés volver a ingresar.");
+        window.location.href = 'dashboard.html';
+    }
+}
+verificarAccesoGrupos();
+
 const flagApi = "https://flagcdn.com/16x12/";
 const flagCodesApi = "https://flagcdn.com/es/codes.json";
 
@@ -242,11 +257,11 @@ btnGenerar.addEventListener('click', () =>{
 
             if (errorPredicciones) throw errorPredicciones;
 
-            await supaClient.from('usuarios').update({ya_participo: true}).eq('id', usuarioActivo.id);
+            // Guardamos la marca de tiempo exacta
+            await supaClient.from('usuarios').update({ fecha_envio_grupos: new Date().toISOString() }).eq('id', usuarioActivo.id);
 
             alert("Predicciones guardadas con éxito");
-            localStorage.removeItem('usuarioLogueado');
-            window.location.href = '../index.html';
+            window.location.href = 'dashboard.html';
         } catch (error) {
             console.error("Error: ", error);
             alert("Hubo un problema al guardar");

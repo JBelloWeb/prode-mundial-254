@@ -3,6 +3,12 @@ const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
 window.supaClient = supaClient;
 
+// Si ya hay una sesión activa, lo mandamos directo a su panel
+const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado'));
+if(usuarioActivo){
+    window.location.href = 'pages/dashboard.html'; 
+}
+
 const d = document;
 const reglas = d.getElementById('reglas');
 const formulario = d.getElementById('loginForm');
@@ -34,44 +40,25 @@ formulario.addEventListener('submit', async (e) =>{
 
         if(!usuarioEncontrado){
             mensaje.textContent = "Email o Clave incorrectos";
-            mensaje.className = "error"; //--------------------------> Vincular clase 🟢  
+            mensaje.className = "error"; 
             btnIngresar.disabled = false;
             return;
         }
 
-        // if(usuarioEncontrado.ya_participo === true) {
-        //     mensaje.textContent = "Acceso denegado: Ya enviaste tu pronóstico previamente.";
-        //     mensaje.className = "error"; //--------------------------> Vincular clase 🟢  
-        //     btnIngresar.disabled = false;
-        //     return;
-        // }
-
-        if(usuarioEncontrado.ya_participo === true) {
-            localStorage.setItem('usuarioLogueado', JSON.stringify({
-                id: usuarioEncontrado.id,
-                nombre: usuarioEncontrado.nombre
-            }));
-
-            mensaje.textContent = "¡Bienvenido/a de vuelta! Redirigiendo a tu panel...";
-            mensaje.className = "exito"; //--------------------------> Vincular clase 🟢
-            
-            setTimeout(() =>{
-                window.location.href = '../pages/dashboard.html';
-            }, 1000);
-            return;
-        }
-        marado.classList.remove('d-none');
-        mensaje.textContent = "¡Ingreso exitoso! Redirigiendo...";
-        mensaje.className = "exito"; //--------------------------> Vincular clase 🟢  
+        // ¡Ingreso Exitoso para TODOS!
+        mensaje.textContent = "¡Bienvenido/a! Redirigiendo a tu panel...";
+        mensaje.className = "exito"; 
 
         localStorage.setItem('usuarioLogueado', JSON.stringify({
             id: usuarioEncontrado.id,
-            nombre: usuarioEncontrado.nombre    
-            }));
+            nombre: usuarioEncontrado.nombre
+        }));
 
         setTimeout(() => {
-            window.location.href = 'pages/prode.html';
+            // Asumiendo que el login está en la raíz y el dashboard en pages/
+            window.location.href = 'pages/dashboard.html'; 
         }, 3000);
+
     } catch (error){
         console.error("Error: ", error);
         mensaje.textContent = "Hubo un error al conectar con la base de datos";

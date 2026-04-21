@@ -20,6 +20,8 @@ const spanParciales = d.getElementById('puntosParciales');
 const listaEquipos = d.getElementById('listaEquipos');
 const tablaPronosticos = d.getElementById('tablaPronosticos');
 const btnCerrarSesion = d.getElementById('btnCerrarSesion');
+const btnIrGrupos = d.getElementById('btnIrGrupos');
+const btnIrMataMata = d.getElementById('btnIrMataMata');
 
 // Referencias al DOM (Ranking y Pestañas)
 const btnTabPerfil = d.getElementById('btnTabPerfil');
@@ -52,13 +54,38 @@ btnTabRanking.addEventListener('click', () => {
 
 async function cargarPerfil() {
     try {
+        // 1. Traemos los equipos seguidos y LAS DOS FECHAS DE ENVÍO
         const { data: usuarioData, error: errorUser } = await supaClient
             .from('usuarios')
-            .select('paises_seguidos')
+            .select('paises_seguidos, fecha_envio_grupos, fecha_envio_mata_mata')
             .eq('id', usuarioActivo.id)
             .single();
+            
         if (errorUser) throw errorUser;
 
+        // 2. LÓGICA DE BOTONES: Grupos
+        if (usuarioData.fecha_envio_grupos) {
+            btnIrGrupos.disabled = true;
+            btnIrGrupos.textContent = "Grupos Enviado ✅";
+            btnIrGrupos.style.backgroundColor = "#2d2d2d"; // Un gris oscuro estilo completado
+            btnIrGrupos.style.color = "var(--text-muted)";
+            btnIrGrupos.style.border = "1px solid var(--text-muted)";
+        } else {
+            btnIrGrupos.addEventListener('click', () => window.location.href = 'prode.html');
+        }
+
+        // 3. LÓGICA DE BOTONES: Mata-Mata
+        if (usuarioData.fecha_envio_mata_mata) {
+            btnIrMataMata.disabled = true;
+            btnIrMataMata.textContent = "Mata-Mata Enviado ✅";
+            btnIrMataMata.style.backgroundColor = "#2d2d2d"; 
+            btnIrMataMata.style.color = "var(--text-muted)";
+            btnIrMataMata.style.border = "1px solid var(--text-muted)";
+        } else {
+            btnIrMataMata.addEventListener('click', () => window.location.href = 'mata-mata.html');
+        }
+
+        // 4. Cargamos la lista de equipos seguidos (Lo que ya tenías)
         if (usuarioData.paises_seguidos && usuarioData.paises_seguidos.length > 0) {
             usuarioData.paises_seguidos.forEach(pais => {
                 const li = d.createElement('li');

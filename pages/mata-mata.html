@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Mata-Mata - Prode 254</title>
+    <style>
+        .fase-container { margin-bottom: 50px; }
+        .fase-container h2 { color: var(--sananto-blue); border-bottom: 1px solid var(--border-thin); padding-bottom: 10px; margin-bottom: 20px;}
+        .penales-box { background: rgba(225, 44, 44, 0.1); border: 1px solid var(--sananto-red); padding: 10px; border-radius: 6px; margin-top: 15px; display: none; }
+        .penales-box label { font-size: 0.85rem; color: var(--text-main); }
+        .team-select { background-color: var(--sananto-black); color: white; border: 1px solid var(--text-muted); padding: 8px; border-radius: 4px; width: 140px; }
+        .team-select:focus { border-color: var(--sananto-blue); outline: none; }
+        .auto-team { display: inline-block; width: 140px; padding: 8px; background-color: rgba(255,255,255,0.05); border-radius: 4px; color: var(--text-muted); font-size: 0.9rem;}
+        .auto-team.filled { color: var(--sananto-blue); font-weight: bold; border: 1px solid var(--sananto-blue); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Fase Final (Mata-Mata)</h1>
+        <p style="color: var(--text-muted);">Completa los cuadros. Los ganadores avanzarán automáticamente.</p>
+    </header>
+
+    <main id="bracketContainer">
+
+        <div style="text-align: center; margin-top: 40px; margin-bottom: 60px;">
+            <button id="btnGuardarMataMata" style="font-size: 1.2rem; padding: 15px 30px;">Guardar Fase Final 🏆</button>
+        </div>
+    </main>
+
+    <script src="../js/mata-mata.js"></script>
+</body>
+</html>
