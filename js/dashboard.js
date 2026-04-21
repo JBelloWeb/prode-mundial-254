@@ -188,7 +188,7 @@ function dibujarTablaRanking(ranking) {
 
 btnCerrarSesion.addEventListener('click', () => {
     localStorage.removeItem('usuarioLogueado');
-    window.location.href = 'index.html';
+    window.location.href = '../index.html';
 });
 
 cargarPerfil();

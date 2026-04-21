@@ -208,9 +208,9 @@ btnGenerar.addEventListener('click', () =>{
             <p><strong>Grupo ${partido.grupo}</strong></p>
             <div class="team-row">
                 <span class="team-name">${partido.equipoA}</span>
-                <input type="number" class="score-input" data-equipo="${partido.equipoA}" data-index="${index}" min="0" max="99" required placeholdes="0">
+                <input type="number" class="score-input" data-equipo="${partido.equipoA}" data-index="${index}" min="0" max="99" required placeholder="0">
                 <span class="team-name"> vs </span>
-                <input type="number" class="score-input" data-equipo="${partido.equipoB}" data-index="${index}" min="0" max="99" required placeholdes="0">
+                <input type="number" class="score-input" data-equipo="${partido.equipoB}" data-index="${index}" min="0" max="99" required placeholder="0">
                 <span class="team-name">${partido.equipoB}</span>
                 </div>
                 <hr>
@@ -222,50 +222,68 @@ btnGenerar.addEventListener('click', () =>{
     seccionPronosticos.style.display = 'block';
 });
 
-    formGrupos.addEventListener('submit', async (e) =>{
-        e.preventDefault();
-        btnGuardar.disabled = true;
-        btnGuardar.textContent = "Guardando respuestas...";
-
-        try{
-            const { error: errorUsuario } = await supaClient
-                .from('usuarios')
-                .update({ paises_seguidos: paisesASeguir })
-                .eq('id', usuarioActivo.id);
-
-            if(errorUsuario) throw errorUsuario;
-
-            const prediccionesParaSubir = [];
-            const matchCards = contenedorPartidos.querySelectorAll('.match-card');
-
-            matchCards.forEach(card =>{
-                const inputs = card.querySelectorAll('.score-input');
-                prediccionesParaSubir.push({
-                    usuario_id: usuarioActivo.id,
-                    equipo_a_pred: inputs[0].dataset.equipo,
-                    goles_a_pred: parseInt(inputs[0].value),
-                    equipo_b_pred: inputs[1].dataset.equipo,
-                    goles_b_pred: parseInt(inputs[1].value),
-                });
-            });
-
-            console.log("Datos a enviar:", prediccionesParaSubir);
-
-            const { error: errorPredicciones } = await supaClient
-                .from ('predicciones')
-                .insert(prediccionesParaSubir);
-
-            if (errorPredicciones) throw errorPredicciones;
-
-            // Guardamos la marca de tiempo exacta
-            await supaClient.from('usuarios').update({ fecha_envio_grupos: new Date().toISOString() }).eq('id', usuarioActivo.id);
-
-            alert("Predicciones guardadas con éxito");
-            window.location.href = 'dashboard.html';
-        } catch (error) {
-            console.error("Error: ", error);
-            alert("Hubo un problema al guardar");
-            btnGuardar.disabled = false;
-            btnGuardar.textContent = "Guardar Pronósticos";
+// ==========================================
+// VALIDACIÓN ESTRICTA DE GOLES (Fase de Grupos)
+// ==========================================
+d.addEventListener('input', (e) => {
+    // Si el elemento donde están escribiendo es un input de goles...
+    if (e.target.classList.contains('score-input')) {
+        
+        // 1. Evitamos que ingresen el signo menos o la letra 'e'
+        if (e.data === '-' || e.data === 'e') {
+            e.target.value = "";
         }
-    });
+        
+        // 2. Si hay un número, lo limpiamos y forzamos los límites
+        if (e.target.value !== "") {
+            // parseInt(..., 10) limpia los ceros a la izquierda ("05" -> 5)
+            let valor = parseInt(e.target.value, 10); 
+            
+            // Forzamos los límites (0 a 99)
+            if (valor < 0) valor = 0;
+            if (valor > 99) valor = 99;
+            
+            // Reasignamos el valor limpio al cajoncito
+            e.target.value = valor; 
+        }
+    }
+});
+
+formGrupos.addEventListener('submit', async (e) =>{
+    e.preventDefault();
+    btnGuardar.disabled = true;
+    btnGuardar.textContent = "Guardando respuestas...";
+    try{
+        const { error: errorUsuario } = await supaClient
+            .from('usuarios')
+            .update({ paises_seguidos: paisesASeguir })
+            .eq('id', usuarioActivo.id);
+        if(errorUsuario) throw errorUsuario;
+        const prediccionesParaSubir = [];
+        const matchCards = contenedorPartidos.querySelectorAll('.match-card');
+        matchCards.forEach(card =>{
+            const inputs = card.querySelectorAll('.score-input');
+            prediccionesParaSubir.push({
+                usuario_id: usuarioActivo.id,
+                equipo_a_pred: inputs[0].dataset.equipo,
+                goles_a_pred: parseInt(inputs[0].value),
+                equipo_b_pred: inputs[1].dataset.equipo,
+                goles_b_pred: parseInt(inputs[1].value),
+            });
+        });
+        console.log("Datos a enviar:", prediccionesParaSubir);
+        const { error: errorPredicciones } = await supaClient
+            .from ('predicciones')
+            .insert(prediccionesParaSubir);
+        if (errorPredicciones) throw errorPredicciones;
+        // Guardamos la marca de tiempo exacta
+        await supaClient.from('usuarios').update({ fecha_envio_grupos: new Date().toISOString() }).eq('id', usuarioActivo.id);
+        alert("Predicciones guardadas con éxito");
+        window.location.href = 'dashboard.html';
+    } catch (error) {
+        console.error("Error: ", error);
+        alert("Hubo un problema al guardar");
+        btnGuardar.disabled = false;
+        btnGuardar.textContent = "Guardar Pronósticos";
+    }
+});
