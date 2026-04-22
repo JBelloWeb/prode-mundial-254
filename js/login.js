@@ -14,6 +14,7 @@ const reglas = d.getElementById('reglas');
 const formulario = d.getElementById('loginForm');
 const mensaje = d.getElementById('mensaje');
 const btnIngresar = d.getElementById('btnIngresar');
+const btnReglas = d.getElementById('btnReglas');
 const clave = d.getElementById('clave');
 const icon = d.getElementById('claveIcon');
 const marado = d.getElementById('maradonaOk');
@@ -25,8 +26,8 @@ formulario.addEventListener('submit', async (e) =>{
     const claveTry = clave.value.trim();
 
     btnIngresar.disabled = true;
+    mensaje.classList.remove("d-none");
     mensaje.textContent = "Verficando credenciales...";
-    mensaje.className = "";
 
     try{
         const { data: usuarioEncontrado, error } = await supaClient
@@ -39,16 +40,15 @@ formulario.addEventListener('submit', async (e) =>{
         if(error) throw error;
 
         if(!usuarioEncontrado){
-            mensaje.textContent = "Email o Clave incorrectos";
-            mensaje.className = "error"; 
+            mensaje.classList.remove("d-none");
+            mensaje.textContent = "❗ Email o Clave incorrectos";
             btnIngresar.disabled = false;
             return;
         }
 
         // ¡Ingreso Exitoso para TODOS!
         marado.classList.remove('d-none');
-        mensaje.textContent = "¡Bienvenido/a! Redirigiendo a tu panel...";
-        mensaje.className = "exito"; 
+        mensaje.textContent = "✔ ¡Bienvenido/a! Redirigiendo a tu panel..."; 
 
         localStorage.setItem('usuarioLogueado', JSON.stringify({
             id: usuarioEncontrado.id,
@@ -61,14 +61,20 @@ formulario.addEventListener('submit', async (e) =>{
 
     } catch (error){
         console.error("Error: ", error);
+        mensaje.classList.remove("d-none");
         mensaje.textContent = "Hubo un error al conectar con la base de datos";
-        mensaje.className = "error"; //--------------------------> Vincular clase 🟢  
         btnIngresar.disabled = false;
     }
 });
 
 const viewRules = (abierto) =>{
-    abierto ? reglas.classList.add("d-none") : reglas.classList.remove("d-none");
+    if(abierto){
+        reglas.classList.add("d-none");
+        btnReglas.classList= 'd-flex';
+    } else{
+        reglas.classList.remove("d-none");
+        btnReglas.classList= 'd-none';
+    }
 }
 
 icon.addEventListener('click', () =>{

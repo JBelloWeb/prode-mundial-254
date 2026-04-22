@@ -62,11 +62,19 @@ overflow-wrap: break-word;
 .d-none{
     display: none;
 }
+.d-flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 body{
     background: var(--pattern-bg);
     background-size: var(--pattern-bg-size);
     background-attachment: fixed;
+    min-height: 100dvh; 
+    display: flex;
+    flex-direction: column;
 }
 main, section{
     background-color: var(--sananto-white);
@@ -75,13 +83,21 @@ main, .top-section{
     border-radius: 50px 50px 0px 0px;
     box-shadow: #131313a9 0px 0px 20px 7px;;
 }
-footer{
-    height: 40vw;
-    background-color: var(--sananto-white);
+
+main{
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 40px 40px 0px 0px; 
+    padding: 2rem 1.5rem;
+    position: relative;
+    box-shadow: #131313a9 0px -5px 20px 2px; 
 }
 
 header{
-    padding: 4rem;
+     padding: 2rem 1rem;
 }
 h1{
     color: var(--sananto-white);
@@ -110,18 +126,21 @@ h2{
     align-items: center;
         
     h2{
-        color: var(--sananto-black);
+        color: var(--sananto-white);
         width: 100%;
         padding: 15px 0;
-        background-color: var(--sananto-blue);
+        background-color: var(--sananto-red);
+        text-shadow: var(--sananto-black) 0px 3px 0px;
+        border-bottom: var(--sananto-black) solid 5px;
     }
 
     .box{
         height: fit-content;
         background-color: var(--sananto-white);
-        outline: var(--sananto-blue) 5px solid;
+        outline: var(--sananto-red) 5px solid;
         border-radius: 15px;
         background-color: var(--sananto-white);
+        animation: zoom-in 0.5s;
         
         .modal-text{
             padding: 0.7rem;
@@ -135,51 +154,135 @@ h2{
             }
 
             ul{
-                font-size: 0.8rem;
-                list-style-type: decimal;
-                list-style: disc;
+                font-size: 0.9rem;
                 display: flex;
                 flex-direction: column;
                 gap: 5px;
                 padding: 0px 10px;
             }
             li{
+                padding: 0px 10px ;
                 background-color: var(--sananto-blue);
             }
         }
     }
-
-
-
 }
 
+@keyframes zoom-in{
+    from{
+        transform: scale(0%);
+    }
+    to{
+        transform: scale(100%);
+    }
+}
+
+
 .button{
+    background-color: var(--sananto-red);
+    color: var(--sananto-white);
+    font-weight: bold;
     border-radius: 50px;
-    margin: 10px auto;
-    padding: 5px;
+    margin: 10px auto 20px;
+    padding: 15px;
+    border: var(--sananto-white) 4px solid;
+    outline: var(--sananto-blue) 3px solid;
+    text-shadow: var(--sananto-black) 0px 1px 0px;
+    background-size: 10px;
+
+    transition: all 0.2s;
+    transition: outline-offset 0.05s;
+
+    &:hover{
+        cursor: pointer;
+        background-color: var(--sananto-blue);
+        outline: var(--sananto-red) 3px solid;
+        color: var(--sananto-black);
+        text-shadow: var(--sananto-white) 0px 2px 0px;
+    }
+
+    &:active{
+        outline: var(--sananto-red) 4px solid;
+        outline-offset: -4px;
+    }
 }
 
 #btnReglas{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    z-index: 1;
     font-size: 1.5rem;
-    position: fixed;
+    position: absolute;
     color: var(--sananto-black);
-    bottom: 15px;
-    right: 15px;
+    bottom: 25px;
+    right: 25px;
     border-radius: 100px;
     aspect-ratio: 1 / 1;
-    overflow: hidden;
-    width: 40px;
-    padding: 25px;
+    width: 65px;
+    padding: 5px;
     background-color: var(--sananto-blue);
     border: 3px solid var(--sananto-black);
     box-shadow: #13131357 0px 1px 2px 1px;
-}
+    transform-style: preserve-3d;
 
-.box{
-    display: flex;
+     &::after {
+            z-index: -1;
+            transform: translateZ(-1px);
+            position: absolute;
+            content: '';
+            bottom: -4px;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            background-color: var(--sananto-red);
+            border-radius: 50%;
+            margin: 0px;
+            opacity: 1;
+            transform-origin: center;
+            animation: beat 1.5s linear infinite;
+        }
+
+        &::before {
+            z-index: -1;
+            transform: translateZ(-1px);
+            position: absolute;
+            content: '';
+            bottom: -4px;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            background-color: var(--sananto-red);
+            border-radius: 50%;
+            margin: 0px;
+            opacity: 0.8;
+            transform-origin: center;
+            animation: beat 1.5s linear 0.2s infinite;
+        }
+
+        
+        &:hover{
+            cursor: pointer;
+            background-color: var(--sananto-red);
+            border: 3px solid var(--sananto-blue);
+        }
+    }
+    @keyframes beat {
+        0% {
+            margin: 0px;
+            opacity: 1;
+        }
+
+        30%{
+            margin: -10px;
+            opacity: 00;
+        }
+
+        100%{
+            margin: -10px;
+            opacity: 0;
+        }
+    }
+    
+    .box{
+        display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
@@ -196,13 +299,22 @@ h2{
     }
 }
 
+.box.login {
+    height: auto; 
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+}
+
 #loginForm{
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 100%;
     
     button{
-        padding: 5px 7px;
+        padding: 10px;
     }
 }
 
@@ -215,23 +327,23 @@ h2{
     label{
         font-weight: bold;
         background-color: var(--sananto-blue);
-        padding: 5px 0px;
+        padding: 3px 0px;
         padding-left: 15px;
         gap: 10px;
         border-radius: 20px 10px 0px 0px;
         transform: translateY(1px);
 
         &::after{
-            content: 'La que diste al registrarte';
+            content: '';
             position: relative;
             background-color: var(--sananto-red);
             color: var(--sananto-white);
-            margin-left: 20px;
-            padding: 6px;
-            padding-left: 10px;
-            padding-right: 15px;
-            border-radius: 0px 5px 0px 0px;
+            margin-left: 8px;
+            padding: 10px 8px;
+            border-radius: 0px 10px 0px 0px;
             font-weight: 600;
+            font-size: 0.65rem;          
+            
         }
     }
 
@@ -240,7 +352,7 @@ h2{
         display: flex;
         align-items: center;
         background: var(--sananto-blue);
-        border-radius: 0px 20px 20px 20px;
+        border-radius: 0px 25px 25px 25px;
         padding: 10px;
         width: 100%;
         box-sizing: border-box;
@@ -251,16 +363,28 @@ h2{
             border: none;
             border-radius: 20px;
             flex: 1;
-            padding: 5px;
+            padding: 5px 7px;
             font: inherit;
         }
 
         i{
             margin-left: 5px;
             color: var(--sananto-red);
+            
+            &:hover{
+                cursor: pointer;
+            }
         }
     }
 
+}
+
+#mensaje{
+    --main-color: var(--sananto-black);
+    color: var(--sananto-white);
+    font-style: italic;
+    background-color: var(--main-color);
+    padding: 15px;
 }
 
 #maradonaOk{
@@ -382,4 +506,10 @@ h2{
 .match-card{
     width: 90%;
     min-width: fit-content;
+}
+
+@media (max-width: 380px) {
+    .form-group label::after {
+        display: none; 
+    }
 }
