@@ -56,14 +56,20 @@ const paises = [
 ];
 const paisesASeguir = ["Argentina"];
 
+const minBosnia = (p) =>{
+    let n = p === "Bosnia y Herzegovina" ? "Bosnia" : p;
+    return n;
+}
+
 const actualizarSelecciones = () =>{
     if(selections.firstChild) selections.firstChild.remove();
     let ul = d.createElement('ul');
     for(let p of paisesASeguir){
+        let n = minBosnia(p);
         let b = d.getElementById(p.toLowerCase());
         if(b) b.classList.add('selected');
         let li = d.createElement('li');
-        li.textContent = p;
+        li.textContent = n;
         ul.appendChild(li);
     }
     selections.appendChild(ul);
@@ -151,7 +157,8 @@ const cargameLosPaises = () =>{
                 })
             }
             let codigo = codigosBanderas[p];
-            li.innerHTML = `<img src="https://flagcdn.com/16x12/${codigo}.png" alt="${p}" style="margin-right: 8px;"> ${p}`;
+            let n = minBosnia(p);
+            li.innerHTML = `<img src="https://flagcdn.com/16x12/${codigo}.png" alt="${p}" style="margin-right: 8px;">${n}`;
             integrantes.appendChild(li);
         }
         ol.appendChild(gr);
@@ -164,7 +171,6 @@ const generarPartidosUnicos = () =>{
 
     paisesASeguir.forEach(pais =>{
         let indiceGrupo = paises.findIndex(grupo => grupo.includes(pais));
-
         if (indiceGrupo !== -1) {
             const letraGrupo = grupos[indiceGrupo];
             const equiposDelGrupo = paises[indiceGrupo];
@@ -175,6 +181,8 @@ const generarPartidosUnicos = () =>{
                     // Ordenamos alfabéticamente para crear una clave única (Ej: "Argelia-Argentina")
                     // Así evitamos que se duplique si el usuario elige dos del mismo grupo
                     const parOrdenado = [pais, rival].sort();
+                    // let n = minBosnia(p);
+
                     const clave = `${parOrdenado[0]}-vs-${parOrdenado[1]}`;
 
                     if (!partidosUnicos.has(clave)) {
@@ -202,16 +210,19 @@ btnGenerar.addEventListener('click', () =>{
     contenedorPartidos.innerHTML = "";
 
     partidos.forEach((partido, index) =>{
+        let eA = minBosnia(partido.equipoA);
+        let eB = minBosnia(partido.equipoB);
+
         const div = d.createElement('div');
         div.classList = "match-card";
         div.innerHTML = `
             <p><strong>Grupo ${partido.grupo}</strong></p>
             <div class="team-row">
-                <span class="team-name">${partido.equipoA}</span>
+                <span class="team-name">${eA}</span>
                 <input type="number" class="score-input" data-equipo="${partido.equipoA}" data-index="${index}" min="0" max="99" required placeholder="0">
                 <span class="team-name"> vs </span>
                 <input type="number" class="score-input" data-equipo="${partido.equipoB}" data-index="${index}" min="0" max="99" required placeholder="0">
-                <span class="team-name">${partido.equipoB}</span>
+                <span class="team-name">${eB}</span>
                 </div>
                 <hr>
             `;

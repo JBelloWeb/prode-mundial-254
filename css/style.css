@@ -76,8 +76,8 @@ body{
     display: flex;
     flex-direction: column;
 }
-main, section{
-    background-color: var(--sananto-white);
+main{
+    background-color: var(--sananto-white); 
 }
 main, .top-section{
     border-radius: 50px 50px 0px 0px;
@@ -401,7 +401,8 @@ h2{
 }
 
 #seccionSeleccion{
-    padding: 1.2rem;
+
+    background-color: transparent;
 
     p{
         margin-top: 15px;
@@ -410,6 +411,15 @@ h2{
         color: var(--sananto-red);
         text-align: center;
     }
+}
+
+.heading{
+    padding: 1.2rem;
+    background-color: var(--sananto-white);
+    width: 100%;
+    border: var(--sananto-black) 5px solid;
+    border-right: 0px;
+    border-left: 0px;
 }
 
 #seccionPronosticos{
@@ -422,43 +432,90 @@ h2{
     }
 }
 
+#bracketContainer{
+    margin: auto;
+    background: transparent;
+    box-shadow: none;
+}
+
+.fase-container{
+    width: 90%;
+    margin: auto;
+    background: transparent;
+}
+
 #countrySelector ol{
     margin: 50px 5%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 3rem;
 }
 
 .group, .match-card{
+    background-color: var(--sananto-white);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     height: 100px;
     min-height: fit-content;
-    outline: var(--sananto-blue) solid;
+    box-shadow: var(--sananto-black) 0px 5px 4px 1px;
     border-radius: 20px;
     padding: 1rem;
     gap: 20px;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+
+    animation: grow-in linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 35%;
+
+    h3{
+        background-color: var(--sananto-blue);
+        width: 100%;
+        text-align: center;
+        padding: 5px 0;
+    }
 }
+
+@keyframes grow-in{
+    from{
+        transform: scale(0.5);
+    }
+
+    to{
+        transform: scale(1);
+    }
+}
+
 .group-participant{
+    --bg-color: var(--sananto-black);
+
     flex: 0 0 calc(50% - 5px);
     height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: var(--sananto-red);
+    background-color: var(--bg-color);
+    color: var(--sananto-white);
     border-radius: 10px;
     width: fit-content;
     padding: 5px;
 
     font-size: 0.85rem;
     font-weight: bold;
+
+    &:hover{
+        cursor: pointer;
+        background-color: hsl(from var(--bg-color) h s calc(l + 5));
+    }
 }
 .arg, .selected{
-    background-color: var(--sananto-blue);
-    color: var(--text-muted);
+    --bg-color: var(--sananto-blue);
+
+    background-color: var(--bg-color);
+    color: var(--sananto-black);
 }
 
 .countries-container{
@@ -475,7 +532,7 @@ h2{
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 2rem 2rem;
+    padding: 1.5rem 2rem;
     position: sticky;
     background-color: var(--sananto-black);
     color: var(--sananto-white);
@@ -506,6 +563,25 @@ h2{
 .match-card{
     width: 90%;
     min-width: fit-content;
+}
+
+#btnGenerarFormulario, #btnGuardar{
+    margin-top: 2rem;
+    margin-bottom: 10rem;
+}
+
+.team-row{
+    display: flex;
+}
+.team-column-A, .team-column-B{
+    display: flex;
+    flex-direction: column;
+}
+.team-column-A{
+    align-items: flex-start;
+}
+.team-column-B{
+    align-items: flex-end;
 }
 
 @media (max-width: 380px) {

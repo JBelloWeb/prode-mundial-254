@@ -30,7 +30,7 @@ const vistaPerfil = d.getElementById('vistaPerfil');
 const vistaRanking = d.getElementById('vistaRanking');
 const cuerpoTablaRanking = d.getElementById('cuerpoTablaRanking');
 
-bienvenida.textContent = `¡Hola, ${usuarioActivo.nombre}! Este es tu resumen.`;
+bienvenida.textContent = `¡Hola, ${usuarioActivo.nombre}! Este es tu panel`;
 
 // 2. LÓGICA DE PESTAÑAS (Mostrar/Ocultar)
 btnTabPerfil.addEventListener('click', () => {

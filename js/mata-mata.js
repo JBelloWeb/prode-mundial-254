@@ -122,17 +122,21 @@ function dibujarDieciseisavos() {
         card.innerHTML = `
             <p><strong>Partido ${p.id} - ${p.label}</strong></p>
             <div class="team-row">
-                <select class="team-select select-A" data-match="${p.id}">
-                    <option value="">Seleccionar Equipo A</option>
-                    ${optionsA}
-                </select>
-                <input type="number" class="score-input input-A" min="0" placeholder="0">
+                <div class="team-column-A">
+                    <select class="team-select select-A" data-match="${p.id}">
+                        <option value="">Equipo A</option>
+                        ${optionsA}
+                    </select>
+                    <input type="number" class="score-input input-A" min="0" placeholder="0">
+                </div>
                 <span style="color:var(--text-muted)"> vs </span>
-                <input type="number" class="score-input input-B" min="0" placeholder="0">
-                <select class="team-select select-B" data-match="${p.id}">
-                    <option value="">Seleccionar Equipo B</option>
-                    ${optionsB}
-                </select>
+                <div class="team-column-B">
+                    <select class="team-select select-B" data-match="${p.id}">
+                        <option value="">Equipo B</option>
+                        ${optionsB}
+                    </select>
+                    <input type="number" class="score-input input-B" min="0" placeholder="0">
+                </div>
             </div>
             
             <div style="margin-top: 15px;">
