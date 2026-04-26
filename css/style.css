@@ -113,6 +113,59 @@ h2{
     text-align: center;
 }
 
+nav{
+    margin-top: 20px; 
+    text-align: center;
+    margin: auto;
+    display: flex;
+    width: 100%;
+
+    button{
+        width: 50%;
+        padding: 10px;
+    }
+}
+
+#panelHeader{
+    padding:0.5rem;
+    background-color: var(--sananto-white);
+
+    h2{
+        padding: 2.5rem;
+        font-size: 2rem;
+    }
+}
+
+.puntos{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 2rem;
+    padding-left: 1.2rem;
+    margin-top: 0.2rem;
+    ul{
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+}
+
+#btnCerrarSesion{
+    transform: rotateZ(180deg);
+    border: none;
+    font-size: 1.7rem;
+    
+    &:hover{
+        cursor: pointer;
+        transform: translateY(-5px) rotateZ(180deg);
+    }
+}
+
+.dashboard-main{
+    border-radius: 0;
+    box-shadow: none;
+}
+
 .modal{
     height: 100%;
     width: 100%;
@@ -448,7 +501,7 @@ h2{
     margin: 50px 5%;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+
 }
 
 .group, .match-card{
@@ -480,7 +533,7 @@ h2{
 
 @keyframes grow-in{
     from{
-        transform: scale(0.5);
+        transform: scale(0.1);
     }
 
     to{
