@@ -3,12 +3,18 @@ const miniMap = d.getElementById('bracket');
 const url = '../media/brackets/';
 
 let selected = null;
-let p = d.createElement('p');
-p.style = 'color: white;' 
-miniMap.appendChild(p);
+let figure = d.createElement('figure');
+    figure.className = 'figure-container';
+
+let img = d.createElement('img');
+    img.src = '../assets/bracket/';
+
+figure.appendChild(img);    
+miniMap.appendChild(figure);
 
 const updateMiniMap = (match) =>{
-    p.textContent = match.id.replace('match-', 'Partido '); 
+    img.src = '../assets/bracket/';
+    img.src += `${match.id.replace('match-', '')}.png` ; 
 }
 
 for(let m of matches){
