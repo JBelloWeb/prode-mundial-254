@@ -69,7 +69,15 @@ const actualizarSelecciones = () =>{
         let b = d.getElementById(p.toLowerCase());
         if(b) b.classList.add('selected');
         let li = d.createElement('li');
-        li.textContent = n;
+        switch(paisesASeguir.indexOf(n)){
+            case 3:
+                li.textContent = n;
+                break;
+
+            default:
+                li.textContent = `${n} |`;
+                break;
+        }
         ul.appendChild(li);
     }
     selections.appendChild(ul);
@@ -218,11 +226,15 @@ btnGenerar.addEventListener('click', () =>{
         div.innerHTML = `
             <p><strong>Grupo ${partido.grupo}</strong></p>
             <div class="team-row">
+                <div class="team-column-A">
                 <span class="team-name">${eA}</span>
                 <input type="number" class="score-input" data-equipo="${partido.equipoA}" data-index="${index}" min="0" max="99" required placeholder="0">
+                </div>
                 <span class="team-name"> vs </span>
-                <input type="number" class="score-input" data-equipo="${partido.equipoB}" data-index="${index}" min="0" max="99" required placeholder="0">
+                <div class="team-column-B">
                 <span class="team-name">${eB}</span>
+                <input type="number" class="score-input" data-equipo="${partido.equipoB}" data-index="${index}" min="0" max="99" required placeholder="0">
+                </div>
                 </div>
                 <hr>
             `;

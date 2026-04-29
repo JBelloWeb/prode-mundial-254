@@ -126,7 +126,7 @@ function dibujarTablaPronosticos(predicciones) {
         return;
     }
     let html = `
-        <table border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
+        <table>
             <thead>
                 <tr><th style="padding: 10px;">Tu Pronóstico</th><th style="padding: 10px;">Resultado Real</th></tr>
             </thead>

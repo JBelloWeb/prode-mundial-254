@@ -10,17 +10,45 @@
 
     /*BACKGROUND VARIABLES*/
     --s: 100px; /* control the size*/
-    --c1: #8CCBF4;
-    --c2: #5991b6;
-    --_g:#0000, #0004 5%,
+
+    --c1: #363636;
+    --c2: #131313;
+    --_g1:#0000, #0004 5%,
      var(--c2) 6%  14%,var(--c1) 16% 24%,var(--c2) 26% 34%,var(--c1) 36% 44%,
      var(--c2) 46% 54%,var(--c1) 56% 64%,var(--c2) 66% 74%,var(--c1) 76% 84%,
      var(--c2) 86% 94%,#0004 95%,#0000;
-    --pattern-bg:
-    radial-gradient(100% 50% at 100% 0   ,var(--_g)),
-    radial-gradient(100% 50% at 0    50% ,var(--_g)),
-    radial-gradient(100% 50% at 100% 100%,var(--_g));
-    --pattern-bg-size: var(--s) calc(2*var(--s));
+
+    --pattern-bg-black:
+    radial-gradient(100% 50% at 100% 0   ,var(--_g1)),
+    radial-gradient(100% 50% at 0    50% ,var(--_g1)),
+    radial-gradient(100% 50% at 100% 100%,var(--_g1));
+
+    --c3:  #8CCBF4;
+    --c4: #5991b6;
+    --_g2:#0000, #0004 5%,
+     var(--c4) 6%  14%,var(--c3) 16% 24%,var(--c4) 26% 34%,var(--c3) 36% 44%,
+     var(--c4) 46% 54%,var(--c3) 56% 64%,var(--c4) 66% 74%,var(--c3) 76% 84%,
+     var(--c4) 86% 94%,#0004 95%,#0000;
+
+    --pattern-bg-blue:
+    radial-gradient(100% 50% at 100% 0   ,var(--_g2)),
+    radial-gradient(100% 50% at 0    50% ,var(--_g2)),
+    radial-gradient(100% 50% at 100% 100%,var(--_g2));
+
+    --c5:  #E12C2C;
+    --c6: #8d2121;
+    --_g3:#0000, #0004 5%,
+     var(--c6) 6%  14%,var(--c5) 16% 24%,var(--c6) 26% 34%,var(--c5) 36% 44%,
+     var(--c6) 46% 54%,var(--c5) 56% 64%,var(--c6) 66% 74%,var(--c5) 76% 84%,
+     var(--c6) 86% 94%,#0004 95%,#0000;
+
+    --pattern-bg-red:
+    radial-gradient(100% 50% at 100% 0   ,var(--_g3)),
+    radial-gradient(100% 50% at 0    50% ,var(--_g3)),
+    radial-gradient(100% 50% at 100% 100%,var(--_g3));
+
+
+    --pattern-bg-size: calc(var(--s) + 0.5px) calc(2*var(--s) + 0.5px);
 }
 
 html {
@@ -68,14 +96,30 @@ overflow-wrap: break-word;
     align-items: center;
 }
 
-body{
-    background: var(--pattern-bg);
+body {
+    background-color: var(--c4); /* Color base del patrón azul */
+    background-image: var(--pattern-bg-blue);
     background-size: var(--pattern-bg-size);
     background-attachment: fixed;
     min-height: 100dvh; 
     display: flex;
     flex-direction: column;
 }
+
+#group-page, #final-page {
+    background-color: var(--c2); /* Color base del patrón negro */
+    background-image: var(--pattern-bg-black);
+    background-size: var(--pattern-bg-size);
+    background-attachment: fixed;
+}
+
+#main-page {
+    background-color: var(--c4); /* Color base del patrón azul */
+    background-image: var(--pattern-bg-blue);
+    background-size: var(--pattern-bg-size);
+    background-attachment: fixed;
+}
+
 main{
     background-color: var(--sananto-white); 
 }
@@ -119,14 +163,9 @@ nav{
     margin: auto;
     display: flex;
     width: 100%;
-
-    button{
-        width: 50%;
-        padding: 10px;
-    }
 }
 
-#panelHeader{
+/* #panelHeader{
     padding:0.5rem;
     background-color: var(--sananto-white);
 
@@ -134,9 +173,9 @@ nav{
         padding: 2.5rem;
         font-size: 2rem;
     }
-}
+} */
 
-.puntos{
+/* .puntos{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -148,9 +187,9 @@ nav{
         justify-content: flex-end;
         gap: 10px;
     }
-}
+} */
 
-#btnCerrarSesion{
+/* #btnCerrarSesion{
     transform: rotateZ(180deg);
     border: none;
     font-size: 1.7rem;
@@ -159,11 +198,15 @@ nav{
         cursor: pointer;
         transform: translateY(-5px) rotateZ(180deg);
     }
-}
+} */
 
 .dashboard-main{
+    width: 90%;
     border-radius: 0;
     box-shadow: none;
+    margin: auto;
+    margin-bottom: 50px;
+    border-radius: 15px;
 }
 
 .modal{
@@ -231,8 +274,8 @@ nav{
 }
 
 
-.button{
-    background-color: var(--sananto-red);
+/*.button{
+     background-color: var(--sananto-red);
     color: var(--sananto-white);
     font-weight: bold;
     border-radius: 50px;
@@ -258,6 +301,37 @@ nav{
         outline: var(--sananto-red) 4px solid;
         outline-offset: -4px;
     }
+} */
+
+.button {
+    background-color: var(--sananto-red);
+    color: var(--sananto-white);
+    font-weight: bold;
+    border-radius: 10px;
+    margin: 10px auto 20px;
+    padding: 12px 24px;
+    border: 2px solid var(--sananto-black);
+    box-shadow: 4px 4px 0px var(--sananto-black);
+    text-shadow: none;
+    transition: all 0.1s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+}
+
+.button:hover {
+    cursor: pointer;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--sananto-black);
+    background-color: var(--sananto-blue);
+    color: var(--sananto-black);
+}
+
+.button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px var(--sananto-black);
 }
 
 #btnReglas{
@@ -467,12 +541,19 @@ nav{
 }
 
 .heading{
+    margin-top: 10px;
+    color: var(--sananto-red);
+    text-align: center;
     padding: 1.2rem;
     background-color: var(--sananto-white);
     width: 100%;
     border: var(--sananto-black) 5px solid;
     border-right: 0px;
     border-left: 0px;
+
+    h1{
+        margin-bottom: 20px;
+    }
 }
 
 #seccionPronosticos{
@@ -482,16 +563,22 @@ nav{
 
     h2{
         padding: 1.2rem;
+        background-color: var(--sananto-blue);
+        border: 4px solid var(--sananto-white);
     }
 }
 
 #bracketContainer{
-    margin: auto;
     background: transparent;
     box-shadow: none;
+
 }
 
 .fase-container{
+        display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 90%;
     margin: auto;
     background: transparent;
@@ -504,14 +591,16 @@ nav{
 
 }
 
-.group, .match-card{
+ .group{
     background-color: var(--sananto-white);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 100px;
-    min-height: fit-content;
+
+    height: auto;
+    min-height: 100px;
+
     box-shadow: var(--sananto-black) 0px 5px 4px 1px;
     border-radius: 20px;
     padding: 1rem;
@@ -519,25 +608,42 @@ nav{
     margin-top: 2.5rem;
     margin-bottom: 1rem;
 
-    animation: grow-in linear both;
+    animation: pop-in-out linear both;
     animation-timeline: view();
-    animation-range: entry 10% cover 35%;
 
     h3{
         background-color: var(--sananto-blue);
         width: 100%;
         text-align: center;
         padding: 5px 0;
+        border-radius: 15px 15px 5px 5px ;
     }
-}
+} 
 
-@keyframes grow-in{
-    from{
-        transform: scale(0.1);
+
+@keyframes pop-in-out{
+    entry 0%{
+        transform: scale(0.8) translateY(50px);
+        opacity: 0;
+        filter: brightness(0.5);
     }
 
-    to{
-        transform: scale(1);
+    entry 100%{
+        transform: scale(1) translateY(0);
+        opacity: 1;
+        filter: brightness(1);
+    }
+
+    exit 0%{
+        transform: scale(1) translateY(0);
+        opacity: 1;
+        filter: brightness(1);
+    }
+
+    exit 100%{
+        transform: scale(0.8) translateY(-50px);
+        opacity: 0;
+        filter: brightness(0.5);
     }
 }
 
@@ -552,7 +658,7 @@ nav{
     text-align: center;
     background-color: var(--bg-color);
     color: var(--sananto-white);
-    border-radius: 10px;
+    border-radius: 15px 5px;
     width: fit-content;
     padding: 5px;
 
@@ -594,6 +700,7 @@ nav{
     left: 0;
     right: 0;
     height: 40px;
+    margin-top: 10px;
 
     ul{
         display: flex;
@@ -613,15 +720,127 @@ nav{
     gap: 1rem;
 }
 
-.match-card{
+/* .match-card{
     width: 90%;
     min-width: fit-content;
-}
+} */
 
-#btnGenerarFormulario, #btnGuardar{
+#btnGenerarFormulario, #btnGuardar, #btnGuardarMataMata{
     margin-top: 2rem;
     margin-bottom: 10rem;
 }
+
+/* =========================================
+   TÍTULOS DE FASES (MATA-MATA)
+   ========================================= */
+#bracketContainer h2 {
+    background-color: var(--sananto-black);
+    color: var(--sananto-white);
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    text-align: center;
+    padding: 15px 20px;
+    margin: 50px auto 25px auto; /* Espacio generoso arriba para separar las fases */
+    border: 3px solid var(--sananto-blue);
+    border-radius: 15px;
+    
+    /* Sombra brutalista usando el color rojo para que resalte */
+    box-shadow: 6px 6px 0px var(--sananto-red);
+    
+    width: 90%;
+    max-width: 450px;
+    
+    /* Flexbox para alinear el texto y los iconos decorativos */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Agregamos un adorno futbolero a los costados del título */
+#bracketContainer h2::before,
+#bracketContainer h2::after {
+    content: '⚽'; 
+    font-size: 1.2rem;
+    /* Le damos la misma sombra al emoji para integrarlo al diseño */
+    filter: drop-shadow(2px 2px 0px var(--sananto-red));
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 450px) {
+    #bracketContainer h2 {
+        font-size: 1.2rem;
+        padding: 12px 15px;
+        letter-spacing: 1px;
+        box-shadow: 4px 4px 0px var(--sananto-red);
+    }
+    
+    #bracketContainer h2::before,
+    #bracketContainer h2::after {
+        font-size: 1rem;
+    }
+}
+
+#faseNav{
+    position: sticky;
+    top: 15px;
+    z-index: 10;
+    margin: 20px auto;
+    padding: 0 10px;
+}
+
+.nav-fases{
+    display: flex;
+    justify-content: center;
+    min-width: fit-content;
+    gap: 8px;
+    background-color: var(--sananto-black);
+    padding: 10px 15px;
+    border-radius: 50px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+    border: 2px solid var(--sananto-blue);
+    margin: 0;
+}
+
+.fase-container{
+    scroll-margin-top: 90px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.nav-fase-link {
+    text-decoration: none;
+    color: var(--sananto-white);
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.nav-fase-link:hover {
+    background-color: var(--sananto-blue);
+    color: var(--sananto-black);
+}
+
+.nav-fase-link.active {
+    background-color: var(--sananto-red);
+    color: var(--sananto-white);
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.5);
+}
+
+/* #bracketContainer .match-card{
+    justify-content: center;
+}
+
+.focus-match{
+    outline: 4px solid var(--sananto-red);
+} */
 
 .team-row{
     display: flex;
@@ -629,16 +848,648 @@ nav{
 .team-column-A, .team-column-B{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap:10px;
+
+    select{
+        border: none;
+        width: 80%;
+        text-align: center;
+        background-color: var(--sananto-black);
+        color: var(--sananto-white);
+        border-radius: 25px;
+        padding: 5px 0px;
+    }
+    select::-webkit-inner-spin-button, select::-webkit-outer-spin-button, .select::-webkit-keygen-select{
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    input{
+        border: none;
+        outline: none;
+        width: 50%;
+        background-color: transparent;
+        border: 0px;
+        font-size: 3rem;
+        padding: 5px;
+        text-align: center;
+    }
+
+    input[type=number]{
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
 }
+.team-column-A input::-webkit-outer-spin-button, .team-column-A input::-webkit-inner-spin-button,.team-column-B input::-webkit-outer-spin-button, .team-column-B input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .team-column-A{
     align-items: flex-start;
+
+    input{
+        margin-left: 15%;
+    }
 }
 .team-column-B{
     align-items: flex-end;
+
+    input{
+        margin-right: 15%;
+    }
+}
+
+#bracket{
+    position: fixed;
+    z-index: 1;    
+    width: 200px;
+    bottom: 25px;
+    right: 25px;
+
+    h2{
+        background-color: var(--sananto-blue);
+    }
+    
+}
+
+/* =========================================
+   FIX: MATCH CARDS EN UNA SOLA COLUMNA
+   ========================================= */
+
+/* 1. Forzamos al contenedor a ser siempre una columna centrada */
+#bracketContainer .fase-container {
+    display: flex;
+    flex-direction: column !important; /* Prioridad máxima para evitar que el flex-row anterior actúe */
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+/* 2. Unificamos el tamaño de la tarjeta para todas las pantallas */
+#bracketContainer .match-card {
+    width: 90% !important;        /* En celulares ocupará el 90% de la pantalla */
+    max-width: 450px !important;  /* En PC dejará de crecer en 450px, manteniéndose cómoda de leer */
+    min-width: 0 !important;      /* Anulamos el fit-content para que todas midan igual sin importar el texto */
+    margin: 15px auto;            /* Centrado perfecto con un poco de separación vertical */
 }
 
 @media (max-width: 380px) {
     .form-group label::after {
         display: none; 
+    }
+}
+
+@media (min-width: 720px) {
+
+    #countrySelector ol{
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+    
+    .group, .match-card{
+        width: 45%;
+    }
+
+    #bracketContainer .match-card{
+        width: 45%;
+    }
+
+    #faseNav{
+        position: fixed;
+        right: 85%;
+        top: 15%;
+        padding: 10px 2px;
+    }
+
+    .nav-fases{
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 50px;
+        padding: 20px 5px;
+    }
+
+    .fase-container{
+        scroll-margin-top: 0px;
+    }
+
+}
+
+@media (min-width: 1024px){
+    .group, .match-card{
+        width: 30%;
+    }
+    
+    #elecciones{
+        padding: 2rem;
+
+        ul{
+            gap: 10px;
+        }
+    }
+
+    #faseNav{
+        left: 20%;
+    }
+}
+
+/* =========================================
+   REDISEÑO DE MATCH CARDS (PRO & MATA-MATA)
+   ========================================= */
+
+.match-card {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 2px solid transparent;
+    border-radius: 24px;
+    padding: 1.5rem;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto elástico */
+    
+    /* Sombra elegante y suave */
+    box-shadow: 
+        0 10px 20px rgba(0,0,0,0.2),
+        inset 0 0 0 1px rgba(255,255,255,0.5);
+
+    /* Aseguramos que el contenido no se escape (Fix iPhone) */
+    height: auto !important;
+    min-height: 140px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Decoración lateral de la card (pequeño acento azul) */
+.match-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background: var(--sananto-blue);
+    border-radius: 20px 0 0 20px;
+}
+.match-card::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background: var(--sananto-blue);
+    border-radius: 20px 0 0 20px;
+}
+
+/* =========================================
+   ESTILO ESPECIAL: TARJETA SELECCIONADA (FOCUS)
+   ========================================= */
+
+.focus-match {
+    transform: scale(1.05); /* Se agranda un poco */
+    z-index: 5;
+    background-color: #fff;
+    border-color: var(--sananto-red);
+    
+    /* Brillo de Neón Rojo */
+    box-shadow: 
+        0 0 25px rgba(225, 44, 44, 0.4), 
+        0 15px 35px rgba(0,0,0,0.3);
+    
+    /* Animación de pulso sutil */
+    animation: pulse-border 2s infinite;
+}
+
+/* Cambiamos el color del acento lateral cuando está enfocada */
+.focus-match::before, .focus-match::after {
+    background: var(--sananto-red);
+    box-shadow: 0 0 10px var(--sananto-red);
+}
+
+@keyframes pulse-border {
+    0% { box-shadow: 0 0 0 0 rgba(225, 44, 44, 0.7), 0 15px 35px rgba(0,0,0,0.3); }
+    70% { box-shadow: 0 0 0 15px rgba(225, 44, 44, 0), 0 15px 35px rgba(0,0,0,0.3); }
+    100% { box-shadow: 0 0 0 0 rgba(225, 44, 44, 0), 0 15px 35px rgba(0,0,0,0.3); }
+}
+
+/* Mejoras en los textos e inputs dentro de la card */
+.match-card p {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sananto-black);
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.team-row {
+    align-items: center;
+    gap: 15px;
+}
+
+.score-input {
+    background: #f0f0f0 !important;
+    border-radius: 12px !important;
+    font-weight: 900 !important;
+    color: var(--sananto-black);
+    transition: background 0.3s;
+}
+
+.focus-match .score-input {
+    background: #fff !important;
+    outline: 2px solid var(--sananto-blue);
+}
+
+.auto-team {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: #333;
+}
+
+/* =========================================
+   ESTILOS DEL PANEL (DASHBOARD)
+   ========================================= */
+
+/* 1. Botones de Acción (Predicciones) */
+#accionesProde {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+/* #accionesProde button {
+    background-color: var(--sananto-red);
+    color: var(--sananto-white);
+    font-weight: bold;
+    border-radius: 50px;
+    border: var(--sananto-white) 4px solid;
+    outline: var(--sananto-blue) 3px solid;
+    text-shadow: var(--sananto-black) 0px 1px 0px;
+    transition: all 0.2s;
+    margin-top: 20px;
+    min-width: fit-content;
+    width: 20%;
+    padding: 15px 10px;
+}
+
+#accionesProde button:not(:disabled):hover {
+    cursor: pointer;
+    background-color: var(--sananto-blue);
+    outline: var(--sananto-red) 3px solid;
+    color: var(--sananto-black);
+    text-shadow: var(--sananto-white) 0px 2px 0px;
+} */
+
+#accionesProde button {
+    background-color: var(--sananto-red);
+    color: var(--sananto-white);
+    font-weight: bold;
+    border-radius: 10px;
+    border: 2px solid var(--sananto-black);
+    box-shadow: 4px 4px 0px var(--sananto-black);
+    transition: all 0.1s ease-in-out;
+    margin-top: 20px;
+    min-width: fit-content;
+    width: 25%;
+    padding: 15px 10px;
+    font-size: 1.1rem;
+}
+
+#accionesProde button:not(:disabled):hover {
+    cursor: pointer;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--sananto-black);
+    background-color: var(--sananto-blue);
+    color: var(--sananto-black);
+}
+
+#accionesProde button:not(:disabled):active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px var(--sananto-black);
+}
+
+/* Opcional: Estilo para cuando el botón está deshabilitado (Enviado ✅) */
+#accionesProde button:disabled {
+    box-shadow: none;
+    transform: none;
+}
+
+/* 2. Navegación (Pestañas Mi Perfil / Ranking) */
+.dashboard-nav {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 15px;
+    max-width: 80%;
+}
+
+.dashboard-nav button {
+    width: 50%;
+    max-width: 350px;
+    background-color: var(--sananto-black);
+    color: var(--sananto-white);
+    border: 2px solid var(--sananto-blue);
+    border-radius: 15px 15px 0 0; /* Forma de pestaña */
+    padding: 12px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: none;
+}
+
+/* Estilo para la pestaña activa (manejado por JS, detectamos el font-weight) */
+.dashboard-nav button[style*="font-weight: bold"] {
+    background-color: var(--sananto-white);
+    color: var(--sananto-black);
+    border-color: var(--sananto-white);
+}
+
+/* 3. Contenedores de Secciones (Estilo Tarjeta) */
+#vistaPerfil, #vistaRanking {
+    width: 100%;
+    max-width: 800px;
+    animation: appear 0.4s ease-out;
+}
+
+#vistaPerfil section, #vistaRanking section {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border: 2px solid var(--sananto-blue);
+}
+
+#vistaPerfil h2, #vistaRanking h2 {
+    background-color: var(--sananto-black);
+    color: var(--sananto-white);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+/* 4. Lista de Equipos Seguidos (Píldoras) */
+#listaEquipos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 0;
+}
+
+#listaEquipos li {
+    background-color: var(--sananto-blue);
+    color: var(--sananto-black);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* 5. Tablas de Pronósticos y Ranking */
+table {
+    width: 100%;
+    border-collapse: collapse !important;
+    background-color: var(--sananto-white);
+    border-radius: 10px;
+    overflow: hidden; /* Para que los bordes redondeados apliquen al encabezado */
+    border: 2px solid var(--sananto-black) !important;
+}
+
+thead {
+    background-color: var(--sananto-red);
+    color: var(--sananto-white);
+}
+
+th {
+    width: 50%;
+    padding: 12px !important;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+td {
+    padding: 12px !important;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.95rem;
+}
+
+tbody > tr{
+    text-align: center;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* 6. Ajustes Responsive (Celulares) */
+@media (max-width: 600px) {
+    #panelHeader h2 {
+        padding: 1.5rem;
+        font-size: 1.5rem;
+    }
+    
+    td, th {
+        padding: 8px !important;
+        font-size: 0.85rem;
+    }
+    
+    #accionesProde button {
+        min-width: 85%; /* Botones ocupan todo el ancho en móviles */
+    }
+
+    .dashboard-nav button{
+        padding: 0px 4px; 
+    }
+}
+
+/* =========================================
+   REDISEÑO DEL HEADER DEL DASHBOARD
+   ========================================= */
+#panelHeader {
+    background-color: var(--sananto-white);
+    padding: 1.5rem;
+    border-bottom: 4px solid var(--sananto-black);
+    border-radius: 0 0 25px 25px; /* Suaviza las esquinas inferiores */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 15px;
+}
+
+/* Forzamos el estilo del h1 dentro del header para que no tome el fondo negro global */
+.header-top h1#bienvenidaDashboard {
+    background-color: transparent;
+    color: var(--sananto-black);
+    padding: 0;
+    margin: 0;
+    font-size: 1.3rem;
+    text-align: left;
+    width: auto;
+    line-height: 1.2;
+}
+
+/* Botón de Cerrar Sesión más sólido y clickeable */
+#btnCerrarSesion {
+    background-color: var(--sananto-red);
+    color: var(--sananto-white);
+    border: 2px solid var(--sananto-black);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 3px 3px 0px var(--sananto-black); /* Estilo retro/brutalista */
+    transition: all 0.1s ease-in-out;
+}
+
+#btnCerrarSesion:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px var(--sananto-black);
+    background-color: #ff4747;
+}
+
+#btnCerrarSesion:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px var(--sananto-black);
+}
+
+/* =========================================
+   JERARQUÍA DE PUNTUACIONES
+   ========================================= */
+#puntajeContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--sananto-black);
+    padding: 15px 25px;
+    border-radius: 15px;
+    border: 2px solid var(--sananto-blue);
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.1);
+    width: 60%;
+    margin: auto;
+}
+
+/* Protagonista: Puntos Totales */
+.puntaje-box.total {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.puntaje-box.total .puntaje-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--sananto-blue);
+    margin-bottom: 2px;
+}
+
+.puntaje-box.total .puntaje-valor {
+    font-size: 2.8rem; /* Tamaño gigante para resaltar */
+    font-weight: 900;
+    color: var(--sananto-white);
+    line-height: 1;
+}
+
+/* Secundarios: Plenos y Parciales */
+.puntajes-secundarios {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.puntaje-box.detalle {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo sutil */
+    padding: 5px 12px;
+    border-radius: 8px;
+}
+
+.puntaje-box.detalle .puntaje-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text-muted); /* Color grisáceo para quitarles peso visual */
+}
+
+.puntaje-box.detalle .puntaje-valor {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--sananto-white);
+}
+
+/* Adaptación para pantallas muy pequeñas */
+@media (max-width: 470px) {
+    #puntajeContainer {
+        width: 90%;
+        padding: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .puntaje-box.total{
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .puntajes-secundarios {
+        flex-direction: row; /* En celulares los ponemos uno al lado del otro */
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+
+/* Adaptación para pantallas muy pequeñas */
+@media (max-width: 450px) {
+    #panelHeader {
+        padding: 1rem;
+    }
+    
+    .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+    
+    #btnCerrarSesion {
+        align-self: flex-end;
+    }
+
+    .puntaje-valor {
+        font-size: 1.4rem;
     }
 }

@@ -9,30 +9,42 @@
     <title>Mi Panel - Prode 254</title>
 </head>
 <body>
-    <header id="panelHeader"">
+<header id="panelHeader">
+    <div class="header-top">
         <h1 id="bienvenidaDashboard">Cargando perfil...</h1>
-        <div id="puntajeContainer">
-            <div class="puntos">
-                <button id="btnCerrarSesion"><i class="fa-solid fa-arrow-right-from-bracket" style="color:var(--sananto-red);"></i></button>
-                <ul>
-                    <li>Plenos: <span id="puntosPlenos">0</span> </li>
-                    <li>Parciales: <span id="puntosParciales">0</span> </li>
-                </ul>
-            </div>
-            <h2>Puntos Totales: <span id="puntosTotales">0</span></h2>
+        <button id="btnCerrarSesion" title="Cerrar Sesión">
+            Salir <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+    </div>
+    
+    <div id="puntajeContainer">
+        <div class="puntaje-box total">
+            <span class="puntaje-label">Puntos Totales</span>
+            <span class="puntaje-valor" id="puntosTotales">0</span>
         </div>
-    </header>
+        
+        <div class="puntajes-secundarios">
+            <div class="puntaje-box detalle">
+                <span class="puntaje-label">Plenos:</span>
+                <span class="puntaje-valor" id="puntosPlenos">0</span>
+            </div>
+            <div class="puntaje-box detalle">
+                <span class="puntaje-label">Parciales:</span>
+                <span class="puntaje-valor" id="puntosParciales">0</span>
+            </div>
+        </div>
+    </div>
+</header>
 
-    <nav>
+    <nav class="dashboard-nav">
         <button id="btnTabPerfil" style="font-weight: bold;">Mi Perfil</button>
         <button id="btnTabRanking">🏆 Ranking Global</button>
     </nav>
-    <hr>
 
     <main class="dashboard-main">
         <section id="accionesProde">
-            <button id="btnIrGrupos" style="padding: 15px 30px; font-size: 1.1rem;">📝 Predecir Grupos</button>
-            <button id="btnIrMataMata" style="padding: 15px 30px; font-size: 1.1rem;">🏆 Predecir Mata-Mata</button>
+            <button id="btnIrGrupos">📝 Predecir Grupos</button>
+            <button id="btnIrMataMata">🏆 Predecir Mata-Mata</button>
         </section>
 
         <div id="vistaPerfil">
@@ -52,13 +64,13 @@
         <div id="vistaRanking" style="display: none;">
             <section id="seccionRanking">
                 <h2>Tabla de Posiciones</h2>
-                <table border="1" style="width: 100%; max-width: 600px; border-collapse: collapse; text-align: center; margin: 0 auto;">
+                <table style="text-align: center; margin: 0 auto;">
                     <thead>
                         <tr>
-                            <th style="padding: 10px;">Pos</th>
-                            <th style="padding: 10px; text-align: left;">Jugador</th>
-                            <th style="padding: 10px;">Puntos</th>
-                            <th style="padding: 10px;">Plenos</th>
+                            <th>Pos</th>
+                            <th>Jugador</th>
+                            <th>Puntos</th>
+                            <th>Plenos</th>
                         </tr>
                     </thead>
                     <tbody id="cuerpoTablaRanking">

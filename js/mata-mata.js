@@ -101,6 +101,7 @@ const fases = [
     { id: 'final', titulo: 'Gran Final', partidos: ['P104'] }
 ];
 
+const nav = d.getElementById('faseNav');
 const bracketContainer = d.getElementById('bracketContainer');
 
 // ==========================================
@@ -110,6 +111,7 @@ const bracketContainer = d.getElementById('bracketContainer');
 function dibujarDieciseisavos() {
     let section = d.createElement('section');
     section.className = 'fase-container';
+    section.id = 'fase-dieciseisavos';
     section.innerHTML = `<h2>Dieciseisavos de Final</h2>`;
 
     dieciseisavos.forEach(p => {
@@ -144,7 +146,7 @@ function dibujarDieciseisavos() {
                 <label for="penales-${p.id}" style="font-size:0.85rem; color: var(--text-muted);">Definición por Penales</label>
             </div>
 
-            <div class="penales-box" id="box-penales-${p.id}">
+            <div class="penales-box d-none" id="box-penales-${p.id}">
                 <label>Ganador de los penales:</label>
                 <select class="penales-winner">
                     <option value="">Seleccionar ganador...</option>
@@ -161,20 +163,29 @@ function dibujarSiguientesFases() {
     fases.forEach(fase => {
         let section = d.createElement('section');
         section.className = 'fase-container';
+        section.id = `fase-${fase.id}`;
         section.innerHTML = `<h2>${fase.titulo}</h2>`;
 
         fase.partidos.forEach(idPartido => {
             let card = d.createElement('div');
             card.className = 'match-card';
             card.id = `match-${idPartido}`;
+            
+            // Usamos la misma estructura de .team-column-A y .team-column-B que en dieciseisavos
             card.innerHTML = `
                 <p><strong>Partido ${idPartido}</strong></p>
-                <div class="team-row">
-                    <span class="auto-team team-A" id="teamA-${idPartido}">Por definirse...</span>
-                    <input type="number" class="score-input input-A" min="0" placeholder="0">
-                    <span style="color:var(--text-muted)"> vs </span>
-                    <input type="number" class="score-input input-B" min="0" placeholder="0">
-                    <span class="auto-team team-B" id="teamB-${idPartido}">Por definirse...</span>
+                <div class="team-row" style="justify-content: center;">
+                    <div class="team-column-A">
+                        <span class="auto-team team-A" id="teamA-${idPartido}" style="padding: 2px; font-weight: 500; font-size: 0.95rem; min-height: 25px;">Por definirse...</span>
+                        <input type="number" class="score-input input-A" min="0" placeholder="0">
+                    </div>
+                    
+                    <span style="color:var(--text-muted); display:flex; align-items:center; padding: 0 10px;"> vs </span>
+                    
+                    <div class="team-column-B">
+                        <span class="auto-team team-B" id="teamB-${idPartido}" style="padding: 2px; font-weight: 500; font-size: 0.95rem; min-height: 25px;">Por definirse...</span>
+                        <input type="number" class="score-input input-B" min="0" placeholder="0">
+                    </div>
                 </div>
                 
                 <div style="margin-top: 15px;">
@@ -182,7 +193,7 @@ function dibujarSiguientesFases() {
                     <label for="penales-${idPartido}" style="font-size:0.85rem; color: var(--text-muted);">Definición por Penales</label>
                 </div>
 
-                <div class="penales-box" id="box-penales-${idPartido}">
+                <div class="penales-box d-none" id="box-penales-${idPartido}">
                     <label>Ganador de los penales:</label>
                     <select class="penales-winner">
                         <option value="">Seleccionar ganador...</option>
@@ -449,3 +460,23 @@ btnGuardarMataMata.addEventListener('click', async () => {
         btnGuardarMataMata.textContent = "Guardar Fase Final 🏆";
     }
 });
+
+const createBracketNav = () =>{
+    const navItems = [
+        {id: 'fase-dieciseisavos', label:'16vos'},
+        {id: 'fase-octavos', label:'8vos'},
+        {id: 'fase-cuartos', label:'4tos'},
+        {id: 'fase-semis', label:'Semis'},
+        {id: 'fase-final', label:'Final'}
+    ];
+
+    nav.innerHTML = `
+        <ul class="nav-fases">
+            ${navItems.map(item => `
+                <li><a href="#${item.id}" class="nav-fase-link">${item.label}</a></li>
+            `).join('')}
+        </ul>
+    `
+}
+
+createBracketNav();
