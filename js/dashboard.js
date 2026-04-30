@@ -174,11 +174,13 @@ function dibujarTablaRanking(ranking) {
         const estiloFila = jugador.usuario_id === usuarioActivo.id ? 'font-weight: bold;' : '';
         const nombreMostrar = jugador.usuario_id === usuarioActivo.id ? `${jugador.nombre} (Tú)` : jugador.nombre;
 
+        const puntosMostrar = Number(jugador.puntos_totales).toFixed(1).replace('.0', ''); 
+
         html += `
             <tr style="${estiloFila}">
                 <td style="padding: 10px;">${medalla}${posicion}</td>
                 <td style="padding: 10px; text-align: left;">${nombreMostrar}</td>
-                <td style="padding: 10px;"><strong>${jugador.puntos_totales || 0}</strong></td>
+                <td style="padding: 10px;"><strong>${puntosMostrar}</strong></td>
                 <td style="padding: 10px;">${jugador.aciertos_plenos || 0}</td>
             </tr>
         `;

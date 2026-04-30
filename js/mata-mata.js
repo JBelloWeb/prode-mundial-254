@@ -250,6 +250,41 @@ function actualizarDropdownPenales(matchId) {
     if (nombreB && nombreB !== "Por definirse...") selectPenales.innerHTML += `<option value="${nombreB}">${nombreB}</option>`;
 }
 
+// Función para limpiar ramificaciones futuras si se borra un resultado previo
+function limpiarFuturo(matchId) {
+    if (progresion[matchId]) {
+        let nextMatch = progresion[matchId].next;
+        let slot = progresion[matchId].slot;
+        
+        let targetSpan = d.getElementById(`team${slot}-${nextMatch}`);
+        if(targetSpan){
+            targetSpan.textContent = "Por definirse...";
+            targetSpan.classList.remove('filled');
+            actualizarDropdownPenales(nextMatch);
+            // Vaciamos los goles de esa llave por si ya habían escrito algo
+            d.querySelector(`#match-${nextMatch} .input-A`).value = "";
+            d.querySelector(`#match-${nextMatch} .input-B`).value = "";
+            
+            evaluarGanador(nextMatch); // Efecto dominó: limpia hasta la final
+        }
+
+        // Si es la semi, también limpiamos el 3er puesto
+        if (progresion[matchId].loserNext) {
+            let loserMatch = progresion[matchId].loserNext;
+            let loserSlot = progresion[matchId].loserSlot;
+            let targetLoserSpan = d.getElementById(`team${loserSlot}-${loserMatch}`);
+            if(targetLoserSpan){
+                targetLoserSpan.textContent = "Por definirse...";
+                targetLoserSpan.classList.remove('filled');
+                actualizarDropdownPenales(loserMatch);
+                d.querySelector(`#match-${loserMatch} .input-A`).value = "";
+                d.querySelector(`#match-${loserMatch} .input-B`).value = "";
+                evaluarGanador(loserMatch);
+            }
+        }
+    }
+}
+
 // REGLA 3: Evaluar quién ganó y empujarlo a la siguiente fase
 function evaluarGanador(matchId) {
     let card = d.getElementById(`match-${matchId}`);
@@ -266,8 +301,14 @@ function evaluarGanador(matchId) {
     let perdedor = null;
 
     // Solo calculamos si ambos equipos existen y pusieron goles
-    if (!equipoA || equipoA === "Por definirse..." || !equipoB || equipoB === "Por definirse...") return;
-    if (golesA === "" || golesB === "") return;
+    if (!equipoA || equipoA === "Por definirse..." || !equipoB || equipoB === "Por definirse...") {
+        limpiarFuturo(matchId);
+        return;
+    }
+    if (golesA === "" || golesB === "") {
+        limpiarFuturo(matchId);
+        return;
+    }
 
     if (parseInt(golesA) > parseInt(golesB)) {
         ganador = equipoA; perdedor = equipoB;
@@ -411,8 +452,12 @@ btnGuardarMataMata.addEventListener('click', async () => {
         if (golesA === "" || golesB === "") {
             todasCompletas = false;
         }
-        // 3. Que si hay penales, hayan elegido al ganador
-        if (chkPenales && ganadorPenales === "") {
+        // 3. Validación absoluta de Penales y Empates
+        if (golesA === golesB && (!chkPenales || ganadorPenales === "")) {
+            // Si hay empate, SÍ O SÍ debe haber penales marcados y un ganador
+            todasCompletas = false;
+        } else if (chkPenales && ganadorPenales === "") {
+            // Si marcó penales manualmente, no puede estar vacío el ganador
             todasCompletas = false;
         }
 
