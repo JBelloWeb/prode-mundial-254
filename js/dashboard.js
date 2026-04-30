@@ -179,7 +179,7 @@ function dibujarTablaRanking(ranking) {
         html += `
             <tr style="${estiloFila}">
                 <td style="padding: 10px;">${medalla}${posicion}</td>
-                <td style="padding: 10px; text-align: left;">${nombreMostrar}</td>
+                <td style="padding: 10px; text-align: center;">${nombreMostrar}</td>
                 <td style="padding: 10px;"><strong>${puntosMostrar}</strong></td>
                 <td style="padding: 10px;">${jugador.aciertos_plenos || 0}</td>
             </tr>
