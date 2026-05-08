@@ -3,7 +3,6 @@ const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
 window.supaClient = supaClient;
 
-// Si ya hay una sesión activa, lo mandamos directo a su panel
 const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado'));
 if(usuarioActivo){
     window.location.href = 'pages/dashboard.html'; 
@@ -19,15 +18,19 @@ const clave = d.getElementById('clave');
 const icon = d.getElementById('claveIcon');
 const marado = d.getElementById('maradonaOk');
 
+const tryManager = (onTry, message) =>{
+    mensaje.classList.remove("d-none");
+    btnIngresar.disabled = onTry ? true : false;
+    mensaje.textContent = message;
+}
+
 formulario.addEventListener('submit', async (e) =>{
     e.preventDefault();
 
     const emailTry = d.getElementById('email').value.trim();
     const claveTry = clave.value.trim();
 
-    btnIngresar.disabled = true;
-    mensaje.classList.remove("d-none");
-    mensaje.textContent = "Verficando credenciales...";
+    tryManager(true, "Verficando credenciales...");
 
     try{
         const { data: usuarioEncontrado, error } = await supaClient
@@ -40,15 +43,12 @@ formulario.addEventListener('submit', async (e) =>{
         if(error) throw error;
 
         if(!usuarioEncontrado){
-            mensaje.classList.remove("d-none");
-            mensaje.textContent = "❗ Email o Clave incorrectos";
-            btnIngresar.disabled = false;
+            tryManager(false, "❗ Email o Clave incorrectos");
             return;
         }
 
-        // ¡Ingreso Exitoso para TODOS!
         marado.classList.remove('d-none');
-        mensaje.textContent = "✔ ¡Bienvenido/a! Redirigiendo a tu panel..."; 
+        tryManager(true, "✔ ¡Bienvenido/a! Redirigiendo a tu panel")
 
         localStorage.setItem('usuarioLogueado', JSON.stringify({
             id: usuarioEncontrado.id,
@@ -57,13 +57,11 @@ formulario.addEventListener('submit', async (e) =>{
 
         setTimeout(() => {
             window.location.href = 'pages/dashboard.html'; 
-        }, 3000);
+        }, 2500);
 
     } catch (error){
         console.error("Error: ", error);
-        mensaje.classList.remove("d-none");
-        mensaje.textContent = "Hubo un error al conectar con la base de datos";
-        btnIngresar.disabled = false;
+        tryManager(false, "Hubo un error al conectar con la base de datos");
     }
 });
 
@@ -77,14 +75,13 @@ const viewRules = (abierto) =>{
     }
 }
 
+const iconManager = (see) =>{
+    see ? icon.classList.add("fa-eye-slash") : icon.classList.add("fa-eye");
+    see ? icon.classList.remove("fa-eye") : icon.classList.remove("fa-eye-slash");
+    clave.type = see ? "text" : "password";
+}
+
 icon.addEventListener('click', () =>{
-    if(clave.type === "password"){
-        clave.type = "text";
-        icon.classList.remove("fa-eye");
-        icon.classList.add("fa-eye-slash");
-    } else{
-        clave.type = "password";
-        icon.classList.remove("fa-eye-slash");
-        icon.classList.add("fa-eye");
-    }
+    iconManager(clave.type === "password" ? true : false);
 });
+

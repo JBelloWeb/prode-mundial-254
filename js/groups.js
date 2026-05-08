@@ -38,6 +38,7 @@ const btnGuardar = d.getElementById('btnGuardar');
       btnGuardar.disabled = true;
 const contenedorPartidos = d.getElementById('contenedorPartidos');
 const formGrupos = d.getElementById('formGrupos');
+const codigosBanderas = {};
 
 const grupos = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 const paises = [
@@ -101,8 +102,6 @@ const elegirPaises = (pais) =>{
     }
     actualizarSelecciones();
 }
-const codigosBanderas = {};
-
 
 const getCodes = async () => {
     try {
@@ -133,18 +132,18 @@ const getCodes = async () => {
             });
         });
         console.log("Códigos de banderas obtenidos:", codigosBanderas);
-        cargameLosPaises();
 
     } catch (error) {
         console.error("Error al obtener banderas:", error);
-        cargameLosPaises();
     }
+    cargameLosPaises();
 }
 getCodes();
 
 const cargameLosPaises = () =>{
     let index = 0;
     let ol = d.createElement('ol');
+
     for(let group of paises){
         let gr = d.createElement('li');
         gr.classList = "group";
@@ -155,20 +154,24 @@ const cargameLosPaises = () =>{
         integrantes.classList = "countries-container"
         gr.appendChild(name);
         gr.appendChild(integrantes);
+
         for(let p of group){
             let li = d.createElement('li');
             p == "Argentina" ? li.classList = "group-participant selected" : li.classList = "group-participant";
             li.id = p.toLowerCase();
+
             if(p !== "Argentina"){
                 li.addEventListener('click', () =>{
                     elegirPaises(p);
                 })
             }
+
             let codigo = codigosBanderas[p];
             let n = minBosnia(p);
             li.innerHTML = `<img src="https://flagcdn.com/16x12/${codigo}.png" alt="${p}" style="margin-right: 8px;">${n}`;
             integrantes.appendChild(li);
         }
+
         ol.appendChild(gr);
         countries.appendChild(ol);
     }
@@ -177,20 +180,15 @@ const cargameLosPaises = () =>{
 const generarPartidosUnicos = () =>{
     const partidosUnicos = new Map();
 
-    paisesASeguir.forEach(pais =>{
+    for(let pais of paisesASeguir){
         let indiceGrupo = paises.findIndex(grupo => grupo.includes(pais));
         if (indiceGrupo !== -1) {
             const letraGrupo = grupos[indiceGrupo];
             const equiposDelGrupo = paises[indiceGrupo];
 
-            // Generamos los 3 partidos de este país
-            equiposDelGrupo.forEach(rival => {
+            for(let rival of equiposDelGrupo){
                 if (rival !== pais) {
-                    // Ordenamos alfabéticamente para crear una clave única (Ej: "Argelia-Argentina")
-                    // Así evitamos que se duplique si el usuario elige dos del mismo grupo
                     const parOrdenado = [pais, rival].sort();
-                    // let n = minBosnia(p);
-
                     const clave = `${parOrdenado[0]}-vs-${parOrdenado[1]}`;
 
                     if (!partidosUnicos.has(clave)) {
@@ -201,9 +199,9 @@ const generarPartidosUnicos = () =>{
                         });
                     }
                 }
-            });
+            }
         }
-    });
+    }
     return Array.from(partidosUnicos.values());
 };
 
@@ -245,9 +243,6 @@ btnGenerar.addEventListener('click', () =>{
     seccionPronosticos.style.display = 'block';
 });
 
-// ==========================================
-// VALIDACIÓN ESTRICTA DE GOLES (Fase de Grupos)
-// ==========================================
 d.addEventListener('input', (e) => {
     // Si el elemento donde están escribiendo es un input de goles...
     if (e.target.classList.contains('score-input')) {
@@ -282,9 +277,10 @@ formGrupos.addEventListener('submit', async (e) =>{
             .update({ paises_seguidos: paisesASeguir })
             .eq('id', usuarioActivo.id);
         if(errorUsuario) throw errorUsuario;
+
         const prediccionesParaSubir = [];
         const matchCards = contenedorPartidos.querySelectorAll('.match-card');
-        matchCards.forEach(card =>{
+        for(let card of marchCards){
             const inputs = card.querySelectorAll('.score-input');
             prediccionesParaSubir.push({
                 usuario_id: usuarioActivo.id,
@@ -293,12 +289,14 @@ formGrupos.addEventListener('submit', async (e) =>{
                 equipo_b_pred: inputs[1].dataset.equipo,
                 goles_b_pred: parseInt(inputs[1].value),
             });
-        });
+        }
+       
         console.log("Datos a enviar:", prediccionesParaSubir);
         const { error: errorPredicciones } = await supaClient
             .from ('predicciones')
             .insert(prediccionesParaSubir);
         if (errorPredicciones) throw errorPredicciones;
+
         // Guardamos la marca de tiempo exacta
         await supaClient.from('usuarios').update({ fecha_envio_grupos: new Date().toISOString() }).eq('id', usuarioActivo.id);
         alert("Predicciones guardadas con éxito");
