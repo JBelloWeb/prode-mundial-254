@@ -1007,3 +1007,86 @@ tbody tr:hover { background-color: #f1f1f1; }
     width: 20% !important;
     justify-content: center !important;
 }
+
+/* =========================================
+   BOTÓN VOLVER AL DASHBOARD
+   ========================================= */
+.btn-volver {
+    background-color: var(--sananto-black);
+    color: var(--sananto-white);
+    border: 2px solid var(--sananto-blue);
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 15px auto 0 15px; /* Margen superior e izquierdo para que no quede pegado */
+    box-shadow: 3px 3px 0px var(--sananto-blue);
+    transition: all 0.2s ease-in-out;
+    width: fit-content;
+    z-index: 100;
+}
+
+.btn-volver:hover {
+    background-color: var(--sananto-blue);
+    color: var(--sananto-black);
+    box-shadow: 3px 3px 0px var(--sananto-black);
+    transform: translate(-2px, -2px);
+}
+
+.btn-volver:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px var(--sananto-black);
+}
+
+/* =========================================
+   PARCHE DEFINITIVO V3: HUD PARA COMPUTADORAS
+   ========================================= */
+@media (min-width: 1024px) {
+    /* 1. Botón Volver: Fijo a la izquierda */
+    .btn-volver {
+        position: fixed !important;
+        top: 120px !important; /* Queda debajo del título negro */
+        left: 40px !important; /* Anclado al borde izquierdo */
+        margin: 0 !important;
+        z-index: 100 !important;
+        width: 160px !important; /* Ancho fijo para que quede igual al menú */
+        justify-content: center !important;
+    }
+
+    /* 2. Menú de Fases: Fijo a la izquierda, justo debajo del botón */
+    #faseNav {
+        position: fixed !important;
+        top: 180px !important;
+        left: 40px !important; /* Anclado al borde izquierdo */
+        margin: 0 !important;
+        z-index: 100 !important;
+        width: 160px !important;
+        transform: none !important;
+    }
+    
+    .nav-fases {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 3. Minimapa: Fijo a la derecha, anclado al borde */
+    #bracket {
+        position: fixed !important;
+        top: 120px !important; /* Alineado a la misma altura que el botón Volver */
+        right: 40px !important; /* Anclado al borde derecho */
+        left: auto !important; /* Apagamos el viejo porcentaje problemático */
+        margin: 0 !important;
+        z-index: 100 !important;
+        width: 220px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    /* En monitores muy grandes (Wide), les damos un poco más de aire desde los bordes */
+    .btn-volver, #faseNav { left: 80px !important; }
+    #bracket { right: 80px !important; }
+}
