@@ -280,7 +280,7 @@ formGrupos.addEventListener('submit', async (e) =>{
 
         const prediccionesParaSubir = [];
         const matchCards = contenedorPartidos.querySelectorAll('.match-card');
-        for(let card of marchCards){
+        for(let card of matchCards){
             const inputs = card.querySelectorAll('.score-input');
             prediccionesParaSubir.push({
                 usuario_id: usuarioActivo.id,
