@@ -1,20 +1,35 @@
 const matches = d.querySelectorAll('.match-card');
 const miniMap = d.getElementById('bracket');
-const url = '../media/brackets/';
 
 let selected = null;
+
+// 1. Creamos el contenedor del minimapa
 let figure = d.createElement('figure');
-    figure.className = 'figure-container';
+figure.className = 'figure-container';
 
-let img = d.createElement('img');
-    img.src = '../assets/bracket/';
-
-figure.appendChild(img);    
+// 2. ESTADO INICIAL: Placeholder de texto en lugar de una imagen rota
+figure.innerHTML = `
+    <div id="minimap-placeholder" style="text-align: center; color: var(--sananto-white); font-size: 0.85rem; font-weight: bold; padding: 10px;">
+        <i class="fa-solid fa-ranking-star" style="font-size: 1.8rem; color: var(--sananto-red); margin-bottom: 10px; filter: drop-shadow(2px 2px 0px var(--sananto-black));"></i><br>
+        Definí las posiciones de los grupos para ver el mapa
+    </div>
+`;
 miniMap.appendChild(figure);
 
-const updateMiniMap = (match) =>{
-    img.src = '../assets/bracket/';
-    img.src += `${match.id.replace('match-', '')}.png` ; 
+// 3. Función para actualizar el minimapa cuando se scrollea/clickea un partido
+const updateMiniMap = (match) => {
+    // Buscamos si la imagen ya existe
+    let img = figure.querySelector('img');
+    
+    // Si no existe (es decir, todavía está el texto), borramos el texto y creamos la etiqueta <img>
+    if (!img) {
+        figure.innerHTML = ''; 
+        img = d.createElement('img');
+        figure.appendChild(img);
+    }
+    
+    // Actualizamos la ruta de la imagen (Asegurate de que esta carpeta sea la correcta)
+    img.src = `../assets/bracket/${match.id.replace('match-', '')}.png`; 
 }
 
 for(let m of matches){
@@ -55,43 +70,31 @@ d.querySelectorAll('.fase-container').forEach(fase => {
     faseObserver.observe(fase);
 });
 
-// 2. NUEVA LÓGICA: INTERSECTION OBSERVER (Scroll)
-// Configuramos el área de observación
+// INTERSECTION OBSERVER (Scroll)
 const observerOptions = {
-    root: null, // Null significa que usa el viewport (la ventana del navegador)
-    
-    // rootMargin: crea márgenes imaginarios. 
-    // "-40% 0px -40% 0px" significa que solo considerará que la tarjeta está 
-    // "en pantalla" cuando cruce por el 20% central de la pantalla.
+    root: null, 
     rootMargin: '-40% 0px -40% 0px', 
-    
-    threshold: 0 // Se dispara apenas el elemento toca ese margen central
+    threshold: 0 
 };
 
 const matchObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        // Si la tarjeta entra en nuestra zona central definida...
         if (entry.isIntersecting) {
             let currentMatch = entry.target;
             
-            // Evitamos hacer el proceso si ya está seleccionada
             if (selected === currentMatch) return;
 
-            // Removemos la clase de la tarjeta anterior
             let deselect = d.querySelector('.focus-match');
             if(deselect) deselect.classList.remove('focus-match');
             
-            // Asignamos a la nueva
             selected = currentMatch;
             currentMatch.classList.add('focus-match');
             
-            // Actualizamos el minimapa
             updateMiniMap(currentMatch);
         }
     });
 }, observerOptions);
 
-// Ponemos a observar a todas las tarjetas de partido
 matches.forEach(m => {
     matchObserver.observe(m);
 });

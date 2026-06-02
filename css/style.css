@@ -522,9 +522,10 @@ nav{
     height: 45px;
     display: flex; align-items: center; justify-content: center; text-align: center;
     background-color: var(--bg-color); color: var(--sananto-white);
-    border-radius: 15px 5px; width: fit-content; padding: 5px;
+    border-radius: 10px; /* ACÁ ESTÁ EL CAMBIO PARA QUE SEAN RECTÁNGULOS REDONDEADOS */
+    width: fit-content; padding: 5px;
     font-weight: bold;
-    font-size: 0.75rem; /* Letra un poco más chica para países largos */
+    font-size: 0.8rem;
 }
 .group-participant:hover{
     cursor: pointer;
@@ -1089,4 +1090,77 @@ tbody tr:hover { background-color: #f1f1f1; }
     /* En monitores muy grandes (Wide), les damos un poco más de aire desde los bordes */
     .btn-volver, #faseNav { left: 80px !important; }
     #bracket { right: 80px !important; }
+}
+
+/* =========================================
+   SISTEMA DE MEDALLAS (CLASIFICACIÓN MATA-MATA)
+   ========================================= */
+.clasificacion-item {
+    position: relative;
+    transition: all 0.2s ease;
+    margin: 5px;
+}
+
+.badge-posicion {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+    font-size: 0.8rem;
+    color: var(--sananto-white);
+    box-shadow: 2px 2px 0px var(--sananto-black);
+    z-index: 5;
+    animation: zoom-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pos-1 { background-color: #FFD700; color: var(--sananto-black); border: 2px solid var(--sananto-black); } /* Oro */
+.pos-2 { background-color: #C0C0C0; color: var(--sananto-black); border: 2px solid var(--sananto-black); } /* Plata */
+.pos-3 { background-color: #CD7F32; border: 2px solid var(--sananto-white); } /* Bronce */
+
+/* Estilo para los nombres automáticos en las tarjetas */
+.auto-team.filled {
+    background-color: var(--sananto-blue) !important;
+    color: var(--sananto-black) !important;
+    border: 2px solid var(--sananto-black) !important;
+    box-shadow: 2px 2px 0px var(--sananto-black);
+}
+
+/* =========================================
+   REDISEÑO DE LOS NOMBRES DE PAÍSES (MATA-MATA)
+   ========================================= */
+
+/* Estado inicial (Por definirse...) */
+.auto-team {
+    background-color: var(--sananto-black) !important;
+    color: var(--sananto-white) !important;
+    font-weight: 800 !important;
+    font-size: 0.85rem !important;
+    padding: 8px 10px !important;
+    border-radius: 12px !important; /* Mismo redondeo que los inputs de goles */
+    border: 2px solid transparent !important;
+    width: 100% !important;
+    max-width: 130px !important;
+    min-height: 45px !important; /* Altura fija para que nombres largos (2 renglones) no rompan la simetría */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    line-height: 1.1 !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Estado lleno (Cuando ya hay un país clasificado) */
+.auto-team.filled {
+    background-color: var(--sananto-blue) !important;
+    color: var(--sananto-black) !important;
+    border: 2px solid var(--sananto-black) !important;
+    /* Le damos la misma sombra con estilo retro/cómic que usan tus botones principales */
+    box-shadow: 3px 3px 0px var(--sananto-black) !important;
+    transform: translate(-2px, -2px) !important; /* Lo levanta un poquito */
 }
