@@ -271,7 +271,18 @@ function obtenerEquipoParaReq(req, gruposPermitidos, tercerosUsados) {
     if (posRequerida === 1 || posRequerida === 2) {
         return clasificados[gruposPermitidos[0]][posRequerida];
     } else if (posRequerida === 3) {
+        // Plan A: Intento oficial (busca en los grupos que dice la regla)
         for (let g of gruposPermitidos) {
+            let equipoTercero = clasificados[g][3];
+            if (equipoTercero && !tercerosUsados.includes(equipoTercero)) {
+                tercerosUsados.push(equipoTercero);
+                return equipoTercero;
+            }
+        }
+        
+        // Plan B: Fallback de rescate. Si por orden de asignación se quedó sin opciones, 
+        // agarra cualquier 3ro que el usuario haya seleccionado y esté libre.
+        for (let g in clasificados) {
             let equipoTercero = clasificados[g][3];
             if (equipoTercero && !tercerosUsados.includes(equipoTercero)) {
                 tercerosUsados.push(equipoTercero);
