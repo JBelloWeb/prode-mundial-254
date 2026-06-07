@@ -551,7 +551,19 @@ btnGuardarMataMata.addEventListener('click', async () => {
     const prediccionesParaSubir = [];
     const matchCards = d.querySelectorAll('.match-card');
 
+    // Diccionario Traductor: Vincula el nombre de la tarjeta en HTML con tu nuevo ID cronológico en la BD
+    const mapaIdsBaseDatos = {
+        'P73': 1, 'P76': 2, 'P74': 3, 'P75': 4, 'P78': 5, 'P77': 6, 'P79': 7, 'P80': 8,
+        'P82': 9, 'P81': 10, 'P84': 11, 'P83': 12, 'P85': 13, 'P88': 14, 'P86': 15, 'P87': 16,
+        'P90': 17, 'P89': 18, 'P91': 19, 'P92': 20, 'P93': 21, 'P94': 22, 'P95': 23, 'P96': 24,
+        'P97': 25, 'P98': 26, 'P99': 27, 'P100': 28, 'P101': 29, 'P102': 30, 'P103': 31, 'P104': 32
+    };
+
     matchCards.forEach(card => {
+        // Obtenemos el ID traducido usando el diccionario
+        let matchIdStr = card.id.replace('match-', ''); // Queda 'P73', 'P76', etc.
+        let idBaseDatos = mapaIdsBaseDatos[matchIdStr]; // Busca el ID real de la base de datos (1 al 32)
+
         let spanA = card.querySelector('.team-A');
         let spanB = card.querySelector('.team-B');
         let golesA = card.querySelector('.input-A').value;
@@ -571,6 +583,7 @@ btnGuardarMataMata.addEventListener('click', async () => {
 
         prediccionesParaSubir.push({
             usuario_id: usuarioActivo.id,
+            partido_id: idBaseDatos, // <--- ACÁ VA TU NUEVO ID CRONOLÓGICO PERFECTO
             equipo_a_pred: spanA.textContent,
             equipo_b_pred: spanB.textContent,
             goles_a_pred: parseInt(golesA),

@@ -278,12 +278,111 @@ formGrupos.addEventListener('submit', async (e) =>{
             .eq('id', usuarioActivo.id);
         if(errorUsuario) throw errorUsuario;
 
+        const mapaIdsGrupos = {
+            // Grupo A
+            "México-vs-Sudáfrica": 33,
+            "Chequia-vs-Corea del Sur": 34,
+            "Chequia-vs-Sudáfrica": 35,
+            "Corea del Sur-vs-México": 36,
+            "Chequia-vs-México": 37,
+            "Corea del Sur-vs-Sudáfrica": 38,
+
+            // Grupo B
+            "Bosnia y Herzegovina-vs-Canadá": 39,
+            "Catar-vs-Suiza": 40,
+            "Bosnia y Herzegovina-vs-Suiza": 41,
+            "Canadá-vs-Catar": 42,
+            "Canadá-vs-Suiza": 43,
+            "Bosnia y Herzegovina-vs-Catar": 44,
+
+            // Grupo C
+            "Brasil-vs-Marruecos": 45,
+            "Escocia-vs-Haití": 46,
+            "Escocia-vs-Marruecos": 47,
+            "Brasil-vs-Haití": 48,
+            "Brasil-vs-Escocia": 49,
+            "Haití-vs-Marruecos": 50,
+
+            // Grupo D
+            "Estados Unidos-vs-Paraguay": 51,
+            "Australia-vs-Turquía": 52,
+            "Australia-vs-Estados Unidos": 53,
+            "Paraguay-vs-Turquía": 54,
+            "Estados Unidos-vs-Turquía": 55,
+            "Australia-vs-Paraguay": 56,
+
+            // Grupo E
+            "Alemania-vs-Curazao": 57,
+            "Costa de Marfil-vs-Ecuador": 58,
+            "Alemania-vs-Costa de Marfil": 59,
+            "Curazao-vs-Ecuador": 60,
+            "Costa de Marfil-vs-Curazao": 61,
+            "Alemania-vs-Ecuador": 62,
+
+            // Grupo F
+            "Japón-vs-Países Bajos": 63,
+            "Suecia-vs-Túnez": 64,
+            "Países Bajos-vs-Suecia": 65,
+            "Japón-vs-Túnez": 66,
+            "Japón-vs-Suecia": 67,
+            "Países Bajos-vs-Túnez": 68,
+
+            // Grupo G
+            "Bélgica-vs-Egipto": 69,
+            "Irán-vs-Nueva Zelanda": 70,
+            "Bélgica-vs-Irán": 71,
+            "Egipto-vs-Nueva Zelanda": 72,
+            "Egipto-vs-Irán": 73,
+            "Bélgica-vs-Nueva Zelanda": 74,
+
+            // Grupo H
+            "Cabo Verde-vs-España": 75,
+            "Arabia Saudita-vs-Uruguay": 76,
+            "Arabia Saudita-vs-España": 77,
+            "Cabo Verde-vs-Uruguay": 78,
+            "España-vs-Uruguay": 79,
+            "Arabia Saudita-vs-Cabo Verde": 80,
+
+            // Grupo I
+            "Francia-vs-Senegal": 81,
+            "Irak-vs-Noruega": 82,
+            "Francia-vs-Irak": 83,
+            "Noruega-vs-Senegal": 84,
+            "Irak-vs-Senegal": 85,
+            "Francia-vs-Noruega": 86,
+
+            // Grupo J
+            "Argelia-vs-Argentina": 87,
+            "Austria-vs-Jordania": 88,
+            "Argentina-vs-Austria": 89,
+            "Argelia-vs-Jordania": 90,
+            "Argentina-vs-Jordania": 91,
+            "Argelia-vs-Austria": 92,
+
+            // Grupo K
+            "Portugal-vs-RD Congo": 93,
+            "Colombia-vs-Uzbekistán": 94,
+            "Portugal-vs-Uzbekistán": 95,
+            "Colombia-vs-RD Congo": 96,
+            "Colombia-vs-Portugal": 97,
+            "RD Congo-vs-Uzbekistán": 98,
+
+            // Grupo L
+            "Croacia-vs-Inglaterra": 99,
+            "Ghana-vs-Panamá": 100,
+            "Ghana-vs-Inglaterra": 101,
+            "Croacia-vs-Panamá": 102,
+            "Inglaterra-vs-Panamá": 103,
+            "Croacia-vs-Ghana": 104
+        };
+
         const prediccionesParaSubir = [];
         const matchCards = contenedorPartidos.querySelectorAll('.match-card');
         for(let card of matchCards){
             const inputs = card.querySelectorAll('.score-input');
             prediccionesParaSubir.push({
                 usuario_id: usuarioActivo.id,
+                partido_id: idPartidoGrupo,
                 equipo_a_pred: inputs[0].dataset.equipo,
                 goles_a_pred: parseInt(inputs[0].value),
                 equipo_b_pred: inputs[1].dataset.equipo,
