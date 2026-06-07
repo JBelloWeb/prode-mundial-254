@@ -376,16 +376,30 @@ formGrupos.addEventListener('submit', async (e) =>{
             "Croacia-vs-Ghana": 104
         };
 
-        const prediccionesParaSubir = [];
+       const prediccionesParaSubir = [];
         const matchCards = contenedorPartidos.querySelectorAll('.match-card');
+        
         for(let card of matchCards){
             const inputs = card.querySelectorAll('.score-input');
+            
+            // 1. Obtener los equipos de los inputs
+            let eqA = inputs[0].dataset.equipo;
+            let eqB = inputs[1].dataset.equipo;
+            
+            // 2. Generar la clave igual a como está en tu mapa (alfabéticamente)
+            let parOrdenado = [eqA, eqB].sort();
+            let clave = `${parOrdenado[0]}-vs-${parOrdenado[1]}`;
+            
+            // 3. Buscar el ID en tu mapa
+            let idPartidoGrupo = mapaIdsGrupos[clave] || null;
+
+            // 4. Ahora sí, pushear al array
             prediccionesParaSubir.push({
                 usuario_id: usuarioActivo.id,
                 partido_id: idPartidoGrupo,
-                equipo_a_pred: inputs[0].dataset.equipo,
+                equipo_a_pred: eqA,
                 goles_a_pred: parseInt(inputs[0].value),
-                equipo_b_pred: inputs[1].dataset.equipo,
+                equipo_b_pred: eqB,
                 goles_b_pred: parseInt(inputs[1].value),
             });
         }
