@@ -620,7 +620,7 @@ nav{
 
 .group-participant{
     --bg-color: var(--sananto-black);
-    flex: 0 0 calc(50% - 5px);
+    flex: 0 0 calc(50% - 10px);
     height: 45px;
     display: flex;
     align-items: center;
