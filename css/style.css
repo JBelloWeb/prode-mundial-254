@@ -1169,6 +1169,181 @@ tbody tr:nth-child(even) { background-color: #fafafa; }
     font-weight: bold;
 }
 
+/* ── Próximos Partidos ── */
+#proximosPartidos {
+    background-color: #FFFFFF;
+    border-radius: var(--radius-lg);
+    padding: var(--radius-lg);
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 2px solid var(--sananto-blue);
+}
+#proximosPartidos h2 {
+    font-family: var(--font-heading);
+    background-color: var(--sananto-black);
+    color: var(--sananto-white);
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 15px;
+    font-size: var(--text-xl);
+    text-align: center;
+}
+.partido-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid #eee;
+    gap: 10px;
+}
+.partido-card:last-child {
+    border-bottom: none;
+}
+.partido-equipos {
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.partido-vs {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 0.85rem;
+}
+.tag-estado {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+.tag-pendiente {
+    background-color: #17a2b8;
+    color: #fff;
+}
+.tag-en-vivo {
+    background-color: #dc3545;
+    color: #fff;
+    animation: pulsoTag 1.5s ease-in-out infinite;
+}
+.tag-finalizado {
+    background-color: #6c757d;
+    color: #fff;
+}
+.tag-ya-jugado {
+    background-color: #6c757d;
+    color: #fff;
+    opacity: 0.7;
+}
+@keyframes pulsoTag {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+.cargando {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding: 10px;
+}
+
+.fecha-grupo {
+    border-bottom: 1px solid #eee;
+}
+.fecha-grupo:last-child {
+    border-bottom: none;
+}
+.fecha-grupo-titulo {
+    display: block;
+    padding: 10px 16px 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+/* ── Acordeón de Fases (Historial de Predicciones) ── */
+.acordeon-fase {
+    margin-bottom: 12px;
+    border: 2px solid var(--sananto-black);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background-color: #FFFFFF;
+}
+.acordeon-fase summary {
+    padding: 12px 16px;
+    background-color: var(--sananto-black);
+    color: var(--sananto-white);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: var(--text-base);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    transition: background-color 0.15s ease;
+}
+.acordeon-fase summary:hover {
+    background-color: #2a2a2a;
+}
+.acordeon-fase summary::-webkit-details-marker {
+    display: none;
+}
+.acordeon-fase summary::after {
+    content: '▶';
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+.acordeon-fase[open] summary::after {
+    transform: rotate(90deg);
+}
+.acordeon-fase[open] summary {
+    border-bottom: 2px solid var(--sananto-blue);
+}
+.acordeon-contenido {
+    padding: 8px 0;
+}
+.acordeon-contenido table {
+    border: none;
+    border-radius: 0;
+}
+.acordeon-contenido thead {
+    background-color: #333;
+}
+.acordeon-contenido th {
+    font-size: 0.75rem;
+    padding: 8px 10px;
+}
+.acordeon-contenido td {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+}
+
+/* ── Feedback Visual en Tabla de Predicciones ── */
+tr.res-acierto-pleno {
+    border-left: 4px solid #28a745;
+    background-color: #f0fff4;
+}
+tr.res-acierto-diferencia {
+    border-left: 4px solid #20c997;
+    background-color: #f0fdfa;
+}
+tr.res-acierto-parcial {
+    border-left: 4px solid #ffc107;
+    background-color: #fffef5;
+}
+tr.res-fallo {
+    border-left: 4px solid #dc3545;
+    background-color: #fff5f5;
+}
+tr.res-pendiente {
+    border-left: 4px solid #adb5bd;
+}
+
 /* ── Back Button ── */
 .btn-volver {
     background-color: var(--sananto-black);
