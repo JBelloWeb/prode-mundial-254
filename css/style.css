@@ -254,7 +254,7 @@ nav{
     border-bottom: var(--sananto-black) solid 5px;
 }
 .modal .box{
-    background-color: #FFFFFF;
+    background-color: var(--dash-bg, #111111);
     outline: var(--sananto-red) 5px solid;
     border-radius: var(--radius-md);
     animation: zoom-in 0.5s;
@@ -272,7 +272,7 @@ nav{
     overflow-y: auto;
     flex-grow: 1;
     scrollbar-width: thin;
-    scrollbar-color: var(--sananto-red) #f0f0f0;
+    scrollbar-color: var(--sananto-red) #2a2a2a;
 }
 .modal .modal-text::-webkit-scrollbar { width: 6px; }
 .modal .modal-text::-webkit-scrollbar-thumb {
@@ -283,6 +283,7 @@ nav{
 .modal .modal-text p{
     text-align: center;
     font-size: var(--text-base);
+    color: var(--sananto-white);
 }
 .modal .modal-text ul{
     font-size: var(--text-sm);
@@ -293,8 +294,44 @@ nav{
 }
 .modal .modal-text li{
     padding: 0px 10px;
-    background-color: var(--sananto-blue-light);
+    color: var(--sananto-white);
+    background-color: var(--dash-card, #1c1c1c);
 }
+
+/* ── Puntaje Table inside Modal ── */
+.puntaje-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    color: var(--sananto-white);
+}
+.puntaje-table th {
+    background-color: var(--sananto-red);
+    color: var(--sananto-white);
+    font-family: var(--font-heading);
+    padding: 10px;
+    text-align: center;
+    font-size: var(--text-sm);
+    border-bottom: 3px solid var(--sananto-black);
+}
+.puntaje-table th:first-child { border-radius: 8px 0 0 0; }
+.puntaje-table th:last-child { border-radius: 0 8px 0 0; }
+.puntaje-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--dash-border);
+    font-size: var(--text-sm);
+    text-align: center;
+}
+
+.puntaje-table .col-pts {
+    font-weight: 900;
+    font-size: var(--text-lg);
+}
+.puntaje-table .col-pts.pts-perfecto { color: var(--color-perfecto, #FFD700); }
+.puntaje-table .col-pts.pts-pleno { color: var(--color-pleno); }
+.puntaje-table .col-pts.pts-diferencia { color: var(--color-dif); }
+.puntaje-table .col-pts.pts-parcial { color: var(--color-parcial); }
+.puntaje-table .col-pts.pts-fallo { color: var(--color-fallo); }
 
 @keyframes zoom-in{
     from{ transform: scale(0%); }
@@ -1081,6 +1118,40 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 #btnIrGrupos:not(:disabled),
 #btnIrMataMata:not(:disabled) {
     animation: btn-idle-glint 2s ease-in-out infinite;
+}
+
+/* ── Info Button Dashboard ── */
+#btnPuntaje {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 5;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid var(--sananto-black);
+    background-color: var(--sananto-blue);
+    color: var(--sananto-black);
+    font-size: var(--text-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 3px 3px 0px var(--sananto-black);
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+#btnPuntaje:hover {
+    background-color: var(--sananto-red);
+    color: var(--sananto-white);
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px var(--sananto-black);
+}
+
+#btnPuntaje:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px var(--sananto-black);
 }
 
 /* ── Tarjetas Estadísticas ── */

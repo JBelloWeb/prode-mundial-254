@@ -390,3 +390,16 @@ btnIrMataMata.addEventListener('click', () => {
 
 cargarPerfil();
 cargarProximosPartidos();
+
+// ── Toggle Modal Puntaje ──
+const btnPuntaje = d.getElementById('btnPuntaje');
+const modalPuntaje = d.getElementById('modalPuntaje');
+const btnCerrarPuntaje = d.getElementById('btnCerrarPuntaje');
+
+btnPuntaje.addEventListener('click', () => {
+    modalPuntaje.classList.toggle('d-none');
+});
+
+btnCerrarPuntaje.addEventListener('click', () => {
+    modalPuntaje.classList.add('d-none');
+});

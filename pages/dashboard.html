@@ -102,6 +102,37 @@
     </div>
 </div>
 
+    <section id="modalPuntaje" class="d-none">
+        <div class="modal">
+            <div class="box">
+                <h2>CÓMO SE OTORGAN LOS PUNTOS</h2>
+                <div class="modal-text">
+                    <p>Los puntos se asignan según la precisión de tus pronósticos en cada partido del mundial:</p>
+                    <div class="table-responsive">
+                        <table class="puntaje-table">
+                            <thead>
+                                <tr>
+                                    <th>Puntaje</th>
+                                    <th>Justificación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="col-pts pts-perfecto">+6</td><td>Acierto perfecto (acertaste resultado en penales)</td></tr>
+                                <tr><td class="col-pts pts-pleno">+5</td><td>Pleno (acertaste el resultado exacto)</td></tr>
+                                <tr><td class="col-pts pts-diferencia">+3</td><td>Diferencia de goles correcta</td></tr>
+                                <tr><td class="col-pts pts-parcial">+2</td><td>Parcial (acertaste el ganador, no la diferencia)</td></tr>
+                                <tr><td class="col-pts pts-fallo">+0</td><td>Fallo (no acertaste ganador ni diferencia)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <button class="button" id="btnCerrarPuntaje">Entendido</button>
+            </div>
+        </div>
+    </section>
+
+    <button id="btnPuntaje"><i class="fa-solid fa-circle-info"></i></button>
+
     <script type="module" src="../js/dashboard.js"></script>
 </body>
 </html>
