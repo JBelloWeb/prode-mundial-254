@@ -13,7 +13,10 @@ export function showToast(mensaje, tipo) {
     toast.textContent = mensaje;
     toast.style = `--context-color: ${COLORES_TOAST[tipo] || COLORES_TOAST.info}`;
     container.appendChild(toast);
-    setTimeout(() => toast.remove(), 5000);
+    setTimeout(() => {
+        toast.classList.add('removing');
+        setTimeout(() => toast.remove(), 350);
+    }, 5000);
 }
 
 window.showToast = showToast;
