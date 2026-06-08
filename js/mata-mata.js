@@ -1,3 +1,5 @@
+import { showToast } from './utils.js';
+
 const supaUrl = "https://juuwwrzrxensvjjzlpha.supabase.co";
 const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
@@ -5,8 +7,8 @@ window.supaClient = supaClient;
 
 const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado'));
 if(!usuarioActivo){
-    alert("Debes iniciar sesión");
-    window.location.href = '../index.html';
+    showToast('Debes iniciar sesión', 'error');
+    setTimeout(() => { window.location.href = '../index.html'; }, 1500);
 }
 
 async function verificarAccesoMataMata() {
@@ -17,8 +19,8 @@ async function verificarAccesoMataMata() {
         .single();
 
     if (data && data.fecha_envio_mata_mata) {
-        alert("Ya completaste tus pronósticos del Mata-Mata. No podés volver a ingresar.");
-        window.location.href = 'dashboard.html';
+        showToast('Ya completaste tus pronósticos del Mata-Mata. No podés volver a ingresar.', 'warning');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
     }
 }
 verificarAccesoMataMata();
@@ -203,13 +205,13 @@ function seleccionarClasificado(grupo, pais, elementoHtml) {
             agregarBadge(elementoHtml, 2);
         } else if (!grupoObj[3]) {
             if (contarTerceros() >= 8) {
-                alert("⚠️ Ya seleccionaste a los 8 mejores terceros. Si querés elegir otro, primero deseleccioná a uno de los actuales.");
+                showToast('⚠️ Ya seleccionaste a los 8 mejores terceros. Si querés elegir otro, primero deseleccioná a uno de los actuales.', 'warning');
                 return;
             }
             grupoObj[3] = pais;
             agregarBadge(elementoHtml, 3);
         } else {
-            alert("Ya elegiste 1°, 2° y 3° para este grupo. Tocá uno para deseleccionarlo.");
+            showToast('Ya elegiste 1°, 2° y 3° para este grupo. Tocá uno para deseleccionarlo.', 'warning');
             return;
         }
     }
@@ -546,7 +548,7 @@ btnGuardarMataMata.addEventListener('click', async () => {
 
         if (!idBaseDatos) {
             console.error("ID no encontrado para: " + matchIdStr);
-            alert("Error crítico: El partido " + matchIdStr + " no tiene ID asignado.");
+            showToast('Error crítico: El partido ' + matchIdStr + ' no tiene ID asignado.', 'error');
             btnGuardarMataMata.disabled = false;
             return;
         }
@@ -580,7 +582,7 @@ btnGuardarMataMata.addEventListener('click', async () => {
     });
 
     if (!todasCompletas) {
-        alert("⚠️ Faltan datos. Asegurate de haber elegido los clasificados de los grupos y haber llenado todos los goles y penales del cuadro.");
+        showToast('⚠️ Faltan datos. Asegurate de haber elegido los clasificados de los grupos y haber llenado todos los goles y penales del cuadro.', 'warning');
         btnGuardarMataMata.disabled = false;
         btnGuardarMataMata.textContent = "Guardar Fase Final 🏆";
         return;
@@ -594,11 +596,11 @@ btnGuardarMataMata.addEventListener('click', async () => {
 
         if (errorPredicciones) throw errorPredicciones;
 
-        alert("¡Mundial pronosticado con éxito! Que ruede la pelota.");
-        window.location.href = 'dashboard.html'; 
+        showToast('¡Mundial pronosticado con éxito! Que ruede la pelota.', 'success');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
     } catch (error) {
         console.error("Error al guardar Mata-Mata:", error);
-        alert("Hubo un problema al guardar tus pronósticos. Revisa tu conexión.");
+        showToast('Hubo un problema al guardar tus pronósticos. Revisa tu conexión.', 'error');
         btnGuardarMataMata.disabled = false;
         btnGuardarMataMata.textContent = "Guardar Fase Final 🏆";
     }

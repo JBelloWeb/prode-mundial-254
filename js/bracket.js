@@ -1,3 +1,6 @@
+const d = document;
+
+
 const matches = d.querySelectorAll('.match-card');
 const miniMap = d.getElementById('bracket');
 

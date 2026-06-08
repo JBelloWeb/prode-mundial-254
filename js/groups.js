@@ -1,3 +1,5 @@
+import { showToast } from './utils.js';
+
 const supaUrl = "https://juuwwrzrxensvjjzlpha.supabase.co";
 const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
@@ -5,8 +7,8 @@ window.supaClient = supaClient;
 
 const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado'));
 if(!usuarioActivo){
-    alert("Debes iniciar sesión");
-    window.location.href = '../index.html';
+    showToast('Debes iniciar sesión', 'error');
+    setTimeout(() => { window.location.href = '../index.html'; }, 1500);
 }
 
 // Candado de seguridad: Verificar en la BD si ya mandó los grupos
@@ -18,8 +20,8 @@ async function verificarAccesoGrupos() {
         .single();
 
     if (data && data.fecha_envio_grupos) {
-        alert("Ya completaste tus pronósticos de Fase de Grupos. No podés volver a ingresar.");
-        window.location.href = 'dashboard.html';
+        showToast('Ya completaste tus pronósticos de Fase de Grupos. No podés volver a ingresar.', 'warning');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
     }
 }
 verificarAccesoGrupos();
@@ -207,7 +209,7 @@ const generarPartidosUnicos = () =>{
 
 btnGenerar.addEventListener('click', () =>{
     if(paisesASeguir.length < 4) {
-        alert("Por favor, selecciona 4 países en total antes de continuar");
+        showToast('Por favor, selecciona 4 países en total antes de continuar', 'warning');
         return;
     }
 
@@ -412,11 +414,11 @@ formGrupos.addEventListener('submit', async (e) =>{
 
         // Guardamos la marca de tiempo exacta
         await supaClient.from('usuarios').update({ fecha_envio_grupos: new Date().toISOString() }).eq('id', usuarioActivo.id);
-        alert("Predicciones guardadas con éxito");
-        window.location.href = 'dashboard.html';
+        showToast('Predicciones guardadas con éxito', 'success');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
     } catch (error) {
         console.error("Error: ", error);
-        alert("Hubo un problema al guardar");
+        showToast('Hubo un problema al guardar', 'error');
         btnGuardar.disabled = false;
         btnGuardar.textContent = "Guardar Pronósticos";
     }

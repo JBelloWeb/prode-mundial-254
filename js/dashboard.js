@@ -1,24 +1,9 @@
+import { showToast } from './utils.js';
+
 const supaUrl = "https://juuwwrzrxensvjjzlpha.supabase.co";
 const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
 window.supaClient = supaClient;
-
-const Toast = (mensaje, color) => {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = mensaje;
-    toast.style = `--context-color: ${color}`;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 5000);
-};
-
-const COLORES_TOAST = { success: '#28a745', error: '#dc3545', warning: '#ffc107', info: '#17a2b8' };
-
-function showToast(mensaje, tipo) {
-    Toast(mensaje, COLORES_TOAST[tipo] || COLORES_TOAST.info);
-}
 
 const usuarioString = localStorage.getItem('usuarioLogueado');
 
