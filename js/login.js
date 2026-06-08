@@ -1,3 +1,5 @@
+import { showToast } from './utils.js';
+
 const supaUrl = "https://juuwwrzrxensvjjzlpha.supabase.co";
 const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
@@ -13,16 +15,11 @@ const reglas = d.getElementById('reglas');
 const formulario = d.getElementById('loginForm');
 const mensaje = d.getElementById('mensaje');
 const btnIngresar = d.getElementById('btnIngresar');
+const btnDeAcuerdo = d.getElementById('btnDeAcuerdo');
 const btnReglas = d.getElementById('btnReglas');
 const clave = d.getElementById('clave');
 const icon = d.getElementById('claveIcon');
 const marado = d.getElementById('maradonaOk');
-
-const tryManager = (onTry, message) =>{
-    mensaje.classList.remove("d-none");
-    btnIngresar.disabled = onTry ? true : false;
-    mensaje.textContent = message;
-}
 
 formulario.addEventListener('submit', async (e) =>{
     e.preventDefault();
@@ -30,7 +27,8 @@ formulario.addEventListener('submit', async (e) =>{
     const emailTry = d.getElementById('email').value.trim();
     const claveTry = clave.value.trim();
 
-    tryManager(true, "Verficando credenciales...");
+    btnIngresar.disabled = true;
+    showToast('Verificando credenciales...', 'info');
 
     try{
         const { data: usuarioEncontrado, error } = await supaClient
@@ -43,12 +41,13 @@ formulario.addEventListener('submit', async (e) =>{
         if(error) throw error;
 
         if(!usuarioEncontrado){
-            tryManager(false, "❗ Email o Clave incorrectos");
+            btnIngresar.disabled = false;
+            showToast('Email o Clave incorrectos', 'error');
             return;
         }
 
         marado.classList.remove('d-none');
-        tryManager(true, "✔ ¡Bienvenido/a! Redirigiendo a tu panel")
+        showToast('¡Bienvenido/a! Redirigiendo a tu panel', 'success');
 
         localStorage.setItem('usuarioLogueado', JSON.stringify({
             id: usuarioEncontrado.id,
@@ -61,7 +60,8 @@ formulario.addEventListener('submit', async (e) =>{
 
     } catch (error){
         console.error("Error: ", error);
-        tryManager(false, "Hubo un error al conectar con la base de datos");
+        btnIngresar.disabled = false;
+        showToast('Hubo un error al conectar con la base de datos', 'error');
     }
 });
 
@@ -83,5 +83,13 @@ const iconManager = (see) =>{
 
 icon.addEventListener('click', () =>{
     iconManager(clave.type === "password" ? true : false);
+});
+
+btnDeAcuerdo.addEventListener('click', () => {
+    viewRules(true);
+});
+
+btnReglas.addEventListener('click', () => {
+    viewRules(false);
 });
 

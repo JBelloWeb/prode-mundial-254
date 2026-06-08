@@ -12,26 +12,30 @@
 <body id="final-page">
 
 <div id="toastContainer"></div>
-        <div class="heading">
-            <h1>Fase Final (Mata-Mata)</h1>
-            <h3>Completa los cuadros. Los ganadores avanzarán automáticamente.</h3>
-        </div>
 
-        <button onclick="window.location.href='dashboard.html'" class="btn-volver">
+    <div class="heading">
+        <h1>Fase Final (Mata-Mata)</h1>
+        <h3>Completa los cuadros. Los ganadores avanzarán automáticamente.</h3>
+    </div>
+
+    <button onclick="window.location.href='dashboard.html'" class="btn-volver">
         <i class="fa-solid fa-arrow-left"></i> Volver al Panel
     </button>
 
-        <div id="faseNav">
-            
-        </div>
+    <div id="faseNav">
+        
+    </div>
 
-        <section id="clasificacionGrupos" class="dashboard-main clasificacion-section">
-        <h2>1. Seleccioná los Clasificados</h2>
-        <div class="clasificacion-body">
+    <section id="clasificacionGrupos" class="clasificacion-section">
+        <div class="clasificacion-header">
+            <h2>1. Seleccioná los Clasificados</h2>
             <p>
                 Tocá los países para definir quién sale 1°, 2° y 3° en cada grupo.<br>
                 <span class="clasificacion-hint">(Los cruces y mejores terceros se armarán automáticamente abajo)</span>
             </p>
+        </div>
+        
+        <div class="clasificacion-body">
             <div id="gridGruposClasificacion" class="countries-container"></div>
         </div>
     </section>

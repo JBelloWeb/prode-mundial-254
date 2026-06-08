@@ -13,81 +13,94 @@
 
 <div id="toastContainer"></div>
 
-<header id="panelHeader">
-    <div class="header-top">
-        <h1 id="bienvenidaDashboard">Cargando perfil...</h1>
-        <button id="btnCerrarSesion" title="Cerrar Sesión">
-            Salir <i class="fa-solid fa-arrow-right-from-bracket"></i>
-        </button>
-    </div>
-    
-    <div id="puntajeContainer">
-        <div class="puntaje-box total">
-            <span class="puntaje-label">Puntos Totales</span>
-            <span class="puntaje-valor" id="puntosTotales">0</span>
-        </div>
-        
-        <div class="puntajes-secundarios">
-            <div class="puntaje-box detalle">
-                <span class="puntaje-label">Plenos:</span>
-                <span class="puntaje-valor" id="puntosPlenos">0</span>
-            </div>
-            <div class="puntaje-box detalle">
-                <span class="puntaje-label">Parciales:</span>
-                <span class="puntaje-valor" id="puntosParciales">0</span>
-            </div>
-        </div>
-    </div>
-</header>
+<div class="dashboard-container">
+    <div class="panel-superior" style="background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 20px;">
+        <header class="dashboard-header" style="border-bottom-color: #e0e0e0;">
+            <h1 id="bienvenidaDashboard" style="color: #131313;">¡Hola! Este es tu panel</h1>
+            <button id="btnCerrarSesion" class="btn-outline">Cerrar Sesión</button>
+        </header>
 
-    <nav class="dashboard-nav">
-        <button id="btnTabPerfil" class="tab-active">Mi Perfil</button>
-        <button id="btnTabRanking" class="tab-inactive">🏆 Ranking Global</button>
-    </nav>
-
-    <main class="dashboard-main">
-        <section id="accionesProde">
-            <button id="btnIrGrupos">📝 Predecir Grupos</button>
-            <button id="btnIrMataMata">🏆 Predecir Mata-Mata</button>
+        <section class="stats-grid" style="margin-bottom: 0;">
+            <div class="stat-card highlight">
+                <h3>Puntos Totales</h3>
+                <span id="puntosTotales" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>Plenos (5 pts)</h3>
+                <span id="puntosPlenos" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>Parciales (2 o 3 pts)</h3>
+                <span id="puntosParciales" class="stat-value">0</span>
+            </div>
         </section>
+    </div>
 
-        <div id="vistaPerfil">
-            <section id="proximosPartidos">
-                <h2>Próximos Partidos</h2>
-                <div id="listaProximosPartidos">
-                    <p class="cargando">Cargando partidos...</p>
+    <div style=" border-radius: 12px; overflow: hidden; margin-top: 20px;">
+        <nav class="tabs-nav" style="margin-bottom: 0;">
+            <button id="btnTabPerfil" class="tab-active">Mi Perfil</button>
+            <button id="btnTabRanking" class="tab-inactive">🏆 Ranking General</button>
+        </nav>
+
+        <main id="vistaPerfil">
+            <div class="perfil-grid">
+                
+                <div class="perfil-col-left">
+                    <div class="widget-box">
+                        <h2>📅 Próximos Partidos</h2>
+                        <div id="listaProximosPartidos" class="widget-content">
+                            <p class="cargando">Cargando actividad...</p>
+                        </div>
+                    </div>
+
+                    <div class="widget-box">
+                        <h2>Tus Formularios</h2>
+                        <div class="action-buttons">
+                            <button id="btnIrGrupos" class="btn-primary">Llenar Fase de Grupos</button>
+                            <button id="btnIrMataMata" class="btn-primary">Llenar Fase Final (Mata-Mata)</button>
+                        </div>
+                    </div>
                 </div>
-            </section>
 
-            <section id="misEquipos">
-                <h2>Equipos Seguidos</h2>
-                <ul id="listaEquipos"></ul>
-            </section>
+                <div class="perfil-col-right">
+                    <div class="widget-box">
+                        <h2>Tu Historial de Pronósticos</h2>
+                        <div id="tablaPronosticos" class="historial-container">
+                            <p class="cargando">Cargando pronósticos...</p>
+                        </div>
+                    </div>
 
-            <section id="misPronosticos">
-                <h2>Mis Predicciones</h2>
-                <div id="tablaPronosticos"></div>
-            </section>
-        </div>
-        <div id="vistaRanking" style="display: none;">
-            <section id="seccionRanking">
+                    <div class="widget-box">
+                        <h2>Tus Equipos a Seguir</h2>
+                        <ul id="listaEquipos" class="equipos-list"></ul>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <main id="vistaRanking" style="display: none;">
+            <div class="widget-box ranking-box">
                 <h2>Tabla de Posiciones</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Pos</th>
-                            <th>Jugador</th>
-                            <th>Puntos</th>
-                            <th>Plenos</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpoTablaRanking">
-                        <tr><td colspan="4">Cargando posiciones...</td></tr>
-                    </tbody>
-                </table>
-            </section>
-        </div>
-    </main>
+                <div class="table-responsive">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Jugador</th>
+                                <th>Puntos</th>
+                                <th>Plenos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpoTablaRanking">
+                            <tr><td colspan="4" class="cargando">Cargando ranking...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
 
     <script type="module" src="../js/dashboard.js"></script>
 </body>

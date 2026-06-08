@@ -93,8 +93,6 @@ async function cargarPerfil() {
             btnIrGrupos.disabled = true;
             btnIrGrupos.textContent = "Grupos Enviado ✅";
             btnIrGrupos.classList.add('btn-completado');
-        } else {
-            btnIrGrupos.addEventListener('click', () => window.location.href = 'prode.html');
         }
 
         // 3. LÓGICA DE BOTONES: Mata-Mata
@@ -102,8 +100,6 @@ async function cargarPerfil() {
             btnIrMataMata.disabled = true;
             btnIrMataMata.textContent = "Mata-Mata Enviado ✅";
             btnIrMataMata.classList.add('btn-completado');
-        } else {
-            btnIrMataMata.addEventListener('click', () => window.location.href = 'mata-mata.html');
         }
 
         // 4. Cargamos la lista de equipos seguidos (Lo que ya tenías)
@@ -297,12 +293,17 @@ function dibujarTablaPronosticos(predicciones, mapaPartidoId) {
             let claseFila = 'res-pendiente';
 
             if (p.goles_a_real !== null) {
-                textoReal = `${p.equipo_a_pred} <strong>${realA} - ${realB}</strong> ${p.equipo_b_pred}`;
+                // Usamos los nombres reales de la BD, o los del pronóstico si no están disponibles
+                const nombreRealA = p.equipo_a_real || p.equipo_a_pred; 
+                const nombreRealB = p.equipo_b_real || p.equipo_b_pred;
+
+                textoReal = `${nombreRealA} <strong>${realA} - ${realB}</strong> ${nombreRealB}`;
                 textoPuntos = `+${p.puntos || 0}`;
 
-                if (p.puntos === 5) claseFila = 'res-acierto-pleno';
+                if (p.puntos === 6) claseFila = 'res-acierto-perfecto';
+                else if (p.puntos === 5) claseFila = 'res-acierto-pleno';
                 else if (p.puntos === 3) claseFila = 'res-acierto-diferencia';
-                else if (p.puntos === 2) claseFila = 'res-acierto-parcial';
+                else if (p.puntos === 2 || p.puntos === 1) claseFila = 'res-acierto-parcial'; // <-- Cambio aquí
                 else if (p.puntos === 0) claseFila = 'res-fallo';
             } else {
                 textoReal = `<span style="color: gray;">Pendiente</span>`;
@@ -375,6 +376,16 @@ function dibujarTablaRanking(ranking) {
 btnCerrarSesion.addEventListener('click', () => {
     localStorage.removeItem('usuarioLogueado');
     window.location.href = '../index.html';
+});
+
+btnIrGrupos.addEventListener('click', () => {
+    if (btnIrGrupos.disabled) return;
+    window.location.href = 'prode.html';
+});
+
+btnIrMataMata.addEventListener('click', () => {
+    if (btnIrMataMata.disabled) return;
+    window.location.href = 'mata-mata.html';
 });
 
 cargarPerfil();
