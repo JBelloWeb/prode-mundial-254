@@ -32,22 +32,25 @@ const cuerpoTablaRanking = d.getElementById('cuerpoTablaRanking');
 
 bienvenida.textContent = `¡Hola, ${usuarioActivo.nombre}! Este es tu panel`;
 
-// 2. LÓGICA DE PESTAÑAS (Mostrar/Ocultar)
+const tabs = [btnTabPerfil, btnTabRanking];
+
+function activarTab(activo, inactivo) {
+    activo.classList.add('tab-active');
+    activo.classList.remove('tab-inactive');
+    inactivo.classList.remove('tab-active');
+    inactivo.classList.add('tab-inactive');
+}
+
 btnTabPerfil.addEventListener('click', () => {
     vistaPerfil.style.display = 'block';
     vistaRanking.style.display = 'none';
-    btnTabPerfil.style.fontWeight = 'bold';
-    btnTabRanking.style.fontWeight = 'normal';
-    btnTabRanking.style.backgroundColor = '';
+    activarTab(btnTabPerfil, btnTabRanking);
 });
 
 btnTabRanking.addEventListener('click', () => {
     vistaPerfil.style.display = 'none';
     vistaRanking.style.display = 'block';
-    btnTabRanking.style.fontWeight = 'bold';
-    btnTabPerfil.style.fontWeight = 'normal';
-    btnTabPerfil.style.backgroundColor = '';
-    
+    activarTab(btnTabRanking, btnTabPerfil);
     cargarRanking(); 
 });
 
@@ -67,9 +70,7 @@ async function cargarPerfil() {
         if (usuarioData.fecha_envio_grupos) {
             btnIrGrupos.disabled = true;
             btnIrGrupos.textContent = "Grupos Enviado ✅";
-            btnIrGrupos.style.backgroundColor = "#2d2d2d"; // Un gris oscuro estilo completado
-            btnIrGrupos.style.color = "var(--text-muted)";
-            btnIrGrupos.style.border = "1px solid var(--text-muted)";
+            btnIrGrupos.classList.add('btn-completado');
         } else {
             btnIrGrupos.addEventListener('click', () => window.location.href = 'prode.html');
         }
@@ -78,9 +79,7 @@ async function cargarPerfil() {
         if (usuarioData.fecha_envio_mata_mata) {
             btnIrMataMata.disabled = true;
             btnIrMataMata.textContent = "Mata-Mata Enviado ✅";
-            btnIrMataMata.style.backgroundColor = "#2d2d2d"; 
-            btnIrMataMata.style.color = "var(--text-muted)";
-            btnIrMataMata.style.border = "1px solid var(--text-muted)";
+            btnIrMataMata.classList.add('btn-completado');
         } else {
             btnIrMataMata.addEventListener('click', () => window.location.href = 'mata-mata.html');
         }
@@ -131,9 +130,9 @@ function dibujarTablaPronosticos(predicciones) {
         <table>
             <thead>
                 <tr>
-                    <th style="padding: 10px;">Tu Pronóstico</th>
-                    <th style="padding: 10px;">Resultado Real</th>
-                    <th style="padding: 10px; text-align: center;">Pts</th>
+                    <th>Tu Pronóstico</th>
+                    <th>Resultado Real</th>
+                    <th class="col-pts">Pts</th>
                 </tr>
             </thead>
             <tbody>
@@ -166,9 +165,9 @@ function dibujarTablaPronosticos(predicciones) {
         // Agregamos la nueva celda con los puntos al final de la fila
         html += `
             <tr>
-                <td style="padding: 10px;">${textoPronostico}</td>
-                <td style="padding: 10px;">${textoReal}</td>
-                <td style="padding: 10px; text-align: center; font-weight: bold; color: ${colorPuntos};">${textoPuntos}</td>
+                <td>${textoPronostico}</td>
+                <td>${textoReal}</td>
+                <td class="col-pts" style="color: ${colorPuntos};">${textoPuntos}</td>
             </tr>
         `;
     });
@@ -204,17 +203,17 @@ function dibujarTablaRanking(ranking) {
         const posicion = index + 1;
         let medalla = posicion === 1 ? "🥇 " : posicion === 2 ? "🥈 " : posicion === 3 ? "🥉 " : "";
         
-        const estiloFila = jugador.usuario_id === usuarioActivo.id ? 'font-weight: bold;' : '';
+        const filaDestacada = jugador.usuario_id === usuarioActivo.id ? 'fila-destacada' : '';
         const nombreMostrar = jugador.usuario_id === usuarioActivo.id ? `${jugador.nombre} (Tú)` : jugador.nombre;
 
         const puntosMostrar = Number(jugador.puntos_totales).toFixed(1).replace('.0', ''); 
 
         html += `
-            <tr style="${estiloFila}">
-                <td style="padding: 10px;">${medalla}${posicion}</td>
-                <td style="padding: 10px; text-align: center;">${nombreMostrar}</td>
-                <td style="padding: 10px;"><strong>${puntosMostrar}</strong></td>
-                <td style="padding: 10px;">${jugador.aciertos_plenos || 0}</td>
+            <tr class="${filaDestacada}">
+                <td>${medalla}${posicion}</td>
+                <td>${nombreMostrar}</td>
+                <td><strong>${puntosMostrar}</strong></td>
+                <td>${jugador.aciertos_plenos || 0}</td>
             </tr>
         `;
     });

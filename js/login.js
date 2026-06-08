@@ -1,3 +1,5 @@
+import { Toast } from './utils.js';
+
 const supaUrl = "https://juuwwrzrxensvjjzlpha.supabase.co";
 const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
@@ -8,12 +10,14 @@ if(usuarioActivo){
     window.location.href = 'pages/dashboard.html'; 
 }
 
+
 const d = document;
 const reglas = d.getElementById('reglas');
 const formulario = d.getElementById('loginForm');
 const mensaje = d.getElementById('mensaje');
 const btnIngresar = d.getElementById('btnIngresar');
 const btnReglas = d.getElementById('btnReglas');
+const btnDeAcuerdo = d.getElementById('btnDeAcuerdo');
 const clave = d.getElementById('clave');
 const icon = d.getElementById('claveIcon');
 const marado = d.getElementById('maradonaOk');
@@ -43,11 +47,14 @@ formulario.addEventListener('submit', async (e) =>{
         if(error) throw error;
 
         if(!usuarioEncontrado){
+            Toast("❗ Email o Clave incorrectos", "var(--sananto-red)");
             tryManager(false, "❗ Email o Clave incorrectos");
             return;
         }
 
         marado.classList.remove('d-none');
+        Toast("✔ ¡Bienvenido/a! Redirigiendo a tu panel", "var(--sananto-green)");
+
         tryManager(true, "✔ ¡Bienvenido/a! Redirigiendo a tu panel")
 
         localStorage.setItem('usuarioLogueado', JSON.stringify({
@@ -84,4 +91,7 @@ const iconManager = (see) =>{
 icon.addEventListener('click', () =>{
     iconManager(clave.type === "password" ? true : false);
 });
+
+btnDeAcuerdo.addEventListener('click', () => viewRules(true));
+btnReglas.addEventListener('click', () => viewRules(false));
 

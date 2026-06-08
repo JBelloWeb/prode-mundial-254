@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://kit.fontawesome.com/2cd34b61aa.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&display=swap" rel="stylesheet">
     <title>Mi Panel - Prode 254</title>
 </head>
 <body>
@@ -37,8 +38,8 @@
 </header>
 
     <nav class="dashboard-nav">
-        <button id="btnTabPerfil" style="font-weight: bold;">Mi Perfil</button>
-        <button id="btnTabRanking">🏆 Ranking Global</button>
+        <button id="btnTabPerfil" class="tab-active">Mi Perfil</button>
+        <button id="btnTabRanking" class="tab-inactive">🏆 Ranking Global</button>
     </nav>
 
     <main class="dashboard-main">
@@ -61,7 +62,7 @@
         <div id="vistaRanking" style="display: none;">
             <section id="seccionRanking">
                 <h2>Tabla de Posiciones</h2>
-                <table style="text-align: center; margin: 0 auto;">
+                <table>
                     <thead>
                         <tr>
                             <th>Pos</th>

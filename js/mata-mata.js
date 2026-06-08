@@ -151,14 +151,7 @@ function dibujarClasificacionGrupos() {
     container.innerHTML = '';
 
     let ol = d.createElement('ol');
-    ol.style.display = 'flex';
-    ol.style.flexDirection = 'row';
-    ol.style.flexWrap = 'wrap';
-    ol.style.gap = '20px';
-    ol.style.justifyContent = 'center';
-    ol.style.width = '100%';
-    ol.style.padding = '0';
-    ol.style.listStyle = 'none';
+    ol.className = 'clasificacion-grid';
 
     Object.keys(gruposMundial).forEach(letra => {
         let gr = d.createElement('li');
@@ -166,32 +159,19 @@ function dibujarClasificacionGrupos() {
         
         let name = d.createElement('h3');
         name.textContent = `GRUPO ${letra}`;
-        name.style.width = '100%';
-        name.style.marginBottom = '10px';
+        name.className = 'clasificacion-group-title';
         
         let integrantes = d.createElement('ul');
         integrantes.className = "countries-container";
-        
-        // Refuerzo de contenedor
-        integrantes.style.width = '100%';
-        integrantes.style.padding = '0';
-        integrantes.style.margin = '0';
-        integrantes.style.gap = '10px'; // Forzamos el gap exacto
 
         gruposMundial[letra].forEach(pais => {
             let li = d.createElement('li');
             li.className = 'group-participant clasificacion-item';
             
-            // LA MAGIA MATEMÁTICA
-            li.style.flex = '0 0 calc(50% - 5px)';
-            li.style.maxWidth = 'calc(50% - 5px)'; 
-            li.style.boxSizing = 'border-box';
-            li.style.margin = '0'; // <--- ESTO MATA AL MARGEN INFILTRADO QUE ROMPÍA LA FILA
-            
             let codigo = codigosBanderas[pais];
             let n = minBosnia(pais);
             
-            li.innerHTML = `<img src="https://flagcdn.com/16x12/${codigo}.png" alt="${pais}" style="margin-right: 8px;">${n}`;
+            li.innerHTML = `<img src="https://flagcdn.com/16x12/${codigo}.png" alt="${pais}">${n}`;
             
             li.onclick = () => seleccionarClasificado(letra, pais, li);
             integrantes.appendChild(li);
@@ -320,21 +300,21 @@ function dibujarDieciseisavos() {
         card.id = `match-${p.id}`;
         card.innerHTML = `
             <p><strong>Partido ${p.id}</strong></p>
-            <div class="team-row" style="justify-content: center;">
+            <div class="team-row">
                 <div class="team-column-A">
-                    <span class="auto-team team-A" id="teamA-${p.id}" style="padding: 2px; font-weight: 500; font-size: 0.95rem; min-height: 30px;">${reqs[0]}</span>
+                    <span class="auto-team team-A" id="teamA-${p.id}">${reqs[0]}</span>
                     <input type="number" class="score-input input-A" min="0" placeholder="0">
                 </div>
-                <span style="color:var(--text-muted); display:flex; align-items:center; padding: 0 10px;"> vs </span>
+                <span class="vs-separator"> vs </span>
                 <div class="team-column-B">
-                    <span class="auto-team team-B" id="teamB-${p.id}" style="padding: 2px; font-weight: 500; font-size: 0.95rem; min-height: 30px;">${reqs[1]}</span>
+                    <span class="auto-team team-B" id="teamB-${p.id}">${reqs[1]}</span>
                     <input type="number" class="score-input input-B" min="0" placeholder="0">
                 </div>
             </div>
             
-            <div style="margin-top: 15px;">
+            <div class="penal-box">
                 <input type="checkbox" id="penales-${p.id}" class="chk-penales">
-                <label for="penales-${p.id}" style="font-size:0.85rem; color: var(--text-muted);">Definición por Penales</label>
+                <label for="penales-${p.id}">Definición por Penales</label>
             </div>
             <div class="penales-box d-none" id="box-penales-${p.id}">
                 <label>Ganador de los penales:</label>
@@ -361,21 +341,21 @@ function dibujarSiguientesFases() {
             card.id = `match-${idPartido}`;
             card.innerHTML = `
                 <p><strong>Partido ${idPartido}</strong></p>
-                <div class="team-row" style="justify-content: center;">
+                <div class="team-row">
                     <div class="team-column-A">
-                        <span class="auto-team team-A" id="teamA-${idPartido}" style="padding: 2px; font-weight: 500; font-size: 0.95rem; min-height: 30px;">Por definirse...</span>
+                        <span class="auto-team team-A" id="teamA-${idPartido}">Por definirse...</span>
                         <input type="number" class="score-input input-A" min="0" placeholder="0">
                     </div>
-                    <span style="color:var(--text-muted); display:flex; align-items:center; padding: 0 10px;"> vs </span>
+                    <span class="vs-separator"> vs </span>
                     <div class="team-column-B">
-                        <span class="auto-team team-B" id="teamB-${idPartido}" style="padding: 2px; font-weight: 500; font-size: 0.95rem; min-height: 30px;">Por definirse...</span>
+                        <span class="auto-team team-B" id="teamB-${idPartido}">Por definirse...</span>
                         <input type="number" class="score-input input-B" min="0" placeholder="0">
                     </div>
                 </div>
                 
-                <div style="margin-top: 15px;">
+                <div class="penal-box">
                     <input type="checkbox" id="penales-${idPartido}" class="chk-penales">
-                    <label for="penales-${idPartido}" style="font-size:0.85rem; color: var(--text-muted);">Definición por Penales</label>
+                    <label for="penales-${idPartido}">Definición por Penales</label>
                 </div>
                 <div class="penales-box d-none" id="box-penales-${idPartido}">
                     <label>Ganador de los penales:</label>

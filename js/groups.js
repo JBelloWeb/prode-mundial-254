@@ -168,7 +168,7 @@ const cargameLosPaises = () =>{
 
             let codigo = codigosBanderas[p];
             let n = minBosnia(p);
-            li.innerHTML = `<img src="https://flagcdn.com/16x12/${codigo}.png" alt="${p}" style="margin-right: 8px;">${n}`;
+            li.innerHTML = `<img src="https://flagcdn.com/16x12/${codigo}.png" alt="${p}">${n}`;
             integrantes.appendChild(li);
         }
 

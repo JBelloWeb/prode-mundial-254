@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://kit.fontawesome.com/2cd34b61aa.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&display=swap" rel="stylesheet">
     <title>Mata-Mata - Prode 254</title>
 </head>
 <body id="final-page">
@@ -22,14 +23,14 @@
             
         </div>
 
-        <section id="clasificacionGrupos" class="dashboard-main" style="margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
-        <h2 style="background-color: var(--sananto-black); color: var(--sananto-white); padding: 15px; border-radius: 15px 15px 0 0; text-align: center; font-size: 1.3rem;">1. Seleccioná los Clasificados</h2>
-        <div style="background-color: var(--sananto-white); padding: 20px; border-radius: 0 0 15px 15px; border: 2px solid var(--sananto-black); border-top: none;">
-            <p style="text-align: center; font-size: 0.95rem; margin-bottom: 25px; font-weight: 500;">
+        <section id="clasificacionGrupos" class="dashboard-main clasificacion-section">
+        <h2>1. Seleccioná los Clasificados</h2>
+        <div class="clasificacion-body">
+            <p>
                 Tocá los países para definir quién sale 1°, 2° y 3° en cada grupo.<br>
-                <span style="color: var(--sananto-red); font-size: 0.85rem;">(Los cruces y mejores terceros se armarán automáticamente abajo)</span>
+                <span class="clasificacion-hint">(Los cruces y mejores terceros se armarán automáticamente abajo)</span>
             </p>
-            <div id="gridGruposClasificacion" class="countries-container" style="justify-content: center; gap: 20px;"></div>
+            <div id="gridGruposClasificacion" class="countries-container"></div>
         </div>
     </section>
         

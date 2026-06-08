@@ -9,8 +9,8 @@ figure.className = 'figure-container';
 
 // 2. ESTADO INICIAL: Placeholder de texto en lugar de una imagen rota
 figure.innerHTML = `
-    <div id="minimap-placeholder" style="text-align: center; color: var(--sananto-white); font-size: 0.85rem; font-weight: bold; padding: 10px;">
-        <i class="fa-solid fa-ranking-star" style="font-size: 1.8rem; color: var(--sananto-red); margin-bottom: 10px; filter: drop-shadow(2px 2px 0px var(--sananto-black));"></i><br>
+    <div id="minimap-placeholder">
+        <i class="fa-solid fa-ranking-star"></i><br>
         Definí las posiciones de los grupos para ver el mapa
     </div>
 `;
