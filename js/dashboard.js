@@ -125,22 +125,54 @@ function dibujarTablaPronosticos(predicciones) {
         tablaPronosticos.innerHTML = "<p>Aún no has guardado ningún pronóstico.</p>";
         return;
     }
+    
+    // Agregamos la columna 'Pts' al encabezado
     let html = `
         <table>
             <thead>
-                <tr><th style="padding: 10px;">Tu Pronóstico</th><th style="padding: 10px;">Resultado Real</th></tr>
+                <tr>
+                    <th style="padding: 10px;">Tu Pronóstico</th>
+                    <th style="padding: 10px;">Resultado Real</th>
+                    <th style="padding: 10px; text-align: center;">Pts</th>
+                </tr>
             </thead>
             <tbody>
     `;
+    
     predicciones.forEach(p => {
         let realA = p.goles_a_real !== null ? p.goles_a_real : "-";
         let realB = p.goles_b_real !== null ? p.goles_b_real : "-";
+        
         const textoPronostico = `${p.equipo_a_pred} <strong>${p.goles_a_pred} - ${p.goles_b_pred}</strong> ${p.equipo_b_pred}`;
-        const textoReal = p.goles_a_real !== null 
-            ? `${p.equipo_a_pred} <strong>${realA} - ${realB}</strong> ${p.equipo_b_pred}`
-            : `<span style="color: gray;">Pendiente</span>`;
-        html += `<tr><td style="padding: 10px;">${textoPronostico}</td><td style="padding: 10px;">${textoReal}</td></tr>`;
+        
+        let textoReal = "";
+        let textoPuntos = "-";
+        let colorPuntos = "gray";
+
+        if (p.goles_a_real !== null) {
+            textoReal = `${p.equipo_a_pred} <strong>${realA} - ${realB}</strong> ${p.equipo_b_pred}`;
+            
+            // Lógica de colores según el puntaje (5-3-2)
+            textoPuntos = `+${p.puntos || 0}`;
+            if (p.puntos === 5) colorPuntos = "#28a745"; // Verde para plenos
+            else if (p.puntos === 3) colorPuntos = "#17a2b8"; // Celeste para diferencia
+            else if (p.puntos === 2) colorPuntos = "#ffc107"; // Amarillo para ganador
+            else colorPuntos = "#dc3545"; // Rojo para fallos (0 pts)
+            
+        } else {
+            textoReal = `<span style="color: gray;">Pendiente</span>`;
+        }
+
+        // Agregamos la nueva celda con los puntos al final de la fila
+        html += `
+            <tr>
+                <td style="padding: 10px;">${textoPronostico}</td>
+                <td style="padding: 10px;">${textoReal}</td>
+                <td style="padding: 10px; text-align: center; font-weight: bold; color: ${colorPuntos};">${textoPuntos}</td>
+            </tr>
+        `;
     });
+    
     html += `</tbody></table>`;
     tablaPronosticos.innerHTML = html;
 }
@@ -150,8 +182,9 @@ async function cargarRanking() {
         const { data: rankingData, error } = await supaClient
             .from('ranking_prode')
             .select('*')
-            .order('puntos_totales', { ascending: false })
-            .order('aciertos_plenos', { ascending: false });
+            .order('puntos_totales', { ascending: false }) // 1ro: Más puntos
+            .order('aciertos_plenos', { ascending: false }) // 2do: Más plenos
+            .order('fecha_desempate', { ascending: true, nullsFirst: false }); // 3ro: El más rápido gana
 
         if (error) throw error;
         dibujarTablaRanking(rankingData);

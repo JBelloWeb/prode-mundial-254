@@ -564,6 +564,13 @@ btnGuardarMataMata.addEventListener('click', async () => {
         let matchIdStr = card.id.replace('match-', ''); // Queda 'P73', 'P76', etc.
         let idBaseDatos = mapaIdsBaseDatos[matchIdStr]; // Busca el ID real de la base de datos (1 al 32)
 
+        if (!idBaseDatos) {
+            console.error("ID no encontrado para: " + matchIdStr);
+            alert("Error crítico: El partido " + matchIdStr + " no tiene ID asignado.");
+            btnGuardarMataMata.disabled = false;
+            return;
+        }
+
         let spanA = card.querySelector('.team-A');
         let spanB = card.querySelector('.team-B');
         let golesA = card.querySelector('.input-A').value;
