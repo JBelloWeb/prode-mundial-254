@@ -124,6 +124,7 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow-x: hidden;
 }
 
 body::after {
@@ -731,6 +732,11 @@ nav{
     margin: 0 auto;
 }
 
+.clasificacion-grid {
+    padding-left: 0;
+    list-style: none;
+}
+
 #elecciones{
     outline: 3px solid var(--sananto-blue);
     display: flex;
@@ -841,7 +847,8 @@ nav{
 .nav-fases{
     display: flex;
     justify-content: center;
-    min-width: fit-content;
+    flex-wrap: wrap;
+    max-width: 100%;
     gap: 8px;
     background-color: var(--sananto-black);
     padding: 10px 15px;
