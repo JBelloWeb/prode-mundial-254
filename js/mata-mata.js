@@ -5,6 +5,11 @@ const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
 window.supaClient = supaClient;
 
+if (!supaClient) {
+    showToast('Error de conexión. Recargá la página.', 'error');
+    setTimeout(() => { window.location.href = '../index.html'; }, 2000);
+}
+
 const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado'));
 if(!usuarioActivo){
     showToast('Debes iniciar sesión', 'error');
@@ -131,6 +136,7 @@ const getCodes = async () => {
     
     // Una vez que tenemos las banderas, dibujamos los grupos
     dibujarClasificacionGrupos();
+    restaurarClasificadosGuardados();
 }
 
 
@@ -216,6 +222,7 @@ function seleccionarClasificado(grupo, pais, elementoHtml) {
         }
     }
     
+    localStorage.setItem('clasificados_mata_mata', JSON.stringify(clasificados));
     armarBracketAutomatico();
 }
 
@@ -225,6 +232,36 @@ function agregarBadge(elementoHtml, pos) {
     badge.className = `badge-posicion pos-${pos}`;
     badge.textContent = `${pos}°`;
     elementoHtml.appendChild(badge);
+}
+
+function restaurarClasificadosGuardados() {
+    const guardado = localStorage.getItem('clasificados_mata_mata');
+    if (!guardado) return;
+    try {
+        const datos = JSON.parse(guardado);
+        Object.keys(datos).forEach(g => {
+            Object.keys(datos[g]).forEach(pos => {
+                const pais = datos[g][pos];
+                if (pais) {
+                    clasificados[g][pos] = pais;
+                    const items = d.querySelectorAll('#gridGruposClasificacion .group-participant');
+                    items.forEach(li => {
+                        const nombreLi = li.lastChild.textContent.trim();
+                        if (nombreLi === pais) {
+                            li.classList.add('selected');
+                            let badge = d.createElement('div');
+                            badge.className = `badge-posicion pos-${pos}`;
+                            badge.textContent = `${pos}°`;
+                            li.appendChild(badge);
+                        }
+                    });
+                }
+            });
+        });
+        armarBracketAutomatico();
+    } catch(e) {
+        console.error("Error al restaurar clasificados:", e);
+    }
 }
 
 // ==========================================
@@ -289,6 +326,14 @@ function actualizarSlotEnBracket(matchId, slot, teamName, labelOriginal) {
 // ==========================================
 // RENDERIZADO DE INTERFAZ DEL BRACKET
 // ==========================================
+
+function crearBotonGuardarFase() {
+    let btn = d.createElement('button');
+    btn.className = 'btn-guardar-progreso button button-outline';
+    btn.style.maxWidth = '250px';
+    btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar Progreso Parcial';
+    return btn;
+}
 function dibujarDieciseisavos() {
     let section = d.createElement('section');
     section.className = 'fase-container';
@@ -327,6 +372,7 @@ function dibujarDieciseisavos() {
         `;
         section.appendChild(card);
     });
+    section.appendChild(crearBotonGuardarFase());
     bracketContainer.appendChild(section);
 }
 
@@ -368,6 +414,7 @@ function dibujarSiguientesFases() {
             `;
             section.appendChild(card);
         });
+        section.appendChild(crearBotonGuardarFase());
         bracketContainer.appendChild(section);
     });
 }
@@ -381,10 +428,17 @@ function actualizarDropdownPenales(matchId) {
     let spanB = card.querySelector('.team-B');
     
     let selectPenales = card.querySelector('.penales-winner');
+    
+    // Guardamos lo que el usuario tenga seleccionado antes de reescribir
+    let valorActual = selectPenales.value; 
+    
     selectPenales.innerHTML = `<option value="">Seleccionar ganador...</option>`;
     
     if (spanA.classList.contains('filled')) selectPenales.innerHTML += `<option value="${spanA.textContent}">${spanA.textContent}</option>`;
     if (spanB.classList.contains('filled')) selectPenales.innerHTML += `<option value="${spanB.textContent}">${spanB.textContent}</option>`;
+    
+    // Restauramos su selección si todavía es válida
+    if (valorActual) selectPenales.value = valorActual; 
 }
 
 function limpiarFuturo(matchId) {
@@ -474,7 +528,6 @@ function evaluarGanador(matchId) {
 // ==========================================
 // INICIALIZACIÓN Y EVENTOS
 // ==========================================
-getCodes(); // Esto carga las banderas y luego llama a dibujarClasificacionGrupos()
 dibujarDieciseisavos();
 dibujarSiguientesFases();
 
@@ -492,7 +545,8 @@ d.addEventListener('input', (e) => {
         if (e.data === '-' || e.data === 'e') e.target.value = "";
         
         if (e.target.value !== "") {
-            let valor = parseInt(e.target.value, 10); 
+            let valor = parseInt(e.target.value, 10);
+            if (isNaN(valor)) { e.target.value = ""; return; }
             if (valor < 0) valor = 0;
             if (valor > 99) valor = 99;
             e.target.value = valor; 
@@ -520,38 +574,93 @@ d.addEventListener('input', (e) => {
     }
 });
 
-// ==========================================
-// LÓGICA DE GUARDADO
-// ==========================================
-const btnGuardarMataMata = d.getElementById('btnGuardarMataMata');
+async function initMataMata() {
+    await getCodes();
+    await cargarProgresoMataMata();
+}
+initMataMata();
 
-btnGuardarMataMata.addEventListener('click', async () => {
-    btnGuardarMataMata.disabled = true;
-    btnGuardarMataMata.textContent = "Validando partidos...";
+// ==========================================
+// LÓGICA DE GUARDADO Y CARGA (Borrador / Definitivo)
+// ==========================================
 
+// Diccionarios globales para traducir HTML <-> Base de Datos
+const mapaIdsBaseDatos = {
+    'P73': 1, 'P76': 2, 'P74': 3, 'P75': 4, 'P78': 5, 'P77': 6, 'P79': 7, 'P80': 8,
+    'P82': 9, 'P81': 10, 'P84': 11, 'P83': 12, 'P85': 13, 'P88': 14, 'P86': 15, 'P87': 16,
+    'P90': 17, 'P89': 18, 'P91': 19, 'P92': 20, 'P93': 21, 'P94': 22, 'P95': 23, 'P96': 24,
+    'P97': 25, 'P98': 26, 'P99': 27, 'P100': 28, 'P101': 29, 'P102': 30, 'P103': 31, 'P104': 32
+};
+
+// Diccionario inverso para cuando descargamos de la base de datos
+const mapaIdsHTML = Object.fromEntries(Object.entries(mapaIdsBaseDatos).map(([k, v]) => [v, k]));
+
+async function cargarProgresoMataMata() {
+    try {
+        const { data: predicciones, error } = await supaClient
+            .from('predicciones')
+            .select('*')
+            .eq('usuario_id', usuarioActivo.id)
+            .gte('partido_id', 1);
+
+        if (error) throw error;
+
+        if (predicciones && predicciones.length > 0) {
+            predicciones.forEach(p => {
+                const matchIdStr = mapaIdsHTML[p.partido_id];
+                if (!matchIdStr) return; // Si pertenece a la fase de grupos, lo ignora
+
+                const card = d.getElementById(`match-${matchIdStr}`);
+                if (!card) return;
+
+                // 1. Rellenar los equipos
+                const spanA = card.querySelector('.team-A');
+                const spanB = card.querySelector('.team-B');
+                if (p.equipo_a_pred) { spanA.textContent = p.equipo_a_pred; spanA.classList.add('filled'); }
+                if (p.equipo_b_pred) { spanB.textContent = p.equipo_b_pred; spanB.classList.add('filled'); }
+
+                // ¡ACÁ ESTÁ LA MAGIA! Rellenamos el dropdown SIEMPRE.
+                actualizarDropdownPenales(matchIdStr);
+
+                // 2. Rellenar los goles
+                const inputA = card.querySelector('.input-A');
+                const inputB = card.querySelector('.input-B');
+                if (p.goles_a_pred !== null) inputA.value = p.goles_a_pred;
+                if (p.goles_b_pred !== null) inputB.value = p.goles_b_pred;
+
+                // 3. Rellenar los penales
+                if (p.ganador_penales_pred) {
+                    card.querySelector('.chk-penales').checked = true;
+                    const boxPenales = card.querySelector('.penales-box');
+                    boxPenales.style.display = 'block';
+                    
+                    const selectPenales = card.querySelector('.penales-winner');
+                    selectPenales.value = p.ganador_penales_pred;
+                }
+            });
+
+            dieciseisavos.forEach(m => evaluarGanador(m.id));
+
+            showToast("Progreso anterior restaurado", "success");
+        }
+    } catch (err) {
+        console.error("Error al cargar progreso:", err);
+    }
+}
+
+
+
+// --- FUNCIÓN CENTRAL PARA EXTRAER LOS DATOS DE LAS TARJETAS ---
+function recopilarDatosMataMata(exigirCompletos) {
     let todasCompletas = true;
     const prediccionesParaSubir = [];
     const matchCards = d.querySelectorAll('.match-card');
 
-    // Diccionario Traductor: Vincula el nombre de la tarjeta en HTML con tu nuevo ID cronológico en la BD
-    const mapaIdsBaseDatos = {
-        'P73': 1, 'P76': 2, 'P74': 3, 'P75': 4, 'P78': 5, 'P77': 6, 'P79': 7, 'P80': 8,
-        'P82': 9, 'P81': 10, 'P84': 11, 'P83': 12, 'P85': 13, 'P88': 14, 'P86': 15, 'P87': 16,
-        'P90': 17, 'P89': 18, 'P91': 19, 'P92': 20, 'P93': 21, 'P94': 22, 'P95': 23, 'P96': 24,
-        'P97': 25, 'P98': 26, 'P99': 27, 'P100': 28, 'P101': 29, 'P102': 30, 'P103': 31, 'P104': 32
-    };
-
     matchCards.forEach(card => {
-        // Obtenemos el ID traducido usando el diccionario
-        let matchIdStr = card.id.replace('match-', ''); // Queda 'P73', 'P76', etc.
-        let idBaseDatos = mapaIdsBaseDatos[matchIdStr]; // Busca el ID real de la base de datos (1 al 32)
+        let matchIdStr = card.id.replace('match-', '');
+        let idBaseDatos = mapaIdsBaseDatos[matchIdStr];
 
-        if (!idBaseDatos) {
-            console.error("ID no encontrado para: " + matchIdStr);
-            showToast('Error crítico: El partido ' + matchIdStr + ' no tiene ID asignado.', 'error');
-            btnGuardarMataMata.disabled = false;
-            return;
-        }
+        if (!idBaseDatos) return;
 
         let spanA = card.querySelector('.team-A');
         let spanB = card.querySelector('.team-B');
@@ -560,58 +669,163 @@ btnGuardarMataMata.addEventListener('click', async () => {
         let chkPenales = card.querySelector('.chk-penales').checked;
         let ganadorPenales = card.querySelector('.penales-winner').value;
 
-        if (!spanA.classList.contains('filled') || !spanB.classList.contains('filled') || golesA === "" || golesB === "") {
-            todasCompletas = false;
+        // Validaciones estrictas solo si es el "Envío Definitivo"
+        if (exigirCompletos) {
+            if (!spanA.classList.contains('filled') || !spanB.classList.contains('filled') || golesA === "" || golesB === "") {
+                todasCompletas = false;
+            }
+            if (golesA === golesB && (!chkPenales || ganadorPenales === "")) {
+                todasCompletas = false;
+            } else if (chkPenales && ganadorPenales === "") {
+                todasCompletas = false;
+            }
         }
 
-        if (golesA === golesB && (!chkPenales || ganadorPenales === "")) {
-            todasCompletas = false;
-        } else if (chkPenales && ganadorPenales === "") {
-            todasCompletas = false;
+        // Solo preparamos para subir si al menos los equipos están definidos
+        if (spanA.classList.contains('filled') && spanB.classList.contains('filled')) {
+            prediccionesParaSubir.push({
+                usuario_id: usuarioActivo.id,
+                partido_id: idBaseDatos,
+                equipo_a_pred: spanA.textContent,
+                equipo_b_pred: spanB.textContent,
+                goles_a_pred: golesA !== "" ? parseInt(golesA) : null,
+                goles_b_pred: golesB !== "" ? parseInt(golesB) : null,
+                ganador_penales_pred: (chkPenales && ganadorPenales !== "") ? ganadorPenales : null
+            });
         }
-
-        prediccionesParaSubir.push({
-            usuario_id: usuarioActivo.id,
-            partido_id: idBaseDatos, // <--- ACÁ VA TU NUEVO ID CRONOLÓGICO PERFECTO
-            equipo_a_pred: spanA.textContent,
-            equipo_b_pred: spanB.textContent,
-            goles_a_pred: parseInt(golesA),
-            goles_b_pred: parseInt(golesB),
-            ganador_penales_pred: (chkPenales && ganadorPenales !== "") ? ganadorPenales : null
-        });
     });
 
-    if (!todasCompletas) {
-        showToast('⚠️ Faltan datos. Asegurate de haber elegido los clasificados de los grupos y haber llenado todos los goles y penales del cuadro.', 'warning');
-        btnGuardarMataMata.disabled = false;
-        btnGuardarMataMata.textContent = "Guardar Fase Final 🏆";
+    if (exigirCompletos && !todasCompletas) {
+        return null; // Retorna null si falló la validación
+    }
+    return prediccionesParaSubir;
+}
+
+// --- FUNCIÓN INTELIGENTE DE GUARDADO (Sin borrar datos ni usar Upsert) ---
+async function guardarPrediccionesSinBorrar(arrayPredicciones) {
+    // 1. Preguntamos a la base de datos qué partidos ya guardó este usuario
+    const { data: guardados, error: errTraer } = await supaClient
+        .from('predicciones')
+        .select('partido_id')
+        .eq('usuario_id', usuarioActivo.id)
+        .gte('partido_id', 1);
+
+    if (errTraer) throw errTraer;
+
+    // Creamos una lista solo con los números de partido que ya existen
+    const idsExistentes = (guardados || []).map(g => g.partido_id);
+    const promesas = [];
+
+    // 2. Procesamos cada predicción una por una
+    for (const p of arrayPredicciones) {
+        if (idsExistentes.includes(p.partido_id)) {
+            // Si ya existe (aunque esté duplicado), ACTUALIZAMOS sus valores
+            promesas.push(
+                supaClient.from('predicciones')
+                .update({
+                    equipo_a_pred: p.equipo_a_pred,
+                    equipo_b_pred: p.equipo_b_pred,
+                    goles_a_pred: p.goles_a_pred,
+                    goles_b_pred: p.goles_b_pred,
+                    ganador_penales_pred: p.ganador_penales_pred
+                })
+                .eq('usuario_id', usuarioActivo.id)
+                .eq('partido_id', p.partido_id)
+            );
+        } else {
+            // Si no existe, lo INSERTAMOS como uno nuevo
+            promesas.push(
+                supaClient.from('predicciones').insert([p])
+            );
+        }
+    }
+
+    // 3. Ejecutamos todas las peticiones a la vez
+    await Promise.all(promesas);
+}
+
+// --- BOTÓN: GUARDAR BORRADOR ---
+
+d.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.btn-guardar-progreso');
+    if (!btn) return;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
+
+    const arrayPredicciones = recopilarDatosMataMata(false); // false = no exigir completitud
+
+    if (!arrayPredicciones || arrayPredicciones.length === 0) {
+        showToast("No hay datos nuevos para guardar.", "info");
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar Progreso Parcial';
         return;
     }
 
-    btnGuardarMataMata.textContent = "Subiendo a la nube...";
-
     try {
-        const { error: errorPredicciones } = await supaClient.from('predicciones').insert(prediccionesParaSubir);
-        await supaClient.from('usuarios').update({ fecha_envio_mata_mata: new Date().toISOString() }).eq('id', usuarioActivo.id);
+        // Usamos nuestra nueva función en lugar de upsert
+        await guardarPrediccionesSinBorrar(arrayPredicciones);
 
-        if (errorPredicciones) throw errorPredicciones;
-
-        showToast('¡Mundial pronosticado con éxito! Que ruede la pelota.', 'success');
-        setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
-    } catch (error) {
-        console.error("Error al guardar Mata-Mata:", error);
-        showToast('Hubo un problema al guardar tus pronósticos. Revisa tu conexión.', 'error');
-        btnGuardarMataMata.disabled = false;
-        btnGuardarMataMata.textContent = "Guardar Fase Final 🏆";
+        showToast("Progreso guardado correctamente. Podés continuar luego.", "success");
+    } catch (err) {
+        console.error("Error al guardar borrador:", err);
+        showToast("Error al guardar progreso", "error");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar Progreso Parcial';
     }
 });
 
+// --- BOTÓN: ENVÍO DEFINITIVO ---
+const btnEnviarDefinitivo = d.getElementById('btnEnviarDefinitivo');
+
+btnEnviarDefinitivo.addEventListener('click', async () => {
+    
+    const arrayPredicciones = recopilarDatosMataMata(true); // true = Exigir todo completo
+
+    if (!arrayPredicciones) {
+        showToast('⚠️ Faltan datos. Asegurate de haber llenado todos los goles, penales y equipos de cada llave.', 'warning');
+        return;
+    }
+
+    const confirmacion = confirm("¿Estás seguro? Una vez enviado, no podrás modificar NINGUNA fase del Mata-Mata.");
+    if (!confirmacion) return;
+
+    btnEnviarDefinitivo.disabled = true;
+    btnEnviarDefinitivo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+    d.querySelectorAll('.btn-guardar-progreso').forEach(b => b.style.display = 'none');
+
+    try {
+        // 1. Subimos las predicciones usando la nueva lógica
+        await guardarPrediccionesSinBorrar(arrayPredicciones);
+
+        // 2. Sellamos el formulario en el perfil del usuario
+        const { error: errUser } = await supaClient
+            .from('usuarios')
+            .update({ fecha_envio_mata_mata: new Date().toISOString() })
+            .eq('id', usuarioActivo.id);
+            
+        if (errUser) throw errUser;
+
+        showToast("¡Mundial pronosticado con éxito! Que ruede la pelota. 🏆", "success");
+        setTimeout(() => window.location.href = 'dashboard.html', 2000);
+
+    } catch (err) {
+        console.error("Error definitivo:", err);
+        showToast("Error al enviar el formulario final", "error");
+        btnEnviarDefinitivo.disabled = false;
+        btnEnviarDefinitivo.innerHTML = 'Envío Definitivo 🏆';
+        d.querySelectorAll('.btn-guardar-progreso').forEach(b => b.style.display = '');
+    }
+});
+
+// --- CREACIÓN DEL NAV ---
 const createBracketNav = () =>{
     const navItems = [
         {id: 'fase-dieciseisavos', label:'16vos'},
         {id: 'fase-octavos', label:'8vos'},
         {id: 'fase-cuartos', label:'4tos'},
         {id: 'fase-semis', label:'Semis'},
+        {id: 'fase-tercer', label:'Tercero'},
         {id: 'fase-final', label:'Final'}
     ];
     nav.innerHTML = `<ul class="nav-fases">${navItems.map(item => `<li><a href="#${item.id}" class="nav-fase-link">${item.label}</a></li>`).join('')}</ul>`;

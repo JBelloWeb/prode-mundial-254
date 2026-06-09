@@ -671,6 +671,8 @@ nav{
     font-weight: 700;
     font-size: 0.8rem;
     transition: transform 0.2s ease, background-color 0.2s ease;
+    position: relative;
+    gap: 6px;
 }
 .group-participant:hover{
     cursor: pointer;
@@ -685,6 +687,39 @@ nav{
 
 .group-participant img {
     margin-right: 8px;
+}
+
+.badge-posicion {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 900;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    line-height: 1;
+    z-index: 2;
+}
+
+.pos-1 {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #3d2b00;
+}
+
+.pos-2 {
+    background: linear-gradient(135deg, #E0E0E0, #A0A0A0);
+    color: #2a2a2a;
+}
+
+.pos-3 {
+    background: linear-gradient(135deg, #CD7F32, #A0522D);
+    color: #fff;
 }
 
 .countries-container {
