@@ -1,4 +1,4 @@
-:root{
+﻿:root{
     /* ── Color Palette ── */
     --sananto-blue: #8CCBF4;
     --sananto-blue-light: #B8E0FA;
@@ -849,7 +849,6 @@ nav{
     justify-content: center;
     flex-wrap: wrap;
     max-width: 100%;
-    gap: 8px;
     background-color: var(--sananto-black);
     padding: 10px 15px;
     border-radius: 50px;
