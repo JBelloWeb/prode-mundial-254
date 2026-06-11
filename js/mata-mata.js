@@ -584,7 +584,7 @@ initMataMata();
 // LÓGICA DE GUARDADO Y CARGA (Borrador / Definitivo)
 // ==========================================
 
-// Diccionarios globales para traducir HTML <-> Base de Datos
+// Restauramos tu diccionario que era PERFECTO
 const mapaIdsBaseDatos = {
     'P73': 1, 'P76': 2, 'P74': 3, 'P75': 4, 'P78': 5, 'P77': 6, 'P79': 7, 'P80': 8,
     'P82': 9, 'P81': 10, 'P84': 11, 'P83': 12, 'P85': 13, 'P88': 14, 'P86': 15, 'P87': 16,
@@ -592,7 +592,6 @@ const mapaIdsBaseDatos = {
     'P97': 25, 'P98': 26, 'P99': 27, 'P100': 28, 'P101': 29, 'P102': 30, 'P103': 31, 'P104': 32
 };
 
-// Diccionario inverso para cuando descargamos de la base de datos
 const mapaIdsHTML = Object.fromEntries(Object.entries(mapaIdsBaseDatos).map(([k, v]) => [v, k]));
 
 async function cargarProgresoMataMata() {
@@ -601,34 +600,30 @@ async function cargarProgresoMataMata() {
             .from('predicciones')
             .select('*')
             .eq('usuario_id', usuarioActivo.id)
-            .gte('partido_id', 1);
+            .lte('partido_id', 32); // MAGIA: Solo trae los partidos del 1 al 32
 
         if (error) throw error;
 
         if (predicciones && predicciones.length > 0) {
             predicciones.forEach(p => {
                 const matchIdStr = mapaIdsHTML[p.partido_id];
-                if (!matchIdStr) return; // Si pertenece a la fase de grupos, lo ignora
+                if (!matchIdStr) return; 
 
                 const card = d.getElementById(`match-${matchIdStr}`);
                 if (!card) return;
 
-                // 1. Rellenar los equipos
                 const spanA = card.querySelector('.team-A');
                 const spanB = card.querySelector('.team-B');
                 if (p.equipo_a_pred) { spanA.textContent = p.equipo_a_pred; spanA.classList.add('filled'); }
                 if (p.equipo_b_pred) { spanB.textContent = p.equipo_b_pred; spanB.classList.add('filled'); }
 
-                // ¡ACÁ ESTÁ LA MAGIA! Rellenamos el dropdown SIEMPRE.
                 actualizarDropdownPenales(matchIdStr);
 
-                // 2. Rellenar los goles
                 const inputA = card.querySelector('.input-A');
                 const inputB = card.querySelector('.input-B');
                 if (p.goles_a_pred !== null) inputA.value = p.goles_a_pred;
                 if (p.goles_b_pred !== null) inputB.value = p.goles_b_pred;
 
-                // 3. Rellenar los penales
                 if (p.ganador_penales_pred) {
                     card.querySelector('.chk-penales').checked = true;
                     const boxPenales = card.querySelector('.penales-box');
@@ -638,19 +633,12 @@ async function cargarProgresoMataMata() {
                     selectPenales.value = p.ganador_penales_pred;
                 }
             });
-
-            dieciseisavos.forEach(m => evaluarGanador(m.id));
-
-            showToast("Progreso anterior restaurado", "success");
         }
     } catch (err) {
         console.error("Error al cargar progreso:", err);
     }
 }
 
-
-
-// --- FUNCIÓN CENTRAL PARA EXTRAER LOS DATOS DE LAS TARJETAS ---
 function recopilarDatosMataMata(exigirCompletos) {
     let todasCompletas = true;
     const prediccionesParaSubir = [];
@@ -658,7 +646,7 @@ function recopilarDatosMataMata(exigirCompletos) {
 
     matchCards.forEach(card => {
         let matchIdStr = card.id.replace('match-', '');
-        let idBaseDatos = mapaIdsBaseDatos[matchIdStr];
+        let idBaseDatos = mapaIdsBaseDatos[matchIdStr]; // Volvemos a usar el diccionario
 
         if (!idBaseDatos) return;
 
@@ -669,7 +657,6 @@ function recopilarDatosMataMata(exigirCompletos) {
         let chkPenales = card.querySelector('.chk-penales').checked;
         let ganadorPenales = card.querySelector('.penales-winner').value;
 
-        // Validaciones estrictas solo si es el "Envío Definitivo"
         if (exigirCompletos) {
             if (!spanA.classList.contains('filled') || !spanB.classList.contains('filled') || golesA === "" || golesB === "") {
                 todasCompletas = false;
@@ -681,7 +668,6 @@ function recopilarDatosMataMata(exigirCompletos) {
             }
         }
 
-        // Solo preparamos para subir si al menos los equipos están definidos
         if (spanA.classList.contains('filled') && spanB.classList.contains('filled')) {
             prediccionesParaSubir.push({
                 usuario_id: usuarioActivo.id,
@@ -695,9 +681,7 @@ function recopilarDatosMataMata(exigirCompletos) {
         }
     });
 
-    if (exigirCompletos && !todasCompletas) {
-        return null; // Retorna null si falló la validación
-    }
+    if (exigirCompletos && !todasCompletas) return null; 
     return prediccionesParaSubir;
 }
 
@@ -708,7 +692,7 @@ async function guardarPrediccionesSinBorrar(arrayPredicciones) {
         .from('predicciones')
         .select('partido_id')
         .eq('usuario_id', usuarioActivo.id)
-        .gte('partido_id', 1);
+        .lte('partido_id', 32); // <--- Solo los 32 de Mata-Matar
 
     if (errTraer) throw errTraer;
 
