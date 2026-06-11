@@ -188,29 +188,34 @@ async function cargarProximosPartidos() {
             const diffMs = fechaPartido.getTime() - Date.now();
             const diffMinutos = diffMs / 60000;
 
-            let tagClass, tagText, resultado;
+            let tagClass, tagText, resultado = '';
             const tieneResultado = p.goles_a_real !== null && p.goles_b_real !== null;
 
             // Extraemos la hora para mostrarla en la UI
             const horaLocalFormateada = fechaPartido.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-            if (tieneResultado) {
+            const msDesdeInicio = ahora.getTime() - fechaPartido.getTime();
+            const horasDesdeInicio = msDesdeInicio / 3600000;
+
+            if (tieneResultado && horasDesdeInicio >= 2) {
                 tagClass = 'tag-finalizado'; tagText = 'Finalizado';
-                resultado = `<strong>${p.goles_a_real} - ${p.goles_b_real}</strong>`;
-            } else if (diffMinutos <= 0 && diffMinutos >= -105) {
+                resultado = `${p.goles_a_real} - ${p.goles_b_real}`;
+            } else if (tieneResultado || (diffMinutos <= 0 && diffMinutos >= -105)) {
                 tagClass = 'tag-en-vivo'; tagText = 'En Vivo';
-                resultado = `<span class="partido-vs">vs</span>`;
+                if (tieneResultado) resultado = `${p.goles_a_real} - ${p.goles_b_real}`;
             } else {
-                tagClass = 'tag-pendiente'; tagText = horaLocalFormateada; // En vez de decir "Pendiente", mostramos la hora del partido!
-                resultado = `<span class="partido-vs">vs</span>`;
+                tagClass = 'tag-pendiente'; tagText = horaLocalFormateada;
             }
 
             html += `
                 <div class="partido-card">
                     <div class="partido-equipos">
-                        <span class="partido-equipo">${p.equipo_a}</span>
-                        ${resultado}
-                        <span class="partido-equipo">${p.equipo_b}</span>
+                        <div class="partido-equipos-nombres">
+                            <span class="partido-equipo">${p.equipo_a}</span>
+                            <span class="partido-equipos-vs">vs</span>
+                            <span class="partido-equipo">${p.equipo_b}</span>
+                        </div>
+                        ${resultado ? `<div class="partido-marcador">${resultado}</div>` : ''}
                     </div>
                     <span class="tag-estado ${tagClass}">${tagText}</span>
                 </div>
