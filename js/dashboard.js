@@ -152,36 +152,35 @@ async function cargarPerfil() {
 }
 
 async function cargarProximosPartidos() {
-    const FECHA_INICIO_MUNDIAL = '2026-06-11';
-    const hoy = new Date();
-    
-    // Si hoy es anterior al 11 de junio, mostramos el 11. Si no, mostramos la fecha local de hoy.
-    // Le agregamos la zona horaria de Argentina (-03:00) para evitar desfasajes al comparar.
-    const fechaBusqueda = hoy < new Date(FECHA_INICIO_MUNDIAL + 'T00:00:00-03:00') 
-        ? FECHA_INICIO_MUNDIAL 
-        : hoy.toLocaleDateString('en-CA'); // 'en-CA' devuelve formato YYYY-MM-DD limpio
+    // Fecha actual en Argentina (UTC-3)
+    const ahoraArgentina = new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' });
+    const ahora = new Date(ahoraArgentina);
+
+    // Rango UTC: medianoche argentina = 03:00 UTC, 23:59 argentina = 02:59 UTC del día siguiente
+    const inicioDelDia = new Date(Date.UTC(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), 3, 0, 0))
+        .toISOString().replace('T', ' ').replace('Z', '+00');
+    const finDelDia = new Date(Date.UTC(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() + 1, 2, 59, 59))
+        .toISOString().replace('T', ' ').replace('Z', '+00');
 
     try {
-        // Armamos el rango para abarcar todo el día en la base de datos
-        const inicioDelDia = `${fechaBusqueda} 00:00:00+00`;
-        const finDelDia = `${fechaBusqueda} 23:59:59+00`;
-
         const { data: partidos, error } = await supaClient
             .from('partidos')
             .select('*')
-            // Filtramos los que estén dentro de este rango de 24 horas
             .gte('fecha_partido', inicioDelDia)
             .lte('fecha_partido', finDelDia)
             .order('fecha_partido', { ascending: true });
 
         if (error) throw error;
 
+        const opciones = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const fechaMostrar = ahora.toLocaleDateString('es-AR', opciones);
+
         if (!partidos || partidos.length === 0) {
-            LISTA_PROXIMOS_PARTIDOS.innerHTML = `<p class="cargando">No hay actividad programada para el ${fechaBusqueda}.</p>`;
+            LISTA_PROXIMOS_PARTIDOS.innerHTML = `<p class="cargando">No hay actividad programada para hoy (${fechaMostrar}).</p>`;
             return;
         }
 
-        let html = `<div class="fecha-grupo"><span class="fecha-grupo-titulo">Partidos del ${fechaBusqueda === FECHA_INICIO_MUNDIAL ? '11 de junio (Inicio Mundial)' : 'día'}</span></div>`;
+        let html = `<div class="fecha-grupo"><span class="fecha-grupo-titulo">Partidos de hoy — ${fechaMostrar}</span></div>`;
 
         partidos.forEach(p => {
             // Al pasarle la fecha con "+00", JavaScript automáticamente la convierte a tu hora local (Argentina)
@@ -193,7 +192,7 @@ async function cargarProximosPartidos() {
             const tieneResultado = p.goles_a_real !== null && p.goles_b_real !== null;
 
             // Extraemos la hora para mostrarla en la UI
-            const horaLocalFormateada = fechaPartido.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+            const horaLocalFormateada = fechaPartido.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false });
 
             if (tieneResultado) {
                 tagClass = 'tag-finalizado'; tagText = 'Finalizado';
@@ -209,7 +208,9 @@ async function cargarProximosPartidos() {
             html += `
                 <div class="partido-card">
                     <div class="partido-equipos">
-                        ${p.equipo_a} ${resultado} ${p.equipo_b}
+                        <span class="partido-equipo">${p.equipo_a}</span>
+                        ${resultado}
+                        <span class="partido-equipo">${p.equipo_b}</span>
                     </div>
                     <span class="tag-estado ${tagClass}">${tagText}</span>
                 </div>
