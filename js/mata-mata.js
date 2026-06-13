@@ -638,6 +638,12 @@ async function initMataMata() {
 }
 initMataMata();
 
+// Toggle colapsable de clasificación de grupos
+d.getElementById('toggleClasificacion').addEventListener('click', () => {
+    d.getElementById('clasificacionBody').classList.toggle('collapsed');
+    d.querySelector('.toggle-icon').classList.toggle('collapsed');
+});
+
 // ==========================================
 // LÓGICA DE GUARDADO Y CARGA (Borrador / Definitivo)
 // ==========================================

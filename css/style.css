@@ -1556,6 +1556,8 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     text-align: center;
     margin-bottom: 25px;
     box-shadow: var(--shadow-panel);
+    cursor: pointer;
+    user-select: none;
 }
 
 .clasificacion-header h2 {
@@ -1578,6 +1580,32 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     font-size: 0.85rem;
     display: inline-block;
     margin-top: 5px;
+}
+
+.clasificacion-body {
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 5000px;
+    overflow: hidden;
+}
+
+.clasificacion-body.collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
+.toggle-icon {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 0.6em;
+    vertical-align: middle;
+    transition: transform 0.3s ease;
+}
+
+.toggle-icon.collapsed {
+    transform: rotate(-90deg);
 }
 
 /* ── Toast Notifications ── */
