@@ -1616,6 +1616,40 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     text-shadow: 0 0 8px rgba(140, 203, 244, 0.3);
 }
 
+.click-callout {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: callout-bounce 1.2s ease-in-out infinite;
+}
+
+.click-callout span {
+    background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: callout-shimmer 2s linear infinite;
+    text-shadow: none;
+}
+
+@keyframes callout-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes callout-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
 .clasificacion-body {
     transition: max-height 0.3s ease, opacity 0.3s ease;
     max-height: 5000px;
