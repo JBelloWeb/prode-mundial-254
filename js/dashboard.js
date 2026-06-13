@@ -96,7 +96,8 @@ async function cargarPerfil() {
         }
 
         // 3. LÓGICA DE BOTONES: Mata-Mata
-        if (usuarioData.fecha_envio_mata_mata) {
+        const CORTE_MATA_MATA = new Date('2026-06-24T00:00:00Z');
+        if (usuarioData.fecha_envio_mata_mata && new Date() > CORTE_MATA_MATA) {
             btnIrMataMata.disabled = true;
             btnIrMataMata.textContent = "Mata-Mata Enviado ✅";
             btnIrMataMata.classList.add('btn-completado');
