@@ -142,7 +142,10 @@ const getCodes = async () => {
     
     // Una vez que tenemos las banderas, dibujamos los grupos
     dibujarClasificacionGrupos();
-    restaurarClasificadosGuardados();
+    const restoredLS = restaurarClasificadosGuardados();
+    if (!restoredLS) {
+        await restaurarClasificadosDB();
+    }
 }
 
 
@@ -242,7 +245,7 @@ function agregarBadge(elementoHtml, pos) {
 
 function restaurarClasificadosGuardados() {
     const guardado = localStorage.getItem('clasificados_mata_mata');
-    if (!guardado) return;
+    if (!guardado) return false;
     try {
         const datos = JSON.parse(guardado);
         Object.keys(datos).forEach(g => {
@@ -265,8 +268,57 @@ function restaurarClasificadosGuardados() {
             });
         });
         armarBracketAutomatico();
+        return true;
     } catch(e) {
         console.error("Error al restaurar clasificados:", e);
+        return false;
+    }
+}
+
+async function restaurarClasificadosDB() {
+    try {
+        const { data, error } = await supaClient
+            .from('predicciones')
+            .select('equipo_a_pred')
+            .eq('usuario_id', usuarioActivo.id)
+            .eq('partido_id', 999)
+            .single();
+
+        if (error || !data?.equipo_a_pred) return;
+
+        const grupos = JSON.parse(data.equipo_a_pred);
+        let restored = false;
+        Object.keys(grupos).forEach(g => {
+            Object.keys(grupos[g]).forEach(pos => {
+                if (grupos[g][pos] && !clasificados[g]?.[pos]) {
+                    clasificados[g][pos] = grupos[g][pos];
+                    restored = true;
+                }
+            });
+        });
+
+        if (restored) {
+            const items = d.querySelectorAll('#gridGruposClasificacion .group-participant');
+            items.forEach(li => {
+                const nombreLi = li.lastChild.textContent.trim();
+                if (!nombreLi) return;
+                Object.keys(clasificados).forEach(g => {
+                    Object.keys(clasificados[g]).forEach(pos => {
+                        const pais = clasificados[g][pos];
+                        if (pais === nombreLi && !li.querySelector('.badge-posicion')) {
+                            li.classList.add('selected');
+                            let badge = d.createElement('div');
+                            badge.className = `badge-posicion pos-${pos}`;
+                            badge.textContent = `${pos}°`;
+                            li.appendChild(badge);
+                        }
+                    });
+                });
+            });
+            armarBracketAutomatico();
+        }
+    } catch (err) {
+        console.error("Error al restaurar clasificaciones desde DB:", err);
     }
 }
 
@@ -711,6 +763,23 @@ async function guardarPrediccionesSinBorrar(arrayPredicciones) {
 
         if (errInsert) throw errInsert;
     }
+
+    // Guardamos clasificación de grupos (visual feedback) como metadata
+    const { error: errDelClasif } = await supaClient
+        .from('predicciones')
+        .delete()
+        .eq('usuario_id', usuarioActivo.id)
+        .eq('partido_id', 999);
+    if (errDelClasif) throw errDelClasif;
+
+    const { error: errInsClasif } = await supaClient
+        .from('predicciones')
+        .insert({
+            usuario_id: usuarioActivo.id,
+            partido_id: 999,
+            equipo_a_pred: JSON.stringify(clasificados)
+        });
+    if (errInsClasif) throw errInsClasif;
 }
 
 // --- BOTÓN: GUARDAR BORRADOR ---
