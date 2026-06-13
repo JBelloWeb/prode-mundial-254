@@ -284,24 +284,24 @@ formGrupos.addEventListener('submit', async (e) =>{
             // Grupo A
             "México-vs-Sudáfrica": 33,
             "Chequia-vs-Corea del Sur": 34,
-            "Chequia-vs-Sudáfrica": 35,
-            "Corea del Sur-vs-México": 36,
+            "Chequia-vs-Sudáfrica": 36,
+            "Corea del Sur-vs-México": 35,
             "Chequia-vs-México": 37,
             "Corea del Sur-vs-Sudáfrica": 38,
 
             // Grupo B
             "Bosnia y Herzegovina-vs-Canadá": 39,
             "Catar-vs-Suiza": 40,
-            "Bosnia y Herzegovina-vs-Suiza": 41,
-            "Canadá-vs-Catar": 42,
+            "Bosnia y Herzegovina-vs-Suiza": 42,
+            "Canadá-vs-Catar": 41,
             "Canadá-vs-Suiza": 43,
             "Bosnia y Herzegovina-vs-Catar": 44,
 
             // Grupo C
             "Brasil-vs-Marruecos": 45,
             "Escocia-vs-Haití": 46,
-            "Escocia-vs-Marruecos": 47,
-            "Brasil-vs-Haití": 48,
+            "Escocia-vs-Marruecos": 48,
+            "Brasil-vs-Haití": 47,
             "Brasil-vs-Escocia": 49,
             "Haití-vs-Marruecos": 50,
 
@@ -318,24 +318,24 @@ formGrupos.addEventListener('submit', async (e) =>{
             "Costa de Marfil-vs-Ecuador": 58,
             "Alemania-vs-Costa de Marfil": 59,
             "Curazao-vs-Ecuador": 60,
-            "Costa de Marfil-vs-Curazao": 61,
-            "Alemania-vs-Ecuador": 62,
+            "Costa de Marfil-vs-Curazao": 62,
+            "Alemania-vs-Ecuador": 61,
 
             // Grupo F
             "Japón-vs-Países Bajos": 63,
             "Suecia-vs-Túnez": 64,
             "Países Bajos-vs-Suecia": 65,
             "Japón-vs-Túnez": 66,
-            "Japón-vs-Suecia": 67,
-            "Países Bajos-vs-Túnez": 68,
+            "Japón-vs-Suecia": 68,
+            "Países Bajos-vs-Túnez": 67,
 
             // Grupo G
             "Bélgica-vs-Egipto": 69,
             "Irán-vs-Nueva Zelanda": 70,
             "Bélgica-vs-Irán": 71,
             "Egipto-vs-Nueva Zelanda": 72,
-            "Egipto-vs-Irán": 73,
-            "Bélgica-vs-Nueva Zelanda": 74,
+            "Egipto-vs-Irán": 74,
+            "Bélgica-vs-Nueva Zelanda": 73,
 
             // Grupo H
             "Cabo Verde-vs-España": 75,
@@ -350,8 +350,8 @@ formGrupos.addEventListener('submit', async (e) =>{
             "Irak-vs-Noruega": 82,
             "Francia-vs-Irak": 83,
             "Noruega-vs-Senegal": 84,
-            "Irak-vs-Senegal": 85,
-            "Francia-vs-Noruega": 86,
+            "Irak-vs-Senegal": 86,
+            "Francia-vs-Noruega": 85,
 
             // Grupo J
             "Argelia-vs-Argentina": 87,

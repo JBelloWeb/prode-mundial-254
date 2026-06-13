@@ -17,6 +17,12 @@ if(!usuarioActivo){
 }
 
 async function verificarAccesoMataMata() {
+    const CORTE_MATA_MATA = new Date('2026-06-24T00:00:00Z');
+
+    // Antes del corte: acceso libre siempre
+    if (new Date() <= CORTE_MATA_MATA) return;
+
+    // Después del corte: solo bloqueamos si ya había enviado
     const { data, error } = await supaClient
         .from('usuarios')
         .select('fecha_envio_mata_mata')
@@ -24,7 +30,7 @@ async function verificarAccesoMataMata() {
         .single();
 
     if (data && data.fecha_envio_mata_mata) {
-        showToast('Ya completaste tus pronósticos del Mata-Mata. No podés volver a ingresar.', 'warning');
+        showToast('Pasó la fecha límite para pronosticar el Mata-Mata.', 'warning');
         setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
     }
 }
@@ -646,7 +652,7 @@ function recopilarDatosMataMata(exigirCompletos) {
 
     matchCards.forEach(card => {
         let matchIdStr = card.id.replace('match-', '');
-        let idBaseDatos = mapaIdsBaseDatos[matchIdStr]; // Volvemos a usar el diccionario
+        let idBaseDatos = mapaIdsBaseDatos[matchIdStr];
 
         if (!idBaseDatos) return;
 
@@ -657,8 +663,10 @@ function recopilarDatosMataMata(exigirCompletos) {
         let chkPenales = card.querySelector('.chk-penales').checked;
         let ganadorPenales = card.querySelector('.penales-winner').value;
 
+        let equipoCompleto = spanA.classList.contains('filled') && spanB.classList.contains('filled');
+
         if (exigirCompletos) {
-            if (!spanA.classList.contains('filled') || !spanB.classList.contains('filled') || golesA === "" || golesB === "") {
+            if (!equipoCompleto || golesA === "" || golesB === "") {
                 todasCompletas = false;
             }
             if (golesA === golesB && (!chkPenales || ganadorPenales === "")) {
@@ -668,64 +676,41 @@ function recopilarDatosMataMata(exigirCompletos) {
             }
         }
 
-        if (spanA.classList.contains('filled') && spanB.classList.contains('filled')) {
-            prediccionesParaSubir.push({
-                usuario_id: usuarioActivo.id,
-                partido_id: idBaseDatos,
-                equipo_a_pred: spanA.textContent,
-                equipo_b_pred: spanB.textContent,
-                goles_a_pred: golesA !== "" ? parseInt(golesA) : null,
-                goles_b_pred: golesB !== "" ? parseInt(golesB) : null,
-                ganador_penales_pred: (chkPenales && ganadorPenales !== "") ? ganadorPenales : null
-            });
-        }
+        // Siempre incluimos los 32 partidos (con o sin datos)
+        prediccionesParaSubir.push({
+            usuario_id: usuarioActivo.id,
+            partido_id: idBaseDatos,
+            equipo_a_pred: equipoCompleto ? spanA.textContent : null,
+            equipo_b_pred: equipoCompleto ? spanB.textContent : null,
+            goles_a_pred: golesA !== "" ? parseInt(golesA) : null,
+            goles_b_pred: golesB !== "" ? parseInt(golesB) : null,
+            ganador_penales_pred: (chkPenales && ganadorPenales !== "") ? ganadorPenales : null
+        });
     });
 
-    if (exigirCompletos && !todasCompletas) return null; 
+    if (exigirCompletos && !todasCompletas) return null;
     return prediccionesParaSubir;
 }
 
-// --- FUNCIÓN INTELIGENTE DE GUARDADO (Sin borrar datos ni usar Upsert) ---
+// --- FUNCIÓN DE GUARDADO (Reemplaza todas las predicciones limpiamente) ---
 async function guardarPrediccionesSinBorrar(arrayPredicciones) {
-    // 1. Preguntamos a la base de datos qué partidos ya guardó este usuario
-    const { data: guardados, error: errTraer } = await supaClient
+    // Borramos todas las predicciones previas de mata-mata del usuario
+    const { error: errDelete } = await supaClient
         .from('predicciones')
-        .select('partido_id')
+        .delete()
         .eq('usuario_id', usuarioActivo.id)
-        .lte('partido_id', 32); // <--- Solo los 32 de Mata-Matar
+        .lte('partido_id', 32);
 
-    if (errTraer) throw errTraer;
+    if (errDelete) throw errDelete;
 
-    // Creamos una lista solo con los números de partido que ya existen
-    const idsExistentes = (guardados || []).map(g => g.partido_id);
-    const promesas = [];
+    // Insertamos las actuales (con o sin datos)
+    if (arrayPredicciones.length > 0) {
+        const { error: errInsert } = await supaClient
+            .from('predicciones')
+            .insert(arrayPredicciones);
 
-    // 2. Procesamos cada predicción una por una
-    for (const p of arrayPredicciones) {
-        if (idsExistentes.includes(p.partido_id)) {
-            // Si ya existe (aunque esté duplicado), ACTUALIZAMOS sus valores
-            promesas.push(
-                supaClient.from('predicciones')
-                .update({
-                    equipo_a_pred: p.equipo_a_pred,
-                    equipo_b_pred: p.equipo_b_pred,
-                    goles_a_pred: p.goles_a_pred,
-                    goles_b_pred: p.goles_b_pred,
-                    ganador_penales_pred: p.ganador_penales_pred
-                })
-                .eq('usuario_id', usuarioActivo.id)
-                .eq('partido_id', p.partido_id)
-            );
-        } else {
-            // Si no existe, lo INSERTAMOS como uno nuevo
-            promesas.push(
-                supaClient.from('predicciones').insert([p])
-            );
-        }
+        if (errInsert) throw errInsert;
     }
-
-    // 3. Ejecutamos todas las peticiones a la vez
-    await Promise.all(promesas);
 }
 
 // --- BOTÓN: GUARDAR BORRADOR ---
@@ -746,8 +731,12 @@ d.addEventListener('click', async (e) => {
     }
 
     try {
-        // Usamos nuestra nueva función en lugar de upsert
         await guardarPrediccionesSinBorrar(arrayPredicciones);
+
+        // Actualizamos timestamp de último guardado
+        await supaClient.from('usuarios')
+            .update({ fecha_envio_mata_mata: new Date().toISOString() })
+            .eq('id', usuarioActivo.id);
 
         showToast("Progreso guardado correctamente. Podés continuar luego.", "success");
     } catch (err) {
@@ -771,34 +760,27 @@ btnEnviarDefinitivo.addEventListener('click', async () => {
         return;
     }
 
-    const confirmacion = confirm("¿Estás seguro? Una vez enviado, no podrás modificar NINGUNA fase del Mata-Mata.");
+    const confirmacion = confirm("¿Estás seguro? Vas a guardar todos tus pronósticos del Mata-Mata.");
     if (!confirmacion) return;
 
     btnEnviarDefinitivo.disabled = true;
     btnEnviarDefinitivo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
-    d.querySelectorAll('.btn-guardar-progreso').forEach(b => b.style.display = 'none');
 
     try {
-        // 1. Subimos las predicciones usando la nueva lógica
         await guardarPrediccionesSinBorrar(arrayPredicciones);
 
-        // 2. Sellamos el formulario en el perfil del usuario
-        const { error: errUser } = await supaClient
-            .from('usuarios')
+        await supaClient.from('usuarios')
             .update({ fecha_envio_mata_mata: new Date().toISOString() })
             .eq('id', usuarioActivo.id);
-            
-        if (errUser) throw errUser;
 
-        showToast("¡Mundial pronosticado con éxito! Que ruede la pelota. 🏆", "success");
-        setTimeout(() => window.location.href = 'dashboard.html', 2000);
+        showToast("¡Mundial pronosticado con éxito! Podés seguir editando hasta el 24/06. 🏆", "success");
 
     } catch (err) {
         console.error("Error definitivo:", err);
         showToast("Error al enviar el formulario final", "error");
+    } finally {
         btnEnviarDefinitivo.disabled = false;
         btnEnviarDefinitivo.innerHTML = 'Envío Definitivo 🏆';
-        d.querySelectorAll('.btn-guardar-progreso').forEach(b => b.style.display = '');
     }
 });
 
