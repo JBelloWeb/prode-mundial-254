@@ -1549,23 +1549,56 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 }
 
 .clasificacion-header {
-    background-color: var(--dash-card); /* Usa el mismo fondo elegante del panel */
-    border: 1px solid var(--dash-border);
+    background: linear-gradient(135deg, #1a2a3a 0%, #0d1b2a 50%, #1a2a3a 100%);
+    border: 2px solid var(--sananto-blue);
     border-radius: var(--radius-md);
-    padding: 25px 20px;
+    padding: 28px 20px;
     text-align: center;
     margin-bottom: 25px;
-    box-shadow: var(--shadow-panel);
+    box-shadow: 0 0 20px rgba(140, 203, 244, 0.15), var(--shadow-panel);
     cursor: pointer;
     user-select: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.clasificacion-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(140, 203, 244, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.clasificacion-header:hover {
+    border-color: var(--sananto-blue-light);
+    box-shadow: 0 0 30px rgba(140, 203, 244, 0.3), var(--shadow-panel);
+    transform: translateY(-2px);
+}
+
+.clasificacion-header:active {
+    transform: translateY(0px);
 }
 
 .clasificacion-header h2 {
     font-size: var(--text-xl);
     color: var(--sananto-white);
     margin-bottom: 10px;
-    border-bottom: 2px solid var(--dash-border);
+    border-bottom: 2px solid rgba(140, 203, 244, 0.3);
     padding-bottom: 10px;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+.clasificacion-header .toggle-icon {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 0.8em;
+    vertical-align: middle;
+    transition: transform 0.3s ease;
+    color: var(--sananto-blue);
+    filter: drop-shadow(0 0 4px rgba(140, 203, 244, 0.5));
 }
 
 .clasificacion-header p {
@@ -1575,11 +1608,12 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 }
 
 .clasificacion-hint {
-    color: var(--sananto-blue);
+    color: var(--sananto-blue-light);
     font-weight: 700;
     font-size: 0.85rem;
     display: inline-block;
     margin-top: 5px;
+    text-shadow: 0 0 8px rgba(140, 203, 244, 0.3);
 }
 
 .clasificacion-body {
