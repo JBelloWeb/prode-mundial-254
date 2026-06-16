@@ -753,11 +753,12 @@ function recopilarDatosMataMata(exigirCompletos) {
 // --- FUNCIÓN DE GUARDADO (Reemplaza todas las predicciones limpiamente) ---
 async function guardarPrediccionesSinBorrar(arrayPredicciones) {
     // Borramos todas las predicciones previas de mata-mata del usuario
+    const idsMataMata = Array.from({ length: 32 }, (_, i) => i + 1);
     const { error: errDelete } = await supaClient
         .from('predicciones')
         .delete()
         .eq('usuario_id', usuarioActivo.id)
-        .lte('partido_id', 32);
+        .in('partido_id', idsMataMata);
 
     if (errDelete) throw errDelete;
 
