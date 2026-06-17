@@ -137,7 +137,7 @@ async function cargarPerfil() {
 
         const { data: rawPredicciones, error: errorRaw } = await supaClient
             .from('predicciones')
-            .select('partido_id, equipo_a_pred, goles_a_pred, equipo_b_pred, goles_b_pred')
+            .select('partido_id')
             .eq('usuario_id', usuarioActivo.id)
             .neq('partido_id', 999)
             .order('equipo_a_pred')
@@ -146,20 +146,11 @@ async function cargarPerfil() {
             .order('goles_b_pred');
         if (errorRaw) throw errorRaw;
 
-        const keyToIds = new Map();
-        if (rawPredicciones) {
-            rawPredicciones.forEach(r => {
-                const key = `${r.equipo_a_pred}|${r.goles_a_pred}|${r.equipo_b_pred}|${r.goles_b_pred}`;
-                if (!keyToIds.has(key)) keyToIds.set(key, []);
-                keyToIds.get(key).push(r.partido_id);
-            });
-        }
-
         const prediccionesFiltradas = (viewData || []).filter(
             p => !(typeof p.equipo_a_pred === 'string' && p.equipo_a_pred.startsWith('{'))
         );
 
-        dibujarTablaPronosticos(prediccionesFiltradas, keyToIds);
+        dibujarTablaPronosticos(prediccionesFiltradas, rawPredicciones);
 
     } catch (error) {
         console.error("Error cargando perfil:", error);
@@ -244,16 +235,15 @@ async function cargarProximosPartidos() {
     }
 }
 
-function dibujarTablaPronosticos(predicciones, keyToIds) {
+function dibujarTablaPronosticos(predicciones, rawPredicciones) {
     if (!predicciones || predicciones.length === 0) {
         tablaPronosticos.innerHTML = "<p>Aún no has guardado ningún pronóstico.</p>";
         return;
     }
 
-    const prediccionesConFase = predicciones.map(p => {
-        const key = `${p.equipo_a_pred}|${p.goles_a_pred}|${p.equipo_b_pred}|${p.goles_b_pred}`;
-        const ids = keyToIds ? keyToIds.get(key) : null;
-        const partidoId = ids && ids.length > 0 ? ids.shift() : null;
+    const prediccionesConFase = predicciones.map((p, i) => {
+        const rawRow = rawPredicciones && i < rawPredicciones.length ? rawPredicciones[i] : null;
+        const partidoId = rawRow ? rawRow.partido_id : null;
         const fase = partidoId ? determinarFase(partidoId) : null;
         return { ...p, partidoId, fase };
     });
