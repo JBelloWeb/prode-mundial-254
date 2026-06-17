@@ -135,25 +135,7 @@ async function cargarPerfil() {
             p => !(typeof p.equipo_a_pred === 'string' && p.equipo_a_pred.startsWith('{'))
         );
 
-        const { data: rawPredicciones, error: errorRaw } = await supaClient
-            .from('predicciones')
-            .select('partido_id, equipo_a_pred, goles_a_pred, equipo_b_pred, goles_b_pred')
-            .eq('usuario_id', usuarioActivo.id)
-            .neq('partido_id', 999);
-        if (errorRaw) throw errorRaw;
-
-        const mapaPartidoId = new Map();
-        if (rawPredicciones) {
-            rawPredicciones.forEach(r => {
-                const key = `${r.equipo_a_pred}|${r.goles_a_pred}|${r.equipo_b_pred}|${r.goles_b_pred}`;
-                if (!mapaPartidoId.has(key)) {
-                    mapaPartidoId.set(key, []);
-                }
-                mapaPartidoId.get(key).push(r.partido_id);
-            });
-        }
-
-        dibujarTablaPronosticos(prediccionesFiltradas, mapaPartidoId);
+        dibujarTablaPronosticos(prediccionesFiltradas);
 
     } catch (error) {
         console.error("Error cargando perfil:", error);
@@ -238,16 +220,14 @@ async function cargarProximosPartidos() {
     }
 }
 
-function dibujarTablaPronosticos(predicciones, mapaPartidoId) {
+function dibujarTablaPronosticos(predicciones) {
     if (!predicciones || predicciones.length === 0) {
         tablaPronosticos.innerHTML = "<p>Aún no has guardado ningún pronóstico.</p>";
         return;
     }
 
     const prediccionesConFase = predicciones.map(p => {
-        const key = `${p.equipo_a_pred}|${p.goles_a_pred}|${p.equipo_b_pred}|${p.goles_b_pred}`;
-        const ids = mapaPartidoId ? mapaPartidoId.get(key) : null;
-        const partidoId = ids ? ids[0] : null;
+        const partidoId = p.partido_id || null;
         const fase = partidoId ? determinarFase(partidoId) : null;
         return { ...p, partidoId, fase };
     });
