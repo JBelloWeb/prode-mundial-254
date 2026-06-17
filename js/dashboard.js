@@ -217,9 +217,9 @@ async function cargarProximosPartidos() {
                 <div class="partido-card">
                     <div class="partido-equipos">
                         <div class="partido-equipos-nombres">
-                            <span class="partido-equipo">${p.equipo_a}</span>
+                            <span class="partido-equipo">${p.equipo_a || 'TBD'}</span>
                             <span class="partido-equipos-vs">vs</span>
-                            <span class="partido-equipo">${p.equipo_b}</span>
+                            <span class="partido-equipo">${p.equipo_b || 'TBD'}</span>
                         </div>
                         ${resultado ? `<div class="partido-marcador">${resultado}</div>` : ''}
                     </div>
@@ -298,7 +298,11 @@ function dibujarTablaPronosticos(predicciones, rawPredicciones) {
             const realA = p.goles_a_real !== null ? p.goles_a_real : '-';
             const realB = p.goles_b_real !== null ? p.goles_b_real : '-';
 
-            const textoPronostico = `${p.equipo_a_pred} <strong>${p.goles_a_pred} - ${p.goles_b_pred}</strong> ${p.equipo_b_pred}`;
+            const eqPredA = p.equipo_a_pred || '—';
+            const eqPredB = p.equipo_b_pred || '—';
+            const golesPredA = p.goles_a_pred !== null ? p.goles_a_pred : '—';
+            const golesPredB = p.goles_b_pred !== null ? p.goles_b_pred : '—';
+            const textoPronostico = `${eqPredA} <strong>${golesPredA} - ${golesPredB}</strong> ${eqPredB}`;
 
             let textoReal = '';
             let textoPuntos = '-';
@@ -306,8 +310,8 @@ function dibujarTablaPronosticos(predicciones, rawPredicciones) {
 
             if (p.goles_a_real !== null) {
                 // Usamos los nombres reales de la BD, o los del pronóstico si no están disponibles
-                const nombreRealA = p.equipo_a_real || p.equipo_a_pred; 
-                const nombreRealB = p.equipo_b_real || p.equipo_b_pred;
+                const nombreRealA = p.equipo_a_real || p.equipo_a_pred || 'TBD';
+                const nombreRealB = p.equipo_b_real || p.equipo_b_pred || 'TBD';
 
                 textoReal = `${nombreRealA} <strong>${realA} - ${realB}</strong> ${nombreRealB}`;
                 textoPuntos = `+${p.puntos || 0}`;
