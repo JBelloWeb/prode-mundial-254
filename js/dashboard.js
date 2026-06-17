@@ -148,7 +148,7 @@ async function cargarPerfil() {
 
         const prediccionesFiltradas = (viewData || []).filter(
             p => !(typeof p.equipo_a_pred === 'string' && p.equipo_a_pred.startsWith('{'))
-        );
+        ).filter(p => p.goles_a_pred !== null && p.goles_b_pred !== null);
 
         dibujarTablaPronosticos(prediccionesFiltradas, rawPredicciones);
 
