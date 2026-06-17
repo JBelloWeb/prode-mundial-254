@@ -38,7 +38,7 @@ bienvenida.textContent = `¡Hola, ${usuarioActivo.nombre}! Este es tu panel`;
 const tabs = [btnTabPerfil, btnTabRanking];
 
 const FASES = [
-    { id: 'grupos', label: 'Fase de Grupos', minId: 33, maxId: 999 },
+    { id: 'grupos', label: 'Fase de Grupos', minId: 33, maxId: 104 },
     { id: 'dieciseisavos', label: 'Dieciseisavos de Final', minId: 1, maxId: 16 },
     { id: 'octavos', label: 'Octavos de Final', minId: 17, maxId: 24 },
     { id: 'cuartos', label: 'Cuartos de Final', minId: 25, maxId: 28 },
@@ -146,7 +146,10 @@ async function cargarPerfil() {
         if (rawPredicciones) {
             rawPredicciones.forEach(r => {
                 const key = `${r.equipo_a_pred}|${r.goles_a_pred}|${r.equipo_b_pred}|${r.goles_b_pred}`;
-                mapaPartidoId.set(key, r.partido_id);
+                if (!mapaPartidoId.has(key)) {
+                    mapaPartidoId.set(key, []);
+                }
+                mapaPartidoId.get(key).push(r.partido_id);
             });
         }
 
@@ -243,7 +246,8 @@ function dibujarTablaPronosticos(predicciones, mapaPartidoId) {
 
     const prediccionesConFase = predicciones.map(p => {
         const key = `${p.equipo_a_pred}|${p.goles_a_pred}|${p.equipo_b_pred}|${p.goles_b_pred}`;
-        const partidoId = mapaPartidoId ? mapaPartidoId.get(key) : null;
+        const ids = mapaPartidoId ? mapaPartidoId.get(key) : null;
+        const partidoId = ids ? ids[0] : null;
         const fase = partidoId ? determinarFase(partidoId) : null;
         return { ...p, partidoId, fase };
     });

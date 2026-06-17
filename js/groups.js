@@ -407,9 +407,11 @@ formGrupos.addEventListener('submit', async (e) =>{
         }
        
         console.log("Datos a enviar:", prediccionesParaSubir);
+
+        // Upsert para evitar duplicados si ya existen predicciones previas
         const { error: errorPredicciones } = await supaClient
-            .from ('predicciones')
-            .insert(prediccionesParaSubir);
+            .from('predicciones')
+            .upsert(prediccionesParaSubir, { onConflict: 'usuario_id,partido_id' });
         if (errorPredicciones) throw errorPredicciones;
 
         // Guardamos la marca de tiempo exacta
