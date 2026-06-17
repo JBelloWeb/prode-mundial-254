@@ -137,7 +137,7 @@ async function cargarPerfil() {
 
         const { data: rawPredicciones, error: errorRaw } = await supaClient
             .from('predicciones')
-            .select('partido_id')
+            .select('partido_id, equipo_a_pred, goles_a_pred, equipo_b_pred, goles_b_pred')
             .eq('usuario_id', usuarioActivo.id)
             .neq('partido_id', 999)
             .order('equipo_a_pred')
@@ -150,7 +150,11 @@ async function cargarPerfil() {
             p => !(typeof p.equipo_a_pred === 'string' && p.equipo_a_pred.startsWith('{'))
         ).filter(p => p.goles_a_pred !== null && p.goles_b_pred !== null);
 
-        dibujarTablaPronosticos(prediccionesFiltradas, rawPredicciones);
+        const rawFiltradas = (rawPredicciones || []).filter(
+            r => !(typeof r.equipo_a_pred === 'string' && r.equipo_a_pred.startsWith('{'))
+        ).filter(r => r.goles_a_pred !== null && r.goles_b_pred !== null);
+
+        dibujarTablaPronosticos(prediccionesFiltradas, rawFiltradas);
 
     } catch (error) {
         console.error("Error cargando perfil:", error);
