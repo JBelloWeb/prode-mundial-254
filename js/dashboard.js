@@ -139,7 +139,6 @@ async function cargarPerfil() {
             .from('predicciones')
             .select('partido_id, equipo_a_pred, goles_a_pred, equipo_b_pred, goles_b_pred')
             .eq('usuario_id', usuarioActivo.id)
-            .neq('partido_id', 999)
             .order('equipo_a_pred')
             .order('goles_a_pred')
             .order('equipo_b_pred')
