@@ -316,19 +316,17 @@ function dibujarTablaPronosticos(predicciones, rawPredicciones) {
                 const nombreRealB = p.equipo_b_real || p.equipo_b_pred || 'TBD';
 
                 textoReal = `${nombreRealA} <strong>${realA} - ${realB}</strong> ${nombreRealB}`;
-                textoPuntos = `+${p.puntos || 0}`;
+            }
 
-                if (p.puntos === 6) claseFila = 'res-acierto-perfecto';
-                else if (p.puntos === 5) claseFila = 'res-acierto-pleno';
-                else if (p.puntos === 3) claseFila = 'res-acierto-diferencia';
-                else if (p.puntos === 2 || p.puntos === 1) claseFila = 'res-acierto-parcial';
-                else if (p.puntos === 0) claseFila = 'res-fallo';
-            } else if (p.puntos > 0) {
-                const nombreRealA = p.equipo_a_real || p.equipo_a_pred || 'TBD';
-                const nombreRealB = p.equipo_b_real || p.equipo_b_pred || 'TBD';
-                textoReal = `${nombreRealA} <strong>-</strong> ${nombreRealB}`;
+            if (p.puntos > 0) {
                 textoPuntos = `+${p.puntos}`;
-                claseFila = 'res-acierto-parcial';
+                if (p.puntos >= 6) claseFila = 'res-acierto-perfecto';
+                else if (p.puntos === 5) claseFila = 'res-acierto-pleno';
+                else if (p.puntos >= 3) claseFila = 'res-acierto-diferencia';
+                else if (p.puntos >= 1) claseFila = 'res-acierto-parcial';
+            } else if (p.goles_a_real !== null) {
+                textoPuntos = '+0';
+                claseFila = 'res-fallo';
             } else {
                 textoReal = `<span style="color: gray;">Pendiente</span>`;
             }

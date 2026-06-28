@@ -108,6 +108,8 @@
                 <h2>CÓMO SE OTORGAN LOS PUNTOS</h2>
                 <div class="modal-text">
                     <p>Los puntos se asignan según la precisión de tus pronósticos en cada partido del mundial:</p>
+
+                    <h3 style="margin: 1rem 0 0.5rem; font-size: 0.9rem;">Puntos por resultado (todos los partidos)</h3>
                     <div class="table-responsive">
                         <table class="puntaje-table">
                             <thead>
@@ -117,13 +119,52 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td class="col-pts pts-perfecto">+6</td><td>Acierto perfecto (acertaste resultado en penales)</td></tr>
-                                <tr><td class="col-pts pts-pleno">+5</td><td>Pleno (acertaste el resultado exacto)</td></tr>
+                                <tr><td class="col-pts pts-perfecto">+6</td><td>Acierto perfecto (resultado exacto + penales acertados)</td></tr>
+                                <tr><td class="col-pts pts-pleno">+5</td><td>Pleno (resultado exacto)</td></tr>
                                 <tr><td class="col-pts pts-diferencia">+3</td><td>Diferencia de goles correcta</td></tr>
                                 <tr><td class="col-pts pts-parcial">+2</td><td>Parcial (acertaste el ganador, no la diferencia)</td></tr>
-                                <tr><td class="col-pts pts-parcial">+2</td><td>Dos países acertados en Mata-Mata (1 c/u)</td></tr>
-                                <tr><td class="col-pts pts-parcial">+1</td><td>Un país acertado en Mata-Mata</td></tr>
                                 <tr><td class="col-pts pts-fallo">+0</td><td>Fallo (no acertaste ganador ni diferencia)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="margin: 1rem 0 0.5rem; font-size: 0.9rem;">Puntos extra por país acertado (solo Mata-Mata)</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                        En los cruces Mata-Mata se suma <strong>1 punto por cada país</strong> que acertaste en la llave,
+                        independientemente del resultado. Estos puntos se <strong>acumulan</strong> a los puntos por resultado.
+                    </p>
+                    <div class="table-responsive">
+                        <table class="puntaje-table">
+                            <thead>
+                                <tr>
+                                    <th>Puntaje</th>
+                                    <th>Justificación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="col-pts pts-parcial">+2</td><td>Acertaste los dos países del cruce</td></tr>
+                                <tr><td class="col-pts pts-parcial">+1</td><td>Acertaste un país del cruce</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="margin: 1rem 0 0.5rem; font-size: 0.9rem;">Ejemplos en Mata-Mata</h3>
+                    <div class="table-responsive">
+                        <table class="puntaje-table">
+                            <thead>
+                                <tr>
+                                    <th>Países</th>
+                                    <th>Resultado</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>2 aciertos</td><td class="col-pts pts-perfecto">+6 (penales exactos)</td><td class="col-pts pts-perfecto"><strong>= 8</strong></td></tr>
+                                <tr><td>2 aciertos</td><td class="col-pts pts-pleno">+5 (resultado exacto)</td><td class="col-pts pts-pleno"><strong>= 7</strong></td></tr>
+                                <tr><td>1 acierto</td><td class="col-pts pts-pleno">+5 (resultado exacto)</td><td class="col-pts pts-pleno"><strong>= 6</strong></td></tr>
+                                <tr><td>2 aciertos</td><td class="col-pts pts-diferencia">+3 (diferencia correcta)</td><td class="col-pts pts-diferencia"><strong>= 5</strong></td></tr>
+                                <tr><td>2 aciertos</td><td class="col-pts pts-parcial">+2 (ganador correcto)</td><td class="col-pts pts-parcial"><strong>= 4</strong></td></tr>
+                                <tr><td>2 aciertos</td><td class="col-pts pts-fallo">+0 (fallo resultado)</td><td class="col-pts pts-parcial"><strong>= 2</strong></td></tr>
                             </tbody>
                         </table>
                     </div>
