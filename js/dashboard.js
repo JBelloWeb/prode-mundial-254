@@ -312,7 +312,6 @@ function dibujarTablaPronosticos(predicciones, rawPredicciones) {
             let claseFila = 'res-pendiente';
 
             if (p.goles_a_real !== null) {
-                // Usamos los nombres reales de la BD, o los del pronóstico si no están disponibles
                 const nombreRealA = p.equipo_a_real || p.equipo_a_pred || 'TBD';
                 const nombreRealB = p.equipo_b_real || p.equipo_b_pred || 'TBD';
 
@@ -322,8 +321,14 @@ function dibujarTablaPronosticos(predicciones, rawPredicciones) {
                 if (p.puntos === 6) claseFila = 'res-acierto-perfecto';
                 else if (p.puntos === 5) claseFila = 'res-acierto-pleno';
                 else if (p.puntos === 3) claseFila = 'res-acierto-diferencia';
-                else if (p.puntos === 2 || p.puntos === 1) claseFila = 'res-acierto-parcial'; // <-- Cambio aquí
+                else if (p.puntos === 2 || p.puntos === 1) claseFila = 'res-acierto-parcial';
                 else if (p.puntos === 0) claseFila = 'res-fallo';
+            } else if (p.puntos > 0) {
+                const nombreRealA = p.equipo_a_real || p.equipo_a_pred || 'TBD';
+                const nombreRealB = p.equipo_b_real || p.equipo_b_pred || 'TBD';
+                textoReal = `${nombreRealA} <strong>-</strong> ${nombreRealB}`;
+                textoPuntos = `+${p.puntos}`;
+                claseFila = 'res-acierto-parcial';
             } else {
                 textoReal = `<span style="color: gray;">Pendiente</span>`;
             }
@@ -362,13 +367,13 @@ async function cargarRanking() {
 
     } catch (error) {
         console.error("Error al cargar el ranking:", error);
-        cuerpoTablaRanking.innerHTML = `<tr><td colspan="4" style="color:red;">Error al cargar.</td></tr>`;
+        cuerpoTablaRanking.innerHTML = `<tr><td colspan="5" style="color:red;">Error al cargar.</td></tr>`;
     }
 }
 
 function dibujarTablaRanking(ranking) {
     cuerpoTablaRanking.innerHTML = ""; 
-    if (!ranking || ranking.length === 0) return cuerpoTablaRanking.innerHTML = `<tr><td colspan="4">Aún no hay jugadores.</td></tr>`;
+    if (!ranking || ranking.length === 0) return cuerpoTablaRanking.innerHTML = `<tr><td colspan="5">Aún no hay jugadores.</td></tr>`;
 
     let html = "";
     ranking.forEach((jugador, index) => {
@@ -386,6 +391,7 @@ function dibujarTablaRanking(ranking) {
                 <td>${nombreMostrar}</td>
                 <td><strong>${puntosMostrar}</strong></td>
                 <td>${jugador.aciertos_plenos || 0}</td>
+                <td>${jugador.aciertos_parciales || 0}</td>
             </tr>
         `;
     });
