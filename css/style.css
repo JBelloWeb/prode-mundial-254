@@ -1501,10 +1501,6 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     scrollbar-width: thin;
 }
 
-.table-responsive table,
-.historial-container table {
-    min-width: 400px;
-}
 
 /* ── Ranking ── */
 .fila-destacada { background-color: rgba(140, 203, 244, 0.1); }
