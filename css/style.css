@@ -1493,6 +1493,19 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .res-pendiente td strong { color: var(--text-muted); }
 .res-pendiente .col-pts { color: var(--text-muted); }
 
+/* ── Responsive Tables (scroll horizontal) ── */
+.table-responsive,
+.historial-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.table-responsive table,
+.historial-container table {
+    min-width: 400px;
+}
+
 /* ── Ranking ── */
 .fila-destacada { background-color: rgba(140, 203, 244, 0.1); }
 .fila-destacada td { color: var(--sananto-blue); font-weight: bold; }
