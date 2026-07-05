@@ -353,7 +353,7 @@ async function cargarRanking() {
 
 function dibujarTablaRanking(ranking) {
     cuerpoTablaRanking.innerHTML = ""; 
-    if (!ranking || ranking.length === 0) return cuerpoTablaRanking.innerHTML = `<tr><td colspan="5">Aún no hay jugadores.</td></tr>`;
+    if (!ranking || ranking.length === 0) return cuerpoTablaRanking.innerHTML = `<tr><td colspan="4">Aún no hay jugadores.</td></tr>`;
 
     let html = "";
     ranking.forEach((jugador, index) => {
@@ -371,7 +371,6 @@ function dibujarTablaRanking(ranking) {
                 <td>${nombreMostrar}</td>
                 <td><strong>${puntosMostrar}</strong></td>
                 <td>${jugador.aciertos_plenos || 0}</td>
-                <td>${jugador.aciertos_parciales || 0}</td>
             </tr>
         `;
     });
