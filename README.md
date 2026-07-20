@@ -19,8 +19,6 @@ Plataforma web interactiva de predicciones deportivas (Prode) para el Mundial 20
   <img src="media/screenshots/Gallery-3.jpeg" alt="Selección de clasificados" width="45%">
   <img src="media/screenshots/Gallery-4.jpeg" alt="Bracket Mata-Mata" width="45%">
   <img src="media/screenshots/Gallery-5.jpeg" alt="Ranking global" width="45%">
-  <img src="media/screenshots/Gallery-6.gif" alt="Demo animada del flujo completo" width="90%">
-  <br><em>Demo animada del flujo completo</em>
 </div>
 
 ---
