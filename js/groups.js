@@ -5,26 +5,42 @@ const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
 window.supaClient = supaClient;
 
-const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado'));
-if(!usuarioActivo){
+/*
+=== MODO DEMO: VERIFICACIÓN DE USUARIO ===
+Originalmente verificaba que hubiera un usuario logueado.
+Si no existía, redirigía al login.
+En demo se usa un fallback "Visitante" si no hay sesión.
+*/
+const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado')) || { id: 1, nombre: "Visitante" };
+if(!JSON.parse(localStorage.getItem('usuarioLogueado'))){
+    /*
+    === REDIRECCIÓN AL LOGIN (deshabilitada en demo) ===
     showToast('Debes iniciar sesión', 'error');
     setTimeout(() => { window.location.href = '../index.html'; }, 1500);
+    */
 }
 
-// Candado de seguridad: Verificar en la BD si ya mandó los grupos
+/*
+=== MODO DEMO: CANDADO DE SEGURIDAD POR ENVÍO (deshabilitado) ===
+Originalmente consultaba fecha_envio_grupos en la DB.
+Si el usuario ya había enviado, bloqueaba el acceso con un toast y redirigía al dashboard.
+En demo siempre se permite el ingreso para exploración.
+
 async function verificarAccesoGrupos() {
     const { data, error } = await supaClient
         .from('usuarios')
         .select('fecha_envio_grupos')
         .eq('id', usuarioActivo.id)
         .single();
-
     if (data && data.fecha_envio_grupos) {
         showToast('Ya completaste tus pronósticos de Fase de Grupos. No podés volver a ingresar.', 'warning');
         setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
     }
 }
 verificarAccesoGrupos();
+*/
+
+showToast('🔓 Modo Demo: Podés probar los formularios, pero nada se guarda en la base de datos.', 'info');
 
 const flagApi = "https://flagcdn.com/16x12/";
 const flagCodesApi = "https://flagcdn.com/es/codes.json";
@@ -274,11 +290,18 @@ formGrupos.addEventListener('submit', async (e) =>{
     btnGuardar.disabled = true;
     btnGuardar.textContent = "Guardando respuestas...";
     try{
+        /*
+        === MODO DEMO: GUARDADO DE PAÍSES SEGUIDOS (deshabilitado) ===
+        Originalmente persistía los 4 países elegidos por el usuario en la tabla usuarios.
+        En demo se simula con un mensaje en consola.
+        
         const { error: errorUsuario } = await supaClient
             .from('usuarios')
             .update({ paises_seguidos: paisesASeguir })
             .eq('id', usuarioActivo.id);
         if(errorUsuario) throw errorUsuario;
+        */
+        console.log("[DEMO] Países que se guardarían:", paisesASeguir);
 
         const mapaIdsGrupos = {
             // Grupo A
@@ -406,6 +429,12 @@ formGrupos.addEventListener('submit', async (e) =>{
             });
         }
        
+        /*
+        === MODO DEMO: INSERCIÓN DE PREDICCIONES (deshabilitado) ===
+        Originalmente insertaba todas las predicciones del usuario en la tabla `predicciones`
+        y luego sellaba el envío con fecha_envio_grupos para evitar re-ingresos.
+        En demo los datos solo se muestran en consola y el formulario queda siempre accesible.
+        
         console.log("Datos a enviar:", prediccionesParaSubir);
 
         // Upsert para evitar duplicados si ya existen predicciones previas
@@ -413,11 +442,11 @@ formGrupos.addEventListener('submit', async (e) =>{
             .from('predicciones')
             .upsert(prediccionesParaSubir, { onConflict: 'usuario_id,partido_id' });
         if (errorPredicciones) throw errorPredicciones;
-
-        // Guardamos la marca de tiempo exacta
         await supaClient.from('usuarios').update({ fecha_envio_grupos: new Date().toISOString() }).eq('id', usuarioActivo.id);
-        showToast('Predicciones guardadas con éxito', 'success');
-        setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
+        */
+        console.log("[DEMO] Predicciones que se insertarían:", prediccionesParaSubir);
+        showToast('✅ Simulación completada. En producción estos datos se guardarían en Supabase.', 'success');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 2500);
     } catch (error) {
         console.error("Error: ", error);
         showToast('Hubo un problema al guardar', 'error');

@@ -10,11 +10,26 @@ if (!supaClient) {
     setTimeout(() => { window.location.href = '../index.html'; }, 2000);
 }
 
-const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado'));
-if(!usuarioActivo){
+/*
+=== MODO DEMO: VERIFICACIÓN DE USUARIO ===
+Originalmente verificaba que hubiera un usuario logueado.
+Si no existía, redirigía al login.
+En demo se usa un fallback "Visitante" si no hay sesión.
+*/
+const usuarioActivo = JSON.parse(localStorage.getItem('usuarioLogueado')) || { id: 1, nombre: "Visitante" };
+if(!JSON.parse(localStorage.getItem('usuarioLogueado'))){
+    /*
+    === REDIRECCIÓN AL LOGIN (deshabilitada en demo) ===
     showToast('Debes iniciar sesión', 'error');
     setTimeout(() => { window.location.href = '../index.html'; }, 1500);
+    */
 }
+
+/*
+=== MODO DEMO: CANDADO DE SEGURIDAD POR ENVÍO (deshabilitado) ===
+Originalmente consultaba fecha_envio_mata_mata en la DB.
+Si el usuario ya había enviado, bloqueaba el acceso con un toast y redirigía al dashboard.
+En demo siempre se permite el ingreso para exploración.
 
 async function verificarAccesoMataMata() {
     const CORTE_MATA_MATA = new Date('2026-06-24T00:00:00Z');
@@ -28,13 +43,15 @@ async function verificarAccesoMataMata() {
         .select('fecha_envio_mata_mata')
         .eq('id', usuarioActivo.id)
         .single();
-
     if (data && data.fecha_envio_mata_mata) {
         showToast('Pasó la fecha límite para pronosticar el Mata-Mata.', 'warning');
         setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
     }
 }
 verificarAccesoMataMata();
+*/
+
+showToast('🔓 Modo Demo: Podés probar los formularios, pero nada se guarda en la base de datos.', 'info');
 
 const d = document;
 
@@ -750,43 +767,42 @@ function recopilarDatosMataMata(exigirCompletos) {
     return prediccionesParaSubir;
 }
 
-// --- FUNCIÓN DE GUARDADO (Reemplaza todas las predicciones limpiamente) ---
+/* === MODO DEMO: FUNCIÓN DE GUARDADO (deshabilitada) ===
+Originalmente (versión producción más reciente):
+1. Borraba todas las predicciones previas de mata-mata del usuario (DELETE con .in())
+2. Insertaba las predicciones nuevas (INSERT)
+3. Guardaba la clasificación de grupos como metadata (partido_id=999)
+Alternativa anterior: consultaba qué partidos existían y hacía UPDATE/INSERT según correspondía.
+En modo demo no se escribe en DB, solo se simula con console.log.
+
 async function guardarPrediccionesSinBorrar(arrayPredicciones) {
-    // Borramos todas las predicciones previas de mata-mata del usuario
     const idsMataMata = Array.from({ length: 32 }, (_, i) => i + 1);
     const { error: errDelete } = await supaClient
         .from('predicciones')
         .delete()
         .eq('usuario_id', usuarioActivo.id)
         .in('partido_id', idsMataMata);
-
     if (errDelete) throw errDelete;
-
-    // Insertamos las actuales (con o sin datos)
     if (arrayPredicciones.length > 0) {
         const { error: errInsert } = await supaClient
             .from('predicciones')
             .insert(arrayPredicciones);
-
         if (errInsert) throw errInsert;
     }
-
-    // Guardamos clasificación de grupos (visual feedback) como metadata
     const { error: errDelClasif } = await supaClient
         .from('predicciones')
         .delete()
         .eq('usuario_id', usuarioActivo.id)
         .eq('partido_id', 999);
     if (errDelClasif) throw errDelClasif;
-
     const { error: errInsClasif } = await supaClient
         .from('predicciones')
-        .insert({
-            usuario_id: usuarioActivo.id,
-            partido_id: 999,
-            equipo_a_pred: JSON.stringify(clasificados)
-        });
+        .insert({ usuario_id: usuarioActivo.id, partido_id: 999, equipo_a_pred: JSON.stringify(clasificados) });
     if (errInsClasif) throw errInsClasif;
+}
+*/
+async function guardarPrediccionesSinBorrar(arrayPredicciones) {
+    console.log("[DEMO] Predicciones que se guardarían:", arrayPredicciones);
 }
 
 // --- BOTÓN: GUARDAR BORRADOR ---
@@ -845,11 +861,21 @@ btnEnviarDefinitivo.addEventListener('click', async () => {
     try {
         await guardarPrediccionesSinBorrar(arrayPredicciones);
 
+        /*
+        === MODO DEMO: SELLADO DE ENVÍO (deshabilitado) ===
+        Originalmente actualizaba fecha_envio_mata_mata en la tabla usuarios
+        para sellar el envío y evitar modificaciones posteriores.
+        En demo no se sella, el formulario queda siempre accesible.
+        
         await supaClient.from('usuarios')
             .update({ fecha_envio_mata_mata: new Date().toISOString() })
             .eq('id', usuarioActivo.id);
 
         showToast("¡Mundial pronosticado con éxito! Podés seguir editando hasta el 24/06. 🏆", "success");
+        */
+
+        showToast("✅ Simulación completada. En producción estos datos se guardarían en Supabase. 🏆", "success");
+        setTimeout(() => window.location.href = 'dashboard.html', 2000);
 
     } catch (err) {
         console.error("Error definitivo:", err);

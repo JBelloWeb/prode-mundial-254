@@ -5,15 +5,26 @@ const supaKey = "sb_publishable_v38rCE76Ze5wCobL1uBT9Q_Vs_xxUmU";
 const supaClient = window.supaClient || (window.supabase ? window.supabase.createClient(supaUrl, supaKey) : null);
 window.supaClient = supaClient;
 
+/*
+=== MODO DEMO: VERIFICACIÓN DE SESIÓN ===
+Originalmente esto verificaba que hubiera un usuario logueado en localStorage.
+Si no existía, mostraba error y redirigía al login.
+En modo demo se permite el acceso aunque no haya sesión activa,
+usando un usuario "Visitante" por defecto.
+*/
 const usuarioString = localStorage.getItem('usuarioLogueado');
 
 if(!usuarioString){
-    showToast("Debes iniciar sesión para ver tu panel", "error");
+    /*
+    === REDIRECCIÓN AL LOGIN (deshabilitada en demo) ===
+    En producción: showToast("Debes iniciar sesión para ver tu panel", "error");
     setTimeout(() => window.location.href = '../index.html', 2000);
     throw new Error('No autenticado');
+    */
+    showToast("🔓 Modo Demo: Explorando como Visitante", "info");
 }
 
-const usuarioActivo = JSON.parse(usuarioString);
+const usuarioActivo = JSON.parse(usuarioString) || { id: 1, nombre: "Visitante" };
 
 const d = document;
 const bienvenida = d.getElementById('bienvenidaDashboard');
@@ -88,13 +99,17 @@ async function cargarPerfil() {
             
         if (errorUser) throw errorUser;
 
-        // 2. LÓGICA DE BOTONES: Grupos
+        /*
+        === MODO DEMO: BLOQUEO DE BOTONES POR ENVÍO (deshabilitado) ===
+        Originalmente esto deshabilitaba los botones de "Ir a Grupos" e "Ir a Mata-Mata"
+        si el usuario ya había enviado sus predicciones (fecha_envio_grupos / fecha_envio_mata_mata).
+        En modo demo los botones siempre están habilitados para que cualquiera pueda explorar los formularios.
+        
         if (usuarioData.fecha_envio_grupos) {
             btnIrGrupos.disabled = true;
             btnIrGrupos.textContent = "Grupos Enviado ✅";
             btnIrGrupos.classList.add('btn-completado');
         }
-
         // 3. LÓGICA DE BOTONES: Mata-Mata
         const CORTE_MATA_MATA = new Date('2026-06-24T00:00:00Z');
         if (usuarioData.fecha_envio_mata_mata && new Date() > CORTE_MATA_MATA) {
@@ -102,6 +117,7 @@ async function cargarPerfil() {
             btnIrMataMata.textContent = "Mata-Mata Enviado ✅";
             btnIrMataMata.classList.add('btn-completado');
         }
+    */
 
         // 4. Cargamos la lista de equipos seguidos (Lo que ya tenías)
         if (usuarioData.paises_seguidos && usuarioData.paises_seguidos.length > 0) {
@@ -377,9 +393,19 @@ function dibujarTablaRanking(ranking) {
     cuerpoTablaRanking.innerHTML = html;
 }
 
+/*
+=== MODO DEMO: CIERRE DE SESIÓN ===
+Originalmente eliminaba el usuario de localStorage y redirigía al login.
+En modo demo muestra un mensaje informativo y permite volver al inicio.
+*/
 btnCerrarSesion.addEventListener('click', () => {
+    /*
     localStorage.removeItem('usuarioLogueado');
     window.location.href = '../index.html';
+    */
+    localStorage.removeItem('usuarioLogueado');
+    showToast('🔓 Sesión de demo finalizada. Podés volver a ingresar cuando quieras.', 'info');
+    setTimeout(() => window.location.href = '../index.html', 1500);
 });
 
 btnIrGrupos.addEventListener('click', () => {
